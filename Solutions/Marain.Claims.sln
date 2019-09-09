@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{D29CABE7-467E-4CF6-B44B-3C58AB76145A}"
+	ProjectSection(SolutionItems) = preProject
+		..\azure-pipelines.yml = ..\azure-pipelines.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.Claims.Specs", "Marain.Claims.Specs\Marain.Claims.Specs.csproj", "{CEC3DC44-36AF-4B82-B483-04AA9B3C5479}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Abstractions", "Marain.Claims.Abstractions\Marain.Claims.Abstractions.csproj", "{66AA538E-E684-4C84-A1C8-74CBA60537CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.Claims.AspNetCore", "Marain.Claims.AspNetCore\Marain.Claims.AspNetCore.csproj", "{3042871A-6CF2-4145-A3E1-A83F7FC5CA53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.Claims.Storage.AzureBlob", "Marain.Claims.Storage.AzureBlob\Marain.Claims.Storage.AzureBlob.csproj", "{E21B3A99-99AC-4CEC-82EE-BD2460D7FA6E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEC3DC44-36AF-4B82-B483-04AA9B3C5479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEC3DC44-36AF-4B82-B483-04AA9B3C5479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEC3DC44-36AF-4B82-B483-04AA9B3C5479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEC3DC44-36AF-4B82-B483-04AA9B3C5479}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66AA538E-E684-4C84-A1C8-74CBA60537CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66AA538E-E684-4C84-A1C8-74CBA60537CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66AA538E-E684-4C84-A1C8-74CBA60537CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66AA538E-E684-4C84-A1C8-74CBA60537CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3042871A-6CF2-4145-A3E1-A83F7FC5CA53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3042871A-6CF2-4145-A3E1-A83F7FC5CA53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3042871A-6CF2-4145-A3E1-A83F7FC5CA53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3042871A-6CF2-4145-A3E1-A83F7FC5CA53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E21B3A99-99AC-4CEC-82EE-BD2460D7FA6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E21B3A99-99AC-4CEC-82EE-BD2460D7FA6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E21B3A99-99AC-4CEC-82EE-BD2460D7FA6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E21B3A99-99AC-4CEC-82EE-BD2460D7FA6E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B092077E-4A68-480E-A982-FE920DCCEF34}
+	EndGlobalSection
+EndGlobal
