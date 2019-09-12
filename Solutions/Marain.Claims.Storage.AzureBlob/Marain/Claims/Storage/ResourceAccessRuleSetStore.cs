@@ -5,6 +5,9 @@
 namespace Marain.Claims.Storage
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
     using System.Text;
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
@@ -57,23 +60,73 @@ namespace Marain.Claims.Storage
         protected CloudBlobContainer Container { get; }
 
         /// <inheritdoc/>
-        public async Task<ResourceAccessRuleSet> GetAsync(string id)
+        public Task<ResourceAccessRuleSet> GetAsync(string id, string eTag)
         {
             if (id is null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
 
-            try
+            return this.DownloadBlobAsync(id, eTag);
+        }
+
+        /// <inheritdoc/>
+        public Task<ResourceAccessRuleSet> GetAsync(string id)
+        {
+            if (id is null)
             {
-                CloudBlockBlob blob = this.Container.GetBlockBlobReference(id);
-                string permissions = await blob.DownloadTextAsync().ConfigureAwait(false);
-                return JsonConvert.DeserializeObject<ResourceAccessRuleSet>(permissions, this.serializerSettings);
+                throw new ArgumentNullException(nameof(id));
             }
-            catch (Exception ex)
+
+            return this.DownloadBlobAsync(id, null);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ResourceAccessRuleSetCollection> GetBatchAsync(IEnumerable<IdWithETag> ids, int maxParallelism = 5)
+        {
+            if (ids is null)
             {
-                throw new ResourceAccessRuleSetNotFoundException(id, ex);
+                throw new ArgumentNullException(nameof(ids));
             }
+
+            var result = new ResourceAccessRuleSetCollection();
+
+            foreach (IList<IdWithETag> batch in ids.Buffer(maxParallelism))
+            {
+                IList<Task<ResourceAccessRuleSet>> taskBatch = batch.Select(id => Task.Run(async () =>
+                {
+                    return await this.DownloadBlobAsync(id.Id, id.ETag).ConfigureAwait(false);
+                })).Where(r => r != null).ToList();
+
+                ResourceAccessRuleSet[] ruleSets = await Task.WhenAll(taskBatch).ConfigureAwait(false);
+                result.RuleSets.AddRange(ruleSets);
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public async Task<ResourceAccessRuleSetCollection> GetBatchAsync(IEnumerable<string> ids, int maxParallelism = 5)
+        {
+            if (ids is null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            var result = new ResourceAccessRuleSetCollection();
+
+            foreach (IList<string> batch in ids.Buffer(maxParallelism))
+            {
+                IList<Task<ResourceAccessRuleSet>> taskBatch = batch.Select(id => Task.Run(async () =>
+                {
+                    return await this.DownloadBlobAsync(id, null).ConfigureAwait(false);
+                })).ToList();
+
+                ResourceAccessRuleSet[] ruleSets = await Task.WhenAll(taskBatch).ConfigureAwait(false);
+                result.RuleSets.AddRange(ruleSets);
+            }
+
+            return result;
         }
 
         /// <inheritdoc/>
@@ -89,6 +142,27 @@ namespace Marain.Claims.Storage
             await blob.UploadTextAsync(serializedPermissions, Encoding.UTF8, new AccessCondition { IfMatchETag = ruleSet.ETag }, null, null).ConfigureAwait(false);
             ruleSet.ETag = blob.Properties.ETag;
             return ruleSet;
+        }
+
+        private async Task<ResourceAccessRuleSet> DownloadBlobAsync(string id, string eTag)
+        {
+            try
+            {
+                CloudBlockBlob blob = this.Container.GetBlockBlobReference(id);
+                string ruleSetJson = await blob.DownloadTextAsync(Encoding.UTF8, eTag != null ? AccessCondition.GenerateIfNoneMatchCondition(eTag) : null, null, null).ConfigureAwait(false);
+                ResourceAccessRuleSet ruleSet = JsonConvert.DeserializeObject<ResourceAccessRuleSet>(ruleSetJson, this.serializerSettings);
+                ruleSet.ETag = blob.Properties.ETag;
+                return ruleSet;
+            }
+            catch (StorageException storeEx) when (storeEx.RequestInformation.HttpStatusCode == (int)HttpStatusCode.PreconditionFailed)
+            {
+                // NOP - we are quite happy to ignore that, as the blob hasn't changed.
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ResourceAccessRuleSetNotFoundException(id, ex);
+            }
         }
     }
 }

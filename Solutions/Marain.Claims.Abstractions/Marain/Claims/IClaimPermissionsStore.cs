@@ -4,6 +4,7 @@
 
 namespace Marain.Claims
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -23,6 +24,18 @@ namespace Marain.Claims
         ///     when it completes.
         /// </returns>
         Task<ClaimPermissions> GetAsync(string id);
+
+        /// <summary>
+        ///     Gets the specified batch of <see cref="ClaimPermissions" /> from the
+        ///     repository.
+        /// </summary>
+        /// <param name="ids">The ids of the permissions to retrieve.</param>
+        /// <param name="maxParallelism">The maximum parallelization of the request.</param>
+        /// <returns>
+        ///     A <see cref="Task" /> that will return the <see cref="ClaimPermissionsCollection" />
+        ///     when it completes.
+        /// </returns>
+        Task<ClaimPermissionsCollection> GetBatchAsync(IEnumerable<string> ids, int maxParallelism = 5);
 
         /// <summary>
         ///     Saves or updates the given <see cref="ClaimPermissions" />.
