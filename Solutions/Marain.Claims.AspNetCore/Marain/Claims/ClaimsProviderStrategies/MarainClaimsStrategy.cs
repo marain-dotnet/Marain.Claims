@@ -20,7 +20,7 @@ namespace Marain.Claims
     /// </remarks>
     public class MarainClaimsStrategy : IClaimsProviderStrategy<HttpRequest>
     {
-        private const string HeaderKey = "X-ENDJIN-CLAIMS";
+        private const string HeaderKey = "X-MARAIN-CLAIMS";
 
         /// <summary>
         /// Builds a claims identity.
@@ -35,7 +35,7 @@ namespace Marain.Claims
             {
                 var jwtPayload = JwtPayload.Deserialize(request.Headers[HeaderKey]);
 
-                result = new ClaimsIdentity(jwtPayload.Claims, "endjinclaims", "name", "roles");
+                result = new ClaimsIdentity(jwtPayload.Claims, "marainclaims", "name", "roles");
             }
 
             return Task.FromResult(result);

@@ -1,0 +1,658 @@
+﻿openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: Claims Service
+servers:
+  - url: https://claims.marain.io
+paths:
+  /{tenantId}/claimPermissions:
+    post:
+      tags:
+        - Claim Permissions
+      summary: Create a Claim Permissions
+      description: Creates a permissions definition for a claim
+      operationId: createClaimPermissions
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClaimPermissionsWithPostExample'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClaimPermissionsWithGetExample'
+        '403':
+          description: Forbidden
+  /{tenantId}/claimPermissions/{claimPermissionsId}:
+    get:
+      tags:
+        - Claim Permissions
+      summary: Get a claim permissions
+      description: Gets a claim permissions by ID
+      operationId: getClaimPermissions
+      parameters:
+        - $ref: '#/components/parameters/claimPermissionsId'
+        - $ref: '#/components/parameters/tenant'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClaimPermissionsWithGetExample'
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid claimPermissionsId
+  /{tenantId}/claimPermissions/{claimPermissionsId}/allResourceAccessRules:
+    get:
+      tags:
+        - Claim Permissions
+      summary: Get all resource access rules for a claim permissions
+      description: "Gets all resource access rules for a claim permissions, combining direct resource access rules and resource access rules from resource access rules sets"
+      operationId: getClaimPermissionsResourceAccessRules
+      parameters:
+        - $ref: '#/components/parameters/claimPermissionsId'
+        - $ref: '#/components/parameters/tenant'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceAccessRules'
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid claimPermissionsId
+  /{tenantId}/claimPermissions/{claimPermissionsId}/resourceAccessRules:
+    post:
+      tags:
+        - Claim Permissions
+      summary: Adds/removes resource access rules to/from a claim permissions
+      description: Adds/removes resource access rules to/from a claims permission by ID
+      operationId: updateClaimPermissionsResourceAccessRules
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+        - $ref: '#/components/parameters/claimPermissionsId'
+        - $ref: '#/components/parameters/updateOperation'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceAccessRules'
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid claimPermissionsId
+    put:
+      tags:
+        - Claim Permissions
+      summary: Set resource access rules for a claim permissions
+      description: Sets resource access rules for a claim permissions by ID
+      operationId: setClaimPermissionsResourceAccessRules
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+        - $ref: '#/components/parameters/claimPermissionsId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceAccessRules'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid claimPermissionsId
+  /{tenantId}/claimPermissions/{claimPermissionsId}/resourceAccessRuleSets:
+    post:
+      tags:
+        - Claim Permissions
+      summary: Adds/removes resource access rule sets to/from a claim permissions
+      description: Adds/removes resource access rule sets to/from a claim permissions by ID
+      operationId: updateClaimPermissionsResourceAccessRuleSets
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+        - $ref: '#/components/parameters/claimPermissionsId'
+        - $ref: '#/components/parameters/updateOperation'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceAccessRuleSetsWithPostExample'
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '404':
+          description: Invalid claimPermissionsId
+    put:
+      tags:
+        - Claim Permissions
+      summary: Set resource access rule sets for a claim permissions
+      description: Sets resource access rule sets for a claim permissions by ID
+      operationId: setClaimPermissionsResourceAccessRuleSets
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+        - $ref: '#/components/parameters/claimPermissionsId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceAccessRuleSetsWithPostExample'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid claimPermissionsId
+  /{tenantId}/claimPermissions/{claimPermissionsId}/permission:
+    get:
+      tags:
+        - Claim Permissions
+      summary: Gets a permission result for a claim permissions for a target resource and access type
+      description: Gets a permission result for a claim permissions for a target resource and access type
+      operationId: getClaimPermissionsPermission
+      parameters:
+        - $ref: '#/components/parameters/claimPermissionsId'
+        - $ref: '#/components/parameters/tenant'
+        - name: resourceUri
+          schema:
+            type: string
+          in: query
+          required: true
+        - name: accessType
+          schema:
+            type: string
+          in: query
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionResult'
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '404':
+          description: Invalid claimPermissionsId
+          
+  /{tenantId}/claimPermissions/batchPermissionTest:
+    post:
+      tags:
+        - Claim Permissions
+      summary: Gets permission results for a set of target resources and access types
+      description: Gets permission results for a set of target resources and access types
+      operationId: getClaimPermissionsPermissionBatch
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ClaimPermissionsBatchRequestItemWithPostExample'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClaimPermissionsBatchResponseItemWithExample'
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+
+  /{tenantId}/resourceAccessRuleSet:
+    post:
+      tags:
+        - Resource Access Rule Set
+      summary: Create a resource access rule set
+      description: Creates a resource access rule set
+      operationId: createResourceAccessRuleSet
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceAccessRuleSetWithPostExample'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceAccessRuleSetWithGetExample'
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '403':
+          description: Forbidden
+  /{tenantId}/resourceAccessRuleSet/{resourceAccessRuleSetId}:
+    get:
+      tags:
+        - Resource Access Rule Set
+      summary: Get a resource access rule set
+      description: Gets a resource access rule set by ID
+      operationId: getResourceAccessRuleSet
+      parameters:
+        - $ref: '#/components/parameters/resourceAccessRuleSetId'
+        - $ref: '#/components/parameters/tenant'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceAccessRuleSetWithGetExample'
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid resourceAccessRuleSetId
+  /{tenantId}/resourceAccessRuleSet/{resourceAccessRuleSetId}/resourceAccessRules:
+    post:
+      tags:
+        - Resource Access Rule Set
+      summary: Adds/removes resource access rules to/from a resource access rule set
+      description: Adds/removes resource access rules to/from a resource access rule set by ID
+      operationId: updateResourceAccessRuleSetResourceAccessRules
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+        - $ref: '#/components/parameters/resourceAccessRuleSetId'
+        - $ref: '#/components/parameters/updateOperation'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceAccessRules'
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid resourceAccessRuleSetId
+    put:
+      tags:
+        - Resource Access Rule Set
+      summary: Set resource access rules for a resource access rule set
+      description: Sets resource access rules for a resource access rule set by ID
+      operationId: setResourceAccessRuleSetResourceAccessRules
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+        - $ref: '#/components/parameters/resourceAccessRuleSetId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceAccessRules'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        '403':
+          description: Forbidden
+        '404':
+          description: Invalid resourceAccessRuleSetId
+
+  /{tenantId}/tenant:
+    post:
+      tags:
+        - Initialization
+      summary: Set up the initial administrator permissions for a tenant
+      description: Creates a resource access rule set providing access to all endpoints and a Claim Permission granting that access to the specified role
+      operationId: initializeTenant
+      parameters:
+        - $ref: '#/components/parameters/tenant'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [administratorRoleClaimValue]
+              additionalProperties: false
+              properties:
+                administratorRoleClaimValue:
+                  type: string
+                  description: "The value which, if present in a roles claim, will grant a principal full access to the Claims service API"
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+                
+components:
+  schemas:
+    Resource:
+      type: object
+      properties:
+        uri:
+          type: string
+          format: url
+        displayName:
+          type: string
+      required:
+        - name
+        - displayName
+    ResourceAccessRule:
+      type: object
+      properties:
+        accessType:
+          type: string
+        resource:
+          $ref: '#/components/schemas/Resource'
+        permission:
+          type: string
+          enum:
+            - deny
+            - allow
+      required:
+        - accessType
+        - resource
+        - permission
+      example:
+        accessType: view
+        resource:
+          uri: page/home
+          displayName: Home page
+        permission: allow
+    ResourceAccessRules:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceAccessRule'
+    ResourceAccessRuleSet:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceAccessRule'
+      required:
+        - id
+    ResourceAccessRuleSetId:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    ResourceAccessRuleSetWithGetExample:
+      allOf:
+        - $ref: '#/components/schemas/ResourceAccessRuleSet'
+      example:
+        id: admin
+        displayName: admin
+        rules:
+          - accessType: view
+            resource:
+              name: page/admin
+              displayName: Admin page
+            permission: allow
+    ResourceAccessRuleSetWithPostExample:
+      allOf:
+        - $ref: '#/components/schemas/ResourceAccessRuleSet'
+      required:
+        - displayName
+      example:
+        id: admin
+        displayName: admin
+    ResourceAccessRuleSets:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceAccessRuleSet'
+    ResourceAccessRuleSetsWithPostExample:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceAccessRuleSetId'
+    ClaimPermissions:
+      type: object
+      properties:
+        id:
+          type: string
+        ResourceAccessRules:
+          $ref: '#/components/schemas/ResourceAccessRules'
+        ResourceAccessRuleSets:
+          $ref: '#/components/schemas/ResourceAccessRuleSets'
+      required:
+        - id
+    ClaimPermissionsWithGetExample:
+      allOf:
+        - $ref: '#/components/schemas/ClaimPermissions'
+        - example:
+            contentType: application/vnd.marain.claims.claimpermissions
+            id: Mike
+            resourceAccessRules:
+              - accessType: view
+                resource:
+                  name: page/home
+                  displayName: Home page
+                permission: allow
+            resourceAccessRuleSets:
+              id: 1
+              displayName: admin
+              rules:
+                - accessType: view
+                  resource:
+                    name: page/admin
+                    displayName: Admin page
+                  permission: allow
+    ClaimPermissionsWithPostExample:
+      allOf:
+        - $ref: '#/components/schemas/ClaimPermissions'
+        - example:
+            id: Mike
+    PermissionResult:
+      type: object
+      properties:
+        permission:
+          type: string
+          enum:
+            - allow
+            - deny
+      example:
+        permission: allow
+
+    ClaimPermissionsBatchRequestItem:
+      properties:
+        claimPermissionsId:
+          type: string
+        resourceUri:
+          type: string
+          format: url
+        resourceAccessType:
+          type: string
+
+    ClaimPermissionsBatchRequestItemWithPostExample:
+      allOf:
+        - $ref: '#/components/schemas/ClaimPermissionsBatchRequestItem'
+        - example:
+            claimPermissionsId: UserAdministrator
+            resourceUri: page/home
+            resourceAccessType: get
+
+    ClaimPermissionsBatchResponseItem:
+      allOf:
+        - $ref: "#/components/schemas/ClaimPermissionsBatchRequestItem"
+        - properties:
+            responseCode:
+              type: integer
+            permission:
+              type: string
+              enum: 
+                - allow
+                - deny
+
+    ClaimPermissionsBatchResponseItemWithExample:
+      allOf:
+        - $ref: "#/components/schemas/ClaimPermissionsBatchResponseItem"
+        - example:
+            claimPermissionsId: UserAdministrator
+            resourceUri: page/home
+            resourceAccessType: get
+            responseCode: 200
+            permission: allow
+
+    ProblemDetails:
+      required:
+        - status
+        - detail
+      properties:
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        title:
+          type: string
+        instance:
+          type: string
+          format: url
+        type: 
+          type: string
+          format: url
+        validationErrors: 
+          type: array
+      additionalProperties: true
+  parameters:
+    tenant:
+      name: tenantId
+      in: uri
+      x-ms-parameter-location: method
+      description: The tenant within which the request should operate
+      required: true
+      schema:
+        type: string
+    claimPermissionsId:
+      name: claimPermissionsId
+      in: path
+      x-ms-parameter-location: method
+      description: An identifier uniquely associated with a claim permissions
+      required: true
+      schema:
+        type: string
+    resourceAccessRuleSetId:
+      name: resourceAccessRuleSetId
+      in: path
+      x-ms-parameter-location: method
+      description: An identifier uniquely associated with a resource access rule set
+      required: true
+      schema:
+        type: string
+    updateOperation:
+      name: operation
+      in: query
+      x-ms-parameter-location: method
+      required: true
+      schema: 
+        type: string
+        enum: 
+          - add
+          - remove

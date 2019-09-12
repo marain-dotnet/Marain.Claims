@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+  Not using normal netstandard2.0 import, because this contains AutoRest-generated code, which makes
+  the analyzers we normally bring in unhappy.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+    <DocumentationFile>$(OutputPath)$(TargetFramework.ToLowerInvariant())\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>1701;1702;1591;1573</NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Corvus.Identity.ManagedServiceIdentity.ClientAuthentication" Version="0.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.20" />
+  </ItemGroup>
+
+</Project>

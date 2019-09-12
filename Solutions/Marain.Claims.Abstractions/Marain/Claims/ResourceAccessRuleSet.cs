@@ -20,7 +20,7 @@ namespace Marain.Claims
         /// <summary>
         /// The registered content type used when this object is serialized/deserialized.
         /// </summary>
-        public const string RegisteredContentType = "application/vnd.endjin.claims.resourceaccessruleset";
+        public const string RegisteredContentType = "application/vnd.marain.claims.resourceaccessruleset";
 
         private IList<ResourceAccessRule> rules;
 
