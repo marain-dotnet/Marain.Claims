@@ -99,7 +99,7 @@ namespace Marain.Claims.SpecFlow.Steps
             try
             {
                 ClaimPermissions result = await store.GetAsync(p0).ConfigureAwait(false);
-                this.scenarioContext.Set(result, ClaimPermissionsStoreSteps.ClaimPermissionsResult);
+                this.scenarioContext.Set(result, ClaimPermissionsResult);
             }
             catch (Exception ex)
             {

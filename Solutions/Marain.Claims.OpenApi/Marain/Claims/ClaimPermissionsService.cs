@@ -18,6 +18,7 @@ namespace Marain.Claims
     using Microsoft.ApplicationInsights.DataContracts;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Tavis.UriTemplates;
 
     /// <summary>
     ///     Handles claim permissions requests.
@@ -25,10 +26,10 @@ namespace Marain.Claims
     public class ClaimPermissionsService : IOpenApiService
     {
         /// <summary>
-        /// Prefix passed to <c>OpenApiClaimsServiceCollectionExtensions.AddRoleBasedOpenApiAccessControlWithPreemptiveExemptions</c>
+        /// Uri template passed to <c>OpenApiClaimsServiceCollectionExtensions.AddRoleBasedOpenApiAccessControlWithPreemptiveExemptions</c>
         /// to distinguish between rules defining access control policy for the Claims service vs those for other services.
         /// </summary>
-        public const string ClaimsResourcePrefix = "marain/claims/";
+        public const string ClaimsResourceTemplate = "{tenantId}/marain/claims/";
 
         /// <summary>
         /// Open API operation ID for endpoint that evaluates permissions for a particular claims permission.
@@ -589,15 +590,18 @@ namespace Marain.Claims
 
                 (string accessType, string resourceUri, string displayName)[] ruleData =
                 {
-                    ("GET", "api/{0}/claimPermissions/**/*", "Read Claim Permissions"),
-                    ("PUT", "api/{0}/claimPermissions/**/*", "Modify Claim Permissions"),
-                    ("POST", "api/{0}/claimPermissions", "Create Claim Permissions"),
-                    ("POST", "api/{0}/claimPermissions/**/*", "Add to Claim Permissions"),
-                    ("GET", "api/{0}/resourceAccessRuleSet/**/*", "Read Resource Access Rules"),
-                    ("PUT", "api/{0}/resourceAccessRuleSet/**/*", "Modify Resource Access Rules"),
-                    ("POST", "api/{0}/resourceAccessRuleSet", "Create Resource Access Rules"),
-                    ("POST", "api/{0}/resourceAccessRuleSet/**/*", "Add to Resource Access Rules"),
+                    ("GET", "api/claimPermissions/**/*", "Read Claim Permissions"),
+                    ("PUT", "api/claimPermissions/**/*", "Modify Claim Permissions"),
+                    ("POST", "api/claimPermissions", "Create Claim Permissions"),
+                    ("POST", "api/claimPermissions/**/*", "Add to Claim Permissions"),
+                    ("GET", "api/resourceAccessRuleSet/**/*", "Read Resource Access Rules"),
+                    ("PUT", "api/resourceAccessRuleSet/**/*", "Modify Resource Access Rules"),
+                    ("POST", "api/resourceAccessRuleSet", "Create Resource Access Rules"),
+                    ("POST", "api/resourceAccessRuleSet/**/*", "Add to Resource Access Rules"),
                 };
+
+                string prefix = ClaimsResourceTemplate.Replace("{tenantId}", context.CurrentTenantId);
+
                 var ruleSet = new ResourceAccessRuleSet
                 {
                     Id = "marainClaimsAdministrator",
@@ -606,11 +610,12 @@ namespace Marain.Claims
                         .Select(rule =>
                             new ResourceAccessRule(
                             rule.accessType,
-                            new Resource(new Uri(ClaimsResourcePrefix + string.Format(rule.resourceUri, context.CurrentTenantId), UriKind.Relative), rule.displayName),
+                            new Resource(new Uri(prefix + rule.resourceUri, UriKind.Relative), rule.displayName),
                             Permission.Allow))
                         .ToList(),
                 };
-                await ruleSetStore.PersistAsync(ruleSet).ConfigureAwait(false);
+
+                ruleSet = await ruleSetStore.PersistAsync(ruleSet).ConfigureAwait(false);
 
                 var rulesetByIdOnlyForClaimPermissionsPersistence = new ResourceAccessRuleSet { Id = ruleSet.Id };
                 var permissions = new ClaimPermissions

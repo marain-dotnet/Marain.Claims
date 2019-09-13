@@ -82,7 +82,7 @@ namespace Marain.Claims.Storage
                 permissions = await this.UpdateRuleSetsAsync(permissions).ConfigureAwait(false);
                 return permissions;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!(ex is ResourceAccessRuleSetNotFoundException))
             {
                 throw new ClaimPermissionsNotFoundException(id, ex);
             }

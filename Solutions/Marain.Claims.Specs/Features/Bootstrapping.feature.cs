@@ -94,7 +94,7 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.And("the service creates a claims permission with id \'adminrole\' with empty resourceAc" +
                     "cessRules and a single resourceAccessRuleSet \'marainClaimsAdministrator\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 15
-    testRunner.And("the service creates an access rule set with id \'endjinClaimsAdministrator\' with d" +
+    testRunner.And("the service creates an access rule set with id \'marainClaimsAdministrator\' with d" +
                     "isplayname \'Claims Administrator Permissions\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
@@ -103,42 +103,42 @@ this.ScenarioInitialize(scenarioInfo);
                         "accessType",
                         "permission"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/claimPermissions/**/*",
+                        "RootTenant/marain/claims/api/claimPermissions/**/*",
                         "Read Claim Permissions",
                         "GET",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/claimPermissions/**/*",
+                        "RootTenant/marain/claims/api/claimPermissions/**/*",
                         "Modify Claim Permissions",
                         "PUT",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/claimPermissions",
+                        "RootTenant/marain/claims/api/claimPermissions",
                         "Create Claim Permissions",
                         "POST",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/claimPermissions/**/*",
+                        "RootTenant/marain/claims/api/claimPermissions/**/*",
                         "Add to Claim Permissions",
                         "POST",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/resourceAccessRuleSet/**/*",
+                        "RootTenant/marain/claims/api/resourceAccessRuleSet/**/*",
                         "Read Resource Access Rules",
                         "GET",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/resourceAccessRuleSet/**/*",
+                        "RootTenant/marain/claims/api/resourceAccessRuleSet/**/*",
                         "Modify Resource Access Rules",
                         "PUT",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/resourceAccessRuleSet",
+                        "RootTenant/marain/claims/api/resourceAccessRuleSet",
                         "Create Resource Access Rules",
                         "POST",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "marain/claims/api/RootTenant/resourceAccessRuleSet/**/*",
+                        "RootTenant/marain/claims/api/resourceAccessRuleSet/**/*",
                         "Add to Resource Access Rules",
                         "POST",
                         "Allow"});

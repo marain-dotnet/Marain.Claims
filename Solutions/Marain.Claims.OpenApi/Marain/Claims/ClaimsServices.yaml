@@ -5,7 +5,7 @@ info:
 servers:
   - url: https://claims.marain.io
 paths:
-  /{tenantId}/claimPermissions:
+  /{tenantId}/marain/claims/claimPermissions:
     post:
       tags:
         - Claim Permissions
@@ -29,7 +29,7 @@ paths:
                 $ref: '#/components/schemas/ClaimPermissionsWithGetExample'
         '403':
           description: Forbidden
-  /{tenantId}/claimPermissions/{claimPermissionsId}:
+  /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}:
     get:
       tags:
         - Claim Permissions
@@ -50,7 +50,7 @@ paths:
           description: Forbidden
         '404':
           description: Invalid claimPermissionsId
-  /{tenantId}/claimPermissions/{claimPermissionsId}/allResourceAccessRules:
+  /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/allResourceAccessRules:
     get:
       tags:
         - Claim Permissions
@@ -71,7 +71,7 @@ paths:
           description: Forbidden
         '404':
           description: Invalid claimPermissionsId
-  /{tenantId}/claimPermissions/{claimPermissionsId}/resourceAccessRules:
+  /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/resourceAccessRules:
     post:
       tags:
         - Claim Permissions
@@ -135,7 +135,7 @@ paths:
           description: Forbidden
         '404':
           description: Invalid claimPermissionsId
-  /{tenantId}/claimPermissions/{claimPermissionsId}/resourceAccessRuleSets:
+  /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/resourceAccessRuleSets:
     post:
       tags:
         - Claim Permissions
@@ -197,7 +197,7 @@ paths:
           description: Forbidden
         '404':
           description: Invalid claimPermissionsId
-  /{tenantId}/claimPermissions/{claimPermissionsId}/permission:
+  /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/permission:
     get:
       tags:
         - Claim Permissions
@@ -236,7 +236,7 @@ paths:
         '404':
           description: Invalid claimPermissionsId
           
-  /{tenantId}/claimPermissions/batchPermissionTest:
+  /{tenantId}/marain/claims/claimPermissions/batchPermissionTest:
     post:
       tags:
         - Claim Permissions
@@ -272,7 +272,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProblemDetails"
 
-  /{tenantId}/resourceAccessRuleSet:
+  /{tenantId}/marain/claims/resourceAccessRuleSet:
     post:
       tags:
         - Resource Access Rule Set
@@ -305,7 +305,7 @@ paths:
                 $ref: "#/components/schemas/ProblemDetails"
         '403':
           description: Forbidden
-  /{tenantId}/resourceAccessRuleSet/{resourceAccessRuleSetId}:
+  /{tenantId}/marain/claims/resourceAccessRuleSet/{resourceAccessRuleSetId}:
     get:
       tags:
         - Resource Access Rule Set
@@ -326,7 +326,7 @@ paths:
           description: Forbidden
         '404':
           description: Invalid resourceAccessRuleSetId
-  /{tenantId}/resourceAccessRuleSet/{resourceAccessRuleSetId}/resourceAccessRules:
+  /{tenantId}/marain/claims/resourceAccessRuleSet/{resourceAccessRuleSetId}/resourceAccessRules:
     post:
       tags:
         - Resource Access Rule Set
@@ -391,7 +391,7 @@ paths:
         '404':
           description: Invalid resourceAccessRuleSetId
 
-  /{tenantId}/tenant:
+  /{tenantId}/marain/claims/tenant:
     post:
       tags:
         - Initialization

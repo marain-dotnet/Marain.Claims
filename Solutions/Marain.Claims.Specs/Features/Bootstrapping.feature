@@ -12,17 +12,17 @@ Scenario: Claims framework tenant is uninitialised service unit test
     When I initialise the tenant with the role id 'adminrole'
     Then the tenant is initialised
     And the service creates a claims permission with id 'adminrole' with empty resourceAccessRules and a single resourceAccessRuleSet 'marainClaimsAdministrator'
-    And the service creates an access rule set with id 'endjinClaimsAdministrator' with displayname 'Claims Administrator Permissions'
+    And the service creates an access rule set with id 'marainClaimsAdministrator' with displayname 'Claims Administrator Permissions'
     And the access rule set created has the following rules
     | resourceUri                                             | resourceDisplayName          | accessType | permission |
-    | marain/claims/api/RootTenant/claimPermissions/**/*      | Read Claim Permissions       | GET        | Allow      |
-    | marain/claims/api/RootTenant/claimPermissions/**/*      | Modify Claim Permissions     | PUT        | Allow      |
-    | marain/claims/api/RootTenant/claimPermissions           | Create Claim Permissions     | POST       | Allow      |
-    | marain/claims/api/RootTenant/claimPermissions/**/*      | Add to Claim Permissions     | POST       | Allow      |
-    | marain/claims/api/RootTenant/resourceAccessRuleSet/**/* | Read Resource Access Rules   | GET        | Allow      |
-    | marain/claims/api/RootTenant/resourceAccessRuleSet/**/* | Modify Resource Access Rules | PUT        | Allow      |
-    | marain/claims/api/RootTenant/resourceAccessRuleSet      | Create Resource Access Rules | POST       | Allow      |
-    | marain/claims/api/RootTenant/resourceAccessRuleSet/**/* | Add to Resource Access Rules | POST       | Allow      |
+    | RootTenant/marain/claims/api/claimPermissions/**/*      | Read Claim Permissions       | GET        | Allow      |
+    | RootTenant/marain/claims/api/claimPermissions/**/*      | Modify Claim Permissions     | PUT        | Allow      |
+    | RootTenant/marain/claims/api/claimPermissions           | Create Claim Permissions     | POST       | Allow      |
+    | RootTenant/marain/claims/api/claimPermissions/**/*      | Add to Claim Permissions     | POST       | Allow      |
+    | RootTenant/marain/claims/api/resourceAccessRuleSet/**/* | Read Resource Access Rules   | GET        | Allow      |
+    | RootTenant/marain/claims/api/resourceAccessRuleSet/**/* | Modify Resource Access Rules | PUT        | Allow      |
+    | RootTenant/marain/claims/api/resourceAccessRuleSet      | Create Resource Access Rules | POST       | Allow      |
+    | RootTenant/marain/claims/api/resourceAccessRuleSet/**/* | Add to Resource Access Rules | POST       | Allow      |
 
 @realStore
 Scenario: Claims framework tenant is uninitialised service integration test

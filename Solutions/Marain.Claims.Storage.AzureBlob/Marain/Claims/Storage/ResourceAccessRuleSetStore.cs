@@ -96,10 +96,10 @@ namespace Marain.Claims.Storage
                 IList<Task<ResourceAccessRuleSet>> taskBatch = batch.Select(id => Task.Run(async () =>
                 {
                     return await this.DownloadBlobAsync(id.Id, id.ETag).ConfigureAwait(false);
-                })).Where(r => r != null).ToList();
+                })).ToList();
 
                 ResourceAccessRuleSet[] ruleSets = await Task.WhenAll(taskBatch).ConfigureAwait(false);
-                result.RuleSets.AddRange(ruleSets);
+                result.RuleSets.AddRange(ruleSets.Where(r => r != null));
             }
 
             return result;
@@ -154,7 +154,7 @@ namespace Marain.Claims.Storage
                 ruleSet.ETag = blob.Properties.ETag;
                 return ruleSet;
             }
-            catch (StorageException storeEx) when (storeEx.RequestInformation.HttpStatusCode == (int)HttpStatusCode.PreconditionFailed)
+            catch (StorageException storeEx) when (storeEx.RequestInformation.HttpStatusCode == (int)HttpStatusCode.NotModified)
             {
                 // NOP - we are quite happy to ignore that, as the blob hasn't changed.
                 return null;
