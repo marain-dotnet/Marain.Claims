@@ -26,7 +26,7 @@
     <ProjectReference Include="..\Marain.Claims.OpenApi.AspNetCore\Marain.Claims.OpenApi.AspNetCore.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi.Service\Marain.Claims.OpenApi.Service.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
-    <ProjectReference Include="..\Marain.Claims.Tenancy\Marain.Claims.Tenancy.AzureBlob.csproj" />
+    <ProjectReference Include="..\Marain.Claims.Tenancy.AzureBlob\Marain.Claims.Tenancy.AzureBlob.csproj" />
   </ItemGroup>
 
 </Project>
