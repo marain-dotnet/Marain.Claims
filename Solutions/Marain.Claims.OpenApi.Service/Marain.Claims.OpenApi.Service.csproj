@@ -17,16 +17,28 @@
     </PackageReleaseNotes>
   </PropertyGroup>
   <Import Project="..\Common.NetStandard_2_0.proj" />
+
+  <ItemGroup>
+    <None Remove="Marain\Claims\ClaimsServices.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Marain\Claims\OpenApi\ClaimsServices.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Corvus.Azure.Storage.Tenancy" Version="0.10.0" />
-    <PackageReference Include="Menes.Hosting.AspNetCore" Version="0.2.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.2.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
     <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
-    <ProjectReference Include="..\Marain.Claims.Storage.AzureBlob\Marain.Claims.Storage.AzureBlob.csproj" />
+    <ProjectReference Include="..\Marain.Claims.Abstractions\Marain.Claims.Abstractions.csproj" />
   </ItemGroup>
 </Project>

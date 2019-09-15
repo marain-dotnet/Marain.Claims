@@ -23,6 +23,7 @@ namespace Marain.Claims.SpecFlow.Steps
     using Corvus.SpecFlow.Extensions;
     using Corvus.Extensions.Json;
     using Microsoft.Extensions.DependencyInjection;
+    using Marain.Claims.OpenApi;
 
     [Binding]
     public class BootstrappingSteps

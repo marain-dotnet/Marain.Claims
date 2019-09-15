@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageDescription></PackageDescription>
+    <PackageTags></PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+  </PropertyGroup>
+
+  <Import Project="..\Common.NetStandard_2_0.proj" />
+
+  <ItemGroup>
+    <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.10.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.2.0" />
+    <PackageReference Include="Menes.Hosting.AspNetCore" Version="0.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Marain.Claims.InProcessClient\Marain.Claims.InProcessClient.csproj" />
+    <ProjectReference Include="..\Marain.Claims.OpenApi.AspNetCore\Marain.Claims.OpenApi.AspNetCore.csproj" />
+    <ProjectReference Include="..\Marain.Claims.OpenApi.Service\Marain.Claims.OpenApi.Service.csproj" />
+    <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
+    <ProjectReference Include="..\Marain.Claims.Tenancy\Marain.Claims.Tenancy.csproj" />
+  </ItemGroup>
+
+</Project>

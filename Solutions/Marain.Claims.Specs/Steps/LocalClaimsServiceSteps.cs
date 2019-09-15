@@ -18,9 +18,6 @@ namespace Marain.Claims.SpecFlow.Steps
     using TechTalk.SpecFlow;
     using System.Linq;
     using System.Collections.Generic;
-
-    using ServicePermissionResult = Marain.Claims.PermissionResult;
-    using ClientPermissionResult = Marain.Claims.Client.Models.PermissionResult;
     using Menes;
 
     [Binding]

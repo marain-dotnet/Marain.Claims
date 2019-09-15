@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "KeyVaultName": "",
+    "CosmosDbAccountUri": "",
+    "CosmosDbKeySecretName":  "",
+    "CosmosDbDatabaseName": "",
+    "CosmosDbCollectionName": "",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "AI:DeveloperMode": "true"
+  }
+}
