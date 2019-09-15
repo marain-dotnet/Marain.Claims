@@ -1,4 +1,4 @@
-﻿// <copyright file="TenantedClaimsServiceCollectionExtensions.cs" company="Endjin Limited">
+﻿// <copyright file="TenantedBlobStorageClaimsServiceCollectionExtensions.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// Service collection extensions to add implementations of claims stores.
     /// </summary>
-    public static class TenantedClaimsServiceCollectionExtensions
+    public static class TenantedBlobStorageClaimsServiceCollectionExtensions
     {
         /// <summary>
         /// Adds the tenancy repository-based implementation of <see cref="IClaimPermissionsStore"/>
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>
         /// The configured <see cref="IServiceCollection"/>.
         /// </returns>
-        public static IServiceCollection AddTenancyBlobContainerClaimsStore(
+        public static IServiceCollection AddTenantedBlobContainerClaimsStore(
             this IServiceCollection services,
             IConfiguration configuration)
         {
@@ -41,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTenantCloudBlobContainerFactory(configuration);
             services.AddJsonSerializerSettings();
-            services.AddSingleton<IPermissionsStoreFactory, PermissionsStoreFactory>();
+            services.AddSingleton<IPermissionsStoreFactory, BlobContainerPermissionsStoreFactory>();
 
             return services;
         }

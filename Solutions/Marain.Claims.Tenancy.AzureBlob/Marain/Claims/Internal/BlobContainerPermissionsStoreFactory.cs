@@ -1,4 +1,4 @@
-﻿// <copyright file="PermissionsStoreFactory.cs" company="Endjin Limited">
+﻿// <copyright file="BlobContainerPermissionsStoreFactory.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -15,7 +15,7 @@ namespace Marain.Claims.Internal
     ///     Factory class for obtaining instances of <see cref="IClaimPermissionsStore" /> and <see cref="IResourceAccessRuleSetStore"/>
     ///     and <see cref="IResourceAccessRuleSetStore" />.
     /// </summary>
-    public class PermissionsStoreFactory : IPermissionsStoreFactory
+    public class BlobContainerPermissionsStoreFactory : IPermissionsStoreFactory
     {
         private readonly BlobStorageContainerDefinition claimPermissionsRepositoryDefinition;
         private readonly BlobStorageContainerDefinition resourceAccessRuleSetRepositoryDefinition;
@@ -23,7 +23,7 @@ namespace Marain.Claims.Internal
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="PermissionsStoreFactory"/> class.
+        ///     Initializes a new instance of the <see cref="BlobContainerPermissionsStoreFactory"/> class.
         /// </summary>
         /// <param name="tenantCloudBlobContainerFactory">
         ///     The repository factory.
@@ -31,7 +31,7 @@ namespace Marain.Claims.Internal
         /// <param name="serializerSettingsProvider">
         ///     The <see cref="IJsonSerializerSettingsProvider"/> to use for the stores.
         /// </param>
-        public PermissionsStoreFactory(
+        public BlobContainerPermissionsStoreFactory(
             ITenantCloudBlobContainerFactory tenantCloudBlobContainerFactory,
             IJsonSerializerSettingsProvider serializerSettingsProvider)
         {

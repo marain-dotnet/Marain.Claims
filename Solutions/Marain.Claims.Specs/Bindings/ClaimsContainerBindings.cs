@@ -38,7 +38,7 @@ namespace Marain.Claims.SpecFlow.Bindings
                         .Build();
                     serviceCollection.AddSingleton(config);
                     serviceCollection.AddSingleton<ITenantProvider, FakeTenantProvider>();
-                    serviceCollection.AddTenancyBlobContainerClaimsStore(config);
+                    serviceCollection.AddTenantedBlobContainerClaimsStore(config);
                 });
         }
     }

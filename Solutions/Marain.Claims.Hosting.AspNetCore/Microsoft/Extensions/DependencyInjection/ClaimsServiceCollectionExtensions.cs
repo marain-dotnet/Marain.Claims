@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddLogging();
-            services.AddTenancyBlobContainerClaimsStore(rootTenantDefaultConfiguration);
+            services.AddTenantedBlobContainerClaimsStore(rootTenantDefaultConfiguration);
             services.AddSingleton<ClaimPermissionsService>();
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());
             services.AddSingleton<ResourceAccessRuleSetService>();

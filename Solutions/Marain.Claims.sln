@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Abstractions"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Storage.AzureBlob", "Marain.Claims.Storage.AzureBlob\Marain.Claims.Storage.AzureBlob.csproj", "{E21B3A99-99AC-4CEC-82EE-BD2460D7FA6E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Tenancy", "Marain.Claims.Tenancy\Marain.Claims.Tenancy.csproj", "{BD84F228-7BC5-46E7-A89F-BBB53180F4C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Tenancy.AzureBlob", "Marain.Claims.Tenancy.AzureBlob\Marain.Claims.Tenancy.AzureBlob.csproj", "{BD84F228-7BC5-46E7-A89F-BBB53180F4C5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Client", "Marain.Claims.Client\Marain.Claims.Client.csproj", "{8AE603BB-0F1E-4424-8BC8-7B7DE0F51FA0}"
 EndProject
@@ -29,6 +29,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.OpenApi", "Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj", "{9623D1B0-40C8-44C3-8EEC-531CF965B0D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.OpenApi.AspNetCore", "Marain.Claims.OpenApi.AspNetCore\Marain.Claims.OpenApi.AspNetCore.csproj", "{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{19CB7678-387C-46BF-A427-20FA769092A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenApi", "OpenApi", "{17BE0C76-FFF1-4DA8-B077-FBC90DC1D9FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +87,18 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{66AA538E-E684-4C84-A1C8-74CBA60537CD} = {19CB7678-387C-46BF-A427-20FA769092A7}
+		{E21B3A99-99AC-4CEC-82EE-BD2460D7FA6E} = {19CB7678-387C-46BF-A427-20FA769092A7}
+		{BD84F228-7BC5-46E7-A89F-BBB53180F4C5} = {19CB7678-387C-46BF-A427-20FA769092A7}
+		{8AE603BB-0F1E-4424-8BC8-7B7DE0F51FA0} = {17BE0C76-FFF1-4DA8-B077-FBC90DC1D9FA}
+		{4EED1B06-4A40-4D0C-B426-564207920384} = {19CB7678-387C-46BF-A427-20FA769092A7}
+		{4206D374-36DB-4C17-84B3-05D5BBF79BA5} = {19CB7678-387C-46BF-A427-20FA769092A7}
+		{3565035B-723C-4323-B61B-B604F4D85D3F} = {19CB7678-387C-46BF-A427-20FA769092A7}
+		{8C76D305-5A91-40BB-9916-E6318928E60B} = {19CB7678-387C-46BF-A427-20FA769092A7}
+		{9623D1B0-40C8-44C3-8EEC-531CF965B0D6} = {17BE0C76-FFF1-4DA8-B077-FBC90DC1D9FA}
+		{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95} = {17BE0C76-FFF1-4DA8-B077-FBC90DC1D9FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B092077E-4A68-480E-A982-FE920DCCEF34}
