@@ -26,14 +26,14 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ClaimPermissionsWithGetExample CreateClaimPermissions(this IClaimsService operations, string xEndjinTenant, ClaimPermissionsWithPostExample body)
+            public static ClaimPermissionsWithGetExample CreateClaimPermissions(this IClaimsService operations, string tenantId, ClaimPermissionsWithPostExample body)
             {
-                return operations.CreateClaimPermissionsAsync(xEndjinTenant, body).GetAwaiter().GetResult();
+                return operations.CreateClaimPermissionsAsync(tenantId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -45,7 +45,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
@@ -53,9 +53,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ClaimPermissionsWithGetExample> CreateClaimPermissionsAsync(this IClaimsService operations, string xEndjinTenant, ClaimPermissionsWithPostExample body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ClaimPermissionsWithGetExample> CreateClaimPermissionsAsync(this IClaimsService operations, string tenantId, ClaimPermissionsWithPostExample body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateClaimPermissionsWithHttpMessagesAsync(xEndjinTenant, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateClaimPermissionsWithHttpMessagesAsync(tenantId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -73,12 +73,12 @@ namespace Marain.Claims.Client
             /// <param name='claimPermissionsId'>
             /// An identifier uniquely associated with a claim permissions
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
-            public static ClaimPermissionsWithGetExample GetClaimPermissions(this IClaimsService operations, string claimPermissionsId, string xEndjinTenant)
+            public static ClaimPermissionsWithGetExample GetClaimPermissions(this IClaimsService operations, string claimPermissionsId, string tenantId)
             {
-                return operations.GetClaimPermissionsAsync(claimPermissionsId, xEndjinTenant).GetAwaiter().GetResult();
+                return operations.GetClaimPermissionsAsync(claimPermissionsId, tenantId).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -93,15 +93,15 @@ namespace Marain.Claims.Client
             /// <param name='claimPermissionsId'>
             /// An identifier uniquely associated with a claim permissions
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ClaimPermissionsWithGetExample> GetClaimPermissionsAsync(this IClaimsService operations, string claimPermissionsId, string xEndjinTenant, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ClaimPermissionsWithGetExample> GetClaimPermissionsAsync(this IClaimsService operations, string claimPermissionsId, string tenantId, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetClaimPermissionsWithHttpMessagesAsync(claimPermissionsId, xEndjinTenant, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetClaimPermissionsWithHttpMessagesAsync(claimPermissionsId, tenantId, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -121,12 +121,12 @@ namespace Marain.Claims.Client
             /// <param name='claimPermissionsId'>
             /// An identifier uniquely associated with a claim permissions
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
-            public static IList<ResourceAccessRule> GetClaimPermissionsResourceAccessRules(this IClaimsService operations, string claimPermissionsId, string xEndjinTenant)
+            public static IList<ResourceAccessRule> GetClaimPermissionsResourceAccessRules(this IClaimsService operations, string claimPermissionsId, string tenantId)
             {
-                return operations.GetClaimPermissionsResourceAccessRulesAsync(claimPermissionsId, xEndjinTenant).GetAwaiter().GetResult();
+                return operations.GetClaimPermissionsResourceAccessRulesAsync(claimPermissionsId, tenantId).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -143,15 +143,15 @@ namespace Marain.Claims.Client
             /// <param name='claimPermissionsId'>
             /// An identifier uniquely associated with a claim permissions
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ResourceAccessRule>> GetClaimPermissionsResourceAccessRulesAsync(this IClaimsService operations, string claimPermissionsId, string xEndjinTenant, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ResourceAccessRule>> GetClaimPermissionsResourceAccessRulesAsync(this IClaimsService operations, string claimPermissionsId, string tenantId, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(claimPermissionsId, xEndjinTenant, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(claimPermissionsId, tenantId, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -166,7 +166,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -177,9 +177,9 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails UpdateClaimPermissionsResourceAccessRules(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRule> body)
+            public static ProblemDetails UpdateClaimPermissionsResourceAccessRules(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRule> body)
             {
-                return operations.UpdateClaimPermissionsResourceAccessRulesAsync(xEndjinTenant, claimPermissionsId, operation, body).GetAwaiter().GetResult();
+                return operations.UpdateClaimPermissionsResourceAccessRulesAsync(tenantId, claimPermissionsId, operation, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -191,7 +191,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -205,9 +205,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> UpdateClaimPermissionsResourceAccessRulesAsync(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> UpdateClaimPermissionsResourceAccessRulesAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(xEndjinTenant, claimPermissionsId, operation, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(tenantId, claimPermissionsId, operation, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -222,7 +222,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -230,9 +230,9 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails SetClaimPermissionsResourceAccessRules(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRule> body)
+            public static ProblemDetails SetClaimPermissionsResourceAccessRules(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRule> body)
             {
-                return operations.SetClaimPermissionsResourceAccessRulesAsync(xEndjinTenant, claimPermissionsId, body).GetAwaiter().GetResult();
+                return operations.SetClaimPermissionsResourceAccessRulesAsync(tenantId, claimPermissionsId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -244,7 +244,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -255,9 +255,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> SetClaimPermissionsResourceAccessRulesAsync(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> SetClaimPermissionsResourceAccessRulesAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(xEndjinTenant, claimPermissionsId, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(tenantId, claimPermissionsId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -272,7 +272,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -283,9 +283,9 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails UpdateClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body)
+            public static ProblemDetails UpdateClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body)
             {
-                return operations.UpdateClaimPermissionsResourceAccessRuleSetsAsync(xEndjinTenant, claimPermissionsId, operation, body).GetAwaiter().GetResult();
+                return operations.UpdateClaimPermissionsResourceAccessRuleSetsAsync(tenantId, claimPermissionsId, operation, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -297,7 +297,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -311,9 +311,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> UpdateClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> UpdateClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(xEndjinTenant, claimPermissionsId, operation, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(tenantId, claimPermissionsId, operation, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -328,7 +328,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -336,9 +336,9 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails SetClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRuleSetId> body)
+            public static ProblemDetails SetClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetId> body)
             {
-                return operations.SetClaimPermissionsResourceAccessRuleSetsAsync(xEndjinTenant, claimPermissionsId, body).GetAwaiter().GetResult();
+                return operations.SetClaimPermissionsResourceAccessRuleSetsAsync(tenantId, claimPermissionsId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -350,7 +350,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='claimPermissionsId'>
@@ -361,9 +361,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> SetClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRuleSetId> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> SetClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetId> body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(xEndjinTenant, claimPermissionsId, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(tenantId, claimPermissionsId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -383,16 +383,16 @@ namespace Marain.Claims.Client
             /// <param name='claimPermissionsId'>
             /// An identifier uniquely associated with a claim permissions
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='resourceUri'>
             /// </param>
             /// <param name='accessType'>
             /// </param>
-            public static object GetClaimPermissionsPermission(this IClaimsService operations, string claimPermissionsId, string xEndjinTenant, string resourceUri, string accessType)
+            public static object GetClaimPermissionsPermission(this IClaimsService operations, string claimPermissionsId, string tenantId, string resourceUri, string accessType)
             {
-                return operations.GetClaimPermissionsPermissionAsync(claimPermissionsId, xEndjinTenant, resourceUri, accessType).GetAwaiter().GetResult();
+                return operations.GetClaimPermissionsPermissionAsync(claimPermissionsId, tenantId, resourceUri, accessType).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -409,7 +409,7 @@ namespace Marain.Claims.Client
             /// <param name='claimPermissionsId'>
             /// An identifier uniquely associated with a claim permissions
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='resourceUri'>
@@ -419,9 +419,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetClaimPermissionsPermissionAsync(this IClaimsService operations, string claimPermissionsId, string xEndjinTenant, string resourceUri, string accessType, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> GetClaimPermissionsPermissionAsync(this IClaimsService operations, string claimPermissionsId, string tenantId, string resourceUri, string accessType, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetClaimPermissionsPermissionWithHttpMessagesAsync(claimPermissionsId, xEndjinTenant, resourceUri, accessType, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetClaimPermissionsPermissionWithHttpMessagesAsync(claimPermissionsId, tenantId, resourceUri, accessType, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -436,14 +436,14 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static object GetClaimPermissionsPermissionBatch(this IClaimsService operations, string xEndjinTenant, IList<ClaimPermissionsBatchRequestItemWithPostExample> body)
+            public static object GetClaimPermissionsPermissionBatch(this IClaimsService operations, string tenantId, IList<ClaimPermissionsBatchRequestItemWithPostExample> body)
             {
-                return operations.GetClaimPermissionsPermissionBatchAsync(xEndjinTenant, body).GetAwaiter().GetResult();
+                return operations.GetClaimPermissionsPermissionBatchAsync(tenantId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -455,7 +455,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
@@ -463,9 +463,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetClaimPermissionsPermissionBatchAsync(this IClaimsService operations, string xEndjinTenant, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> GetClaimPermissionsPermissionBatchAsync(this IClaimsService operations, string tenantId, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(xEndjinTenant, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(tenantId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -480,14 +480,14 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static object CreateResourceAccessRuleSet(this IClaimsService operations, string xEndjinTenant, ResourceAccessRuleSetWithPostExample body)
+            public static object CreateResourceAccessRuleSet(this IClaimsService operations, string tenantId, ResourceAccessRuleSetWithPostExample body)
             {
-                return operations.CreateResourceAccessRuleSetAsync(xEndjinTenant, body).GetAwaiter().GetResult();
+                return operations.CreateResourceAccessRuleSetAsync(tenantId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -499,7 +499,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
@@ -507,9 +507,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> CreateResourceAccessRuleSetAsync(this IClaimsService operations, string xEndjinTenant, ResourceAccessRuleSetWithPostExample body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> CreateResourceAccessRuleSetAsync(this IClaimsService operations, string tenantId, ResourceAccessRuleSetWithPostExample body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.CreateResourceAccessRuleSetWithHttpMessagesAsync(xEndjinTenant, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateResourceAccessRuleSetWithHttpMessagesAsync(tenantId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -527,12 +527,12 @@ namespace Marain.Claims.Client
             /// <param name='resourceAccessRuleSetId'>
             /// An identifier uniquely associated with a resource access rule set
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
-            public static ResourceAccessRuleSetWithGetExample GetResourceAccessRuleSet(this IClaimsService operations, string resourceAccessRuleSetId, string xEndjinTenant)
+            public static ResourceAccessRuleSetWithGetExample GetResourceAccessRuleSet(this IClaimsService operations, string resourceAccessRuleSetId, string tenantId)
             {
-                return operations.GetResourceAccessRuleSetAsync(resourceAccessRuleSetId, xEndjinTenant).GetAwaiter().GetResult();
+                return operations.GetResourceAccessRuleSetAsync(resourceAccessRuleSetId, tenantId).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -547,15 +547,15 @@ namespace Marain.Claims.Client
             /// <param name='resourceAccessRuleSetId'>
             /// An identifier uniquely associated with a resource access rule set
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ResourceAccessRuleSetWithGetExample> GetResourceAccessRuleSetAsync(this IClaimsService operations, string resourceAccessRuleSetId, string xEndjinTenant, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ResourceAccessRuleSetWithGetExample> GetResourceAccessRuleSetAsync(this IClaimsService operations, string resourceAccessRuleSetId, string tenantId, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetResourceAccessRuleSetWithHttpMessagesAsync(resourceAccessRuleSetId, xEndjinTenant, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetResourceAccessRuleSetWithHttpMessagesAsync(resourceAccessRuleSetId, tenantId, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -570,7 +570,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='resourceAccessRuleSetId'>
@@ -581,9 +581,9 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails UpdateResourceAccessRuleSetResourceAccessRules(this IClaimsService operations, string xEndjinTenant, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body)
+            public static ProblemDetails UpdateResourceAccessRuleSetResourceAccessRules(this IClaimsService operations, string tenantId, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body)
             {
-                return operations.UpdateResourceAccessRuleSetResourceAccessRulesAsync(xEndjinTenant, resourceAccessRuleSetId, operation, body).GetAwaiter().GetResult();
+                return operations.UpdateResourceAccessRuleSetResourceAccessRulesAsync(tenantId, resourceAccessRuleSetId, operation, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -595,7 +595,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='resourceAccessRuleSetId'>
@@ -609,9 +609,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> UpdateResourceAccessRuleSetResourceAccessRulesAsync(this IClaimsService operations, string xEndjinTenant, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> UpdateResourceAccessRuleSetResourceAccessRulesAsync(this IClaimsService operations, string tenantId, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.UpdateResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(xEndjinTenant, resourceAccessRuleSetId, operation, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.UpdateResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(tenantId, resourceAccessRuleSetId, operation, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -626,7 +626,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='resourceAccessRuleSetId'>
@@ -634,9 +634,9 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails SetResourceAccessRuleSetResourceAccessRules(this IClaimsService operations, string xEndjinTenant, string resourceAccessRuleSetId, IList<ResourceAccessRule> body)
+            public static ProblemDetails SetResourceAccessRuleSetResourceAccessRules(this IClaimsService operations, string tenantId, string resourceAccessRuleSetId, IList<ResourceAccessRule> body)
             {
-                return operations.SetResourceAccessRuleSetResourceAccessRulesAsync(xEndjinTenant, resourceAccessRuleSetId, body).GetAwaiter().GetResult();
+                return operations.SetResourceAccessRuleSetResourceAccessRulesAsync(tenantId, resourceAccessRuleSetId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -648,7 +648,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='resourceAccessRuleSetId'>
@@ -659,9 +659,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> SetResourceAccessRuleSetResourceAccessRulesAsync(this IClaimsService operations, string xEndjinTenant, string resourceAccessRuleSetId, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> SetResourceAccessRuleSetResourceAccessRulesAsync(this IClaimsService operations, string tenantId, string resourceAccessRuleSetId, IList<ResourceAccessRule> body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SetResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(xEndjinTenant, resourceAccessRuleSetId, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.SetResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(tenantId, resourceAccessRuleSetId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -677,14 +677,14 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails InitializeTenant(this IClaimsService operations, string xEndjinTenant, Body body)
+            public static ProblemDetails InitializeTenant(this IClaimsService operations, string tenantId, Body body)
             {
-                return operations.InitializeTenantAsync(xEndjinTenant, body).GetAwaiter().GetResult();
+                return operations.InitializeTenantAsync(tenantId, body).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -697,7 +697,7 @@ namespace Marain.Claims.Client
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            /// <param name='xEndjinTenant'>
+            /// <param name='tenantId'>
             /// The tenant within which the request should operate
             /// </param>
             /// <param name='body'>
@@ -705,9 +705,9 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> InitializeTenantAsync(this IClaimsService operations, string xEndjinTenant, Body body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> InitializeTenantAsync(this IClaimsService operations, string tenantId, Body body, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.InitializeTenantWithHttpMessagesAsync(xEndjinTenant, body, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.InitializeTenantWithHttpMessagesAsync(tenantId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

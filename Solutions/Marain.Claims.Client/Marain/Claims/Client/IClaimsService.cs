@@ -46,7 +46,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Creates a permissions definition for a claim
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -57,7 +57,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> CreateClaimPermissionsWithHttpMessagesAsync(string xEndjinTenant, ClaimPermissionsWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> CreateClaimPermissionsWithHttpMessagesAsync(string tenantId, ClaimPermissionsWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get a claim permissions
@@ -68,7 +68,7 @@ namespace Marain.Claims.Client
         /// <param name='claimPermissionsId'>
         /// An identifier uniquely associated with a claim permissions
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='customHeaders'>
@@ -77,7 +77,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> GetClaimPermissionsWithHttpMessagesAsync(string claimPermissionsId, string xEndjinTenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> GetClaimPermissionsWithHttpMessagesAsync(string claimPermissionsId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get all resource access rules for a claim permissions
@@ -90,7 +90,7 @@ namespace Marain.Claims.Client
         /// <param name='claimPermissionsId'>
         /// An identifier uniquely associated with a claim permissions
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='customHeaders'>
@@ -99,7 +99,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<ResourceAccessRule>>> GetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string claimPermissionsId, string xEndjinTenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<ResourceAccessRule>>> GetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string claimPermissionsId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds/removes resource access rules to/from a claim permissions
@@ -108,7 +108,7 @@ namespace Marain.Claims.Client
         /// Adds/removes resource access rules to/from a claims permission by
         /// ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -125,7 +125,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Set resource access rules for a claim permissions
@@ -133,7 +133,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Sets resource access rules for a claim permissions by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -147,7 +147,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds/removes resource access rule sets to/from a claim permissions
@@ -156,7 +156,7 @@ namespace Marain.Claims.Client
         /// Adds/removes resource access rule sets to/from a claim permissions
         /// by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -173,7 +173,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Set resource access rule sets for a claim permissions
@@ -181,7 +181,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Sets resource access rule sets for a claim permissions by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -195,7 +195,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a permission result for a claim permissions for a target
@@ -208,7 +208,7 @@ namespace Marain.Claims.Client
         /// <param name='claimPermissionsId'>
         /// An identifier uniquely associated with a claim permissions
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='resourceUri'>
@@ -221,7 +221,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionWithHttpMessagesAsync(string claimPermissionsId, string xEndjinTenant, string resourceUri, string accessType, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionWithHttpMessagesAsync(string claimPermissionsId, string tenantId, string resourceUri, string accessType, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets permission results for a set of target resources and access
@@ -231,7 +231,7 @@ namespace Marain.Claims.Client
         /// Gets permission results for a set of target resources and access
         /// types
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -242,7 +242,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(string xEndjinTenant, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(string tenantId, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Create a resource access rule set
@@ -250,7 +250,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Creates a resource access rule set
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -261,7 +261,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<object>> CreateResourceAccessRuleSetWithHttpMessagesAsync(string xEndjinTenant, ResourceAccessRuleSetWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<object>> CreateResourceAccessRuleSetWithHttpMessagesAsync(string tenantId, ResourceAccessRuleSetWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get a resource access rule set
@@ -272,7 +272,7 @@ namespace Marain.Claims.Client
         /// <param name='resourceAccessRuleSetId'>
         /// An identifier uniquely associated with a resource access rule set
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='customHeaders'>
@@ -281,7 +281,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ResourceAccessRuleSetWithGetExample>> GetResourceAccessRuleSetWithHttpMessagesAsync(string resourceAccessRuleSetId, string xEndjinTenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ResourceAccessRuleSetWithGetExample>> GetResourceAccessRuleSetWithHttpMessagesAsync(string resourceAccessRuleSetId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Adds/removes resource access rules to/from a resource access rule
@@ -291,7 +291,7 @@ namespace Marain.Claims.Client
         /// Adds/removes resource access rules to/from a resource access rule
         /// set by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='resourceAccessRuleSetId'>
@@ -308,7 +308,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> UpdateResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> UpdateResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string tenantId, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Set resource access rules for a resource access rule set
@@ -316,7 +316,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Sets resource access rules for a resource access rule set by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='resourceAccessRuleSetId'>
@@ -330,7 +330,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> SetResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string resourceAccessRuleSetId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> SetResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string tenantId, string resourceAccessRuleSetId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Set up the initial administrator permissions for a tenant
@@ -340,7 +340,7 @@ namespace Marain.Claims.Client
         /// endpoints and a Claim Permission granting that access to the
         /// specified role
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -351,7 +351,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> InitializeTenantWithHttpMessagesAsync(string xEndjinTenant, Body body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> InitializeTenantWithHttpMessagesAsync(string tenantId, Body body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// View swagger definition for this API

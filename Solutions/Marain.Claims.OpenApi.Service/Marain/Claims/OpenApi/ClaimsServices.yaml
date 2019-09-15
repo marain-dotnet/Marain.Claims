@@ -620,11 +620,13 @@ components:
           format: url
         validationErrors: 
           type: array
+          items:
+            type: object
       additionalProperties: true
   parameters:
     tenant:
       name: tenantId
-      in: uri
+      in: path
       x-ms-parameter-location: method
       description: The tenant within which the request should operate
       required: true

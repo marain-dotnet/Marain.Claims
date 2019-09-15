@@ -314,7 +314,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Creates a permissions definition for a claim
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -340,11 +340,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> CreateClaimPermissionsWithHttpMessagesAsync(string xEndjinTenant, ClaimPermissionsWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> CreateClaimPermissionsWithHttpMessagesAsync(string tenantId, ClaimPermissionsWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (body == null)
             {
@@ -361,28 +361,21 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateClaimPermissions", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -485,7 +478,7 @@ namespace Marain.Claims.Client
         /// <param name='claimPermissionsId'>
         /// An identifier uniquely associated with a claim permissions
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='customHeaders'>
@@ -509,15 +502,15 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> GetClaimPermissionsWithHttpMessagesAsync(string claimPermissionsId, string xEndjinTenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> GetClaimPermissionsWithHttpMessagesAsync(string claimPermissionsId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (claimPermissionsId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "claimPermissionsId");
             }
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -527,28 +520,21 @@ namespace Marain.Claims.Client
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("claimPermissionsId", claimPermissionsId);
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetClaimPermissions", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/{claimPermissionsId}").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}").ToString();
             _url = _url.Replace("{claimPermissionsId}", System.Uri.EscapeDataString(claimPermissionsId));
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -647,7 +633,7 @@ namespace Marain.Claims.Client
         /// <param name='claimPermissionsId'>
         /// An identifier uniquely associated with a claim permissions
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='customHeaders'>
@@ -671,15 +657,15 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<ResourceAccessRule>>> GetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string claimPermissionsId, string xEndjinTenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<ResourceAccessRule>>> GetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string claimPermissionsId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (claimPermissionsId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "claimPermissionsId");
             }
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -689,28 +675,21 @@ namespace Marain.Claims.Client
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("claimPermissionsId", claimPermissionsId);
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetClaimPermissionsResourceAccessRules", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/{claimPermissionsId}/allResourceAccessRules").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/allResourceAccessRules").ToString();
             _url = _url.Replace("{claimPermissionsId}", System.Uri.EscapeDataString(claimPermissionsId));
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -804,7 +783,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Adds/removes resource access rules to/from a claims permission by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -836,11 +815,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (claimPermissionsId == null)
             {
@@ -871,7 +850,7 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("claimPermissionsId", claimPermissionsId);
                 tracingParameters.Add("operation", operation);
                 tracingParameters.Add("body", body);
@@ -880,7 +859,8 @@ namespace Marain.Claims.Client
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/{claimPermissionsId}/resourceAccessRules").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/resourceAccessRules").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             _url = _url.Replace("{claimPermissionsId}", System.Uri.EscapeDataString(claimPermissionsId));
             List<string> _queryParameters = new List<string>();
             if (operation != null)
@@ -897,14 +877,6 @@ namespace Marain.Claims.Client
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -1004,7 +976,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Sets resource access rules for a claim permissions by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -1033,11 +1005,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (claimPermissionsId == null)
             {
@@ -1064,7 +1036,7 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("claimPermissionsId", claimPermissionsId);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -1072,7 +1044,8 @@ namespace Marain.Claims.Client
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/{claimPermissionsId}/resourceAccessRules").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/resourceAccessRules").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             _url = _url.Replace("{claimPermissionsId}", System.Uri.EscapeDataString(claimPermissionsId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -1080,14 +1053,6 @@ namespace Marain.Claims.Client
             _httpRequest.Method = new HttpMethod("PUT");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -1187,7 +1152,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Adds/removes resource access rule sets to/from a claim permissions by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -1219,11 +1184,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (claimPermissionsId == null)
             {
@@ -1254,7 +1219,7 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("claimPermissionsId", claimPermissionsId);
                 tracingParameters.Add("operation", operation);
                 tracingParameters.Add("body", body);
@@ -1263,7 +1228,8 @@ namespace Marain.Claims.Client
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/{claimPermissionsId}/resourceAccessRuleSets").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/resourceAccessRuleSets").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             _url = _url.Replace("{claimPermissionsId}", System.Uri.EscapeDataString(claimPermissionsId));
             List<string> _queryParameters = new List<string>();
             if (operation != null)
@@ -1280,14 +1246,6 @@ namespace Marain.Claims.Client
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -1387,7 +1345,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Sets resource access rule sets for a claim permissions by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='claimPermissionsId'>
@@ -1416,11 +1374,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string xEndjinTenant, string claimPermissionsId, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (claimPermissionsId == null)
             {
@@ -1447,7 +1405,7 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("claimPermissionsId", claimPermissionsId);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -1455,7 +1413,8 @@ namespace Marain.Claims.Client
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/{claimPermissionsId}/resourceAccessRuleSets").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/resourceAccessRuleSets").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             _url = _url.Replace("{claimPermissionsId}", System.Uri.EscapeDataString(claimPermissionsId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -1463,14 +1422,6 @@ namespace Marain.Claims.Client
             _httpRequest.Method = new HttpMethod("PUT");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -1575,7 +1526,7 @@ namespace Marain.Claims.Client
         /// <param name='claimPermissionsId'>
         /// An identifier uniquely associated with a claim permissions
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='resourceUri'>
@@ -1603,15 +1554,15 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionWithHttpMessagesAsync(string claimPermissionsId, string xEndjinTenant, string resourceUri, string accessType, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionWithHttpMessagesAsync(string claimPermissionsId, string tenantId, string resourceUri, string accessType, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (claimPermissionsId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "claimPermissionsId");
             }
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (resourceUri == null)
             {
@@ -1629,7 +1580,7 @@ namespace Marain.Claims.Client
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("claimPermissionsId", claimPermissionsId);
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("resourceUri", resourceUri);
                 tracingParameters.Add("accessType", accessType);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -1637,8 +1588,9 @@ namespace Marain.Claims.Client
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/{claimPermissionsId}/permission").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/permission").ToString();
             _url = _url.Replace("{claimPermissionsId}", System.Uri.EscapeDataString(claimPermissionsId));
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             List<string> _queryParameters = new List<string>();
             if (resourceUri != null)
             {
@@ -1658,14 +1610,6 @@ namespace Marain.Claims.Client
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -1777,7 +1721,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Gets permission results for a set of target resources and access types
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -1803,11 +1747,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(string xEndjinTenant, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(string tenantId, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (body == null)
             {
@@ -1820,28 +1764,21 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetClaimPermissionsPermissionBatch", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "claimPermissions/batchPermissionTest").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/claimPermissions/batchPermissionTest").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -1959,7 +1896,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Creates a resource access rule set
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -1985,11 +1922,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> CreateResourceAccessRuleSetWithHttpMessagesAsync(string xEndjinTenant, ResourceAccessRuleSetWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> CreateResourceAccessRuleSetWithHttpMessagesAsync(string tenantId, ResourceAccessRuleSetWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (body == null)
             {
@@ -2006,28 +1943,21 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "CreateResourceAccessRuleSet", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "resourceAccessRuleSet").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/resourceAccessRuleSet").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -2148,7 +2078,7 @@ namespace Marain.Claims.Client
         /// <param name='resourceAccessRuleSetId'>
         /// An identifier uniquely associated with a resource access rule set
         /// </param>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='customHeaders'>
@@ -2172,15 +2102,15 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ResourceAccessRuleSetWithGetExample>> GetResourceAccessRuleSetWithHttpMessagesAsync(string resourceAccessRuleSetId, string xEndjinTenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ResourceAccessRuleSetWithGetExample>> GetResourceAccessRuleSetWithHttpMessagesAsync(string resourceAccessRuleSetId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (resourceAccessRuleSetId == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "resourceAccessRuleSetId");
             }
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2190,28 +2120,21 @@ namespace Marain.Claims.Client
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("resourceAccessRuleSetId", resourceAccessRuleSetId);
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetResourceAccessRuleSet", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "resourceAccessRuleSet/{resourceAccessRuleSetId}").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/resourceAccessRuleSet/{resourceAccessRuleSetId}").ToString();
             _url = _url.Replace("{resourceAccessRuleSetId}", System.Uri.EscapeDataString(resourceAccessRuleSetId));
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -2305,7 +2228,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Adds/removes resource access rules to/from a resource access rule set by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='resourceAccessRuleSetId'>
@@ -2337,11 +2260,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> UpdateResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> UpdateResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string tenantId, string resourceAccessRuleSetId, string operation, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (resourceAccessRuleSetId == null)
             {
@@ -2372,7 +2295,7 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("resourceAccessRuleSetId", resourceAccessRuleSetId);
                 tracingParameters.Add("operation", operation);
                 tracingParameters.Add("body", body);
@@ -2381,7 +2304,8 @@ namespace Marain.Claims.Client
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "resourceAccessRuleSet/{resourceAccessRuleSetId}/resourceAccessRules").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/resourceAccessRuleSet/{resourceAccessRuleSetId}/resourceAccessRules").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             _url = _url.Replace("{resourceAccessRuleSetId}", System.Uri.EscapeDataString(resourceAccessRuleSetId));
             List<string> _queryParameters = new List<string>();
             if (operation != null)
@@ -2398,14 +2322,6 @@ namespace Marain.Claims.Client
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -2505,7 +2421,7 @@ namespace Marain.Claims.Client
         /// <remarks>
         /// Sets resource access rules for a resource access rule set by ID
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='resourceAccessRuleSetId'>
@@ -2534,11 +2450,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> SetResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string xEndjinTenant, string resourceAccessRuleSetId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> SetResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(string tenantId, string resourceAccessRuleSetId, IList<ResourceAccessRule> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (resourceAccessRuleSetId == null)
             {
@@ -2565,7 +2481,7 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("resourceAccessRuleSetId", resourceAccessRuleSetId);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -2573,7 +2489,8 @@ namespace Marain.Claims.Client
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "resourceAccessRuleSet/{resourceAccessRuleSetId}/resourceAccessRules").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/resourceAccessRuleSet/{resourceAccessRuleSetId}/resourceAccessRules").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             _url = _url.Replace("{resourceAccessRuleSetId}", System.Uri.EscapeDataString(resourceAccessRuleSetId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -2581,14 +2498,6 @@ namespace Marain.Claims.Client
             _httpRequest.Method = new HttpMethod("PUT");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
@@ -2689,7 +2598,7 @@ namespace Marain.Claims.Client
         /// Creates a resource access rule set providing access to all endpoints and a
         /// Claim Permission granting that access to the specified role
         /// </remarks>
-        /// <param name='xEndjinTenant'>
+        /// <param name='tenantId'>
         /// The tenant within which the request should operate
         /// </param>
         /// <param name='body'>
@@ -2715,11 +2624,11 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> InitializeTenantWithHttpMessagesAsync(string xEndjinTenant, Body body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> InitializeTenantWithHttpMessagesAsync(string tenantId, Body body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (xEndjinTenant == null)
+            if (tenantId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "xEndjinTenant");
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
             }
             if (body == null)
             {
@@ -2736,28 +2645,21 @@ namespace Marain.Claims.Client
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("xEndjinTenant", xEndjinTenant);
+                tracingParameters.Add("tenantId", tenantId);
                 tracingParameters.Add("body", body);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "InitializeTenant", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "tenant").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "{tenantId}/marain/claims/tenant").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
-            if (xEndjinTenant != null)
-            {
-                if (_httpRequest.Headers.Contains("X-endjin-tenant"))
-                {
-                    _httpRequest.Headers.Remove("X-endjin-tenant");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("X-endjin-tenant", xEndjinTenant);
-            }
 
 
             if (customHeaders != null)
