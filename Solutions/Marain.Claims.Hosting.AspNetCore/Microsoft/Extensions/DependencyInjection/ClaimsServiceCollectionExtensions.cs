@@ -6,10 +6,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using System;
     using System.Linq;
+    using Corvus.ContentHandling;
     using Endjin.Claims.Hosting;
-    using Endjin.OpenApi.Claims;
     using Marain.Claims;
-    using Marain.Claims.ClaimsProviderStrategies;
     using Marain.Claims.Client;
     using Marain.Claims.OpenApi;
     using Menes;
@@ -50,6 +49,12 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 config.Documents.RegisterOpenApiServiceWithEmbeddedDefinition<ClaimPermissionsService>();
                 configureHost?.Invoke(config);
+            });
+
+            services.AddContentSerialization(contentFactory =>
+            {
+                contentFactory.RegisterTransientContent<ResourceAccessRuleSet>();
+                contentFactory.RegisterTransientContent<ClaimPermissions>();
             });
 
             services.AddSingleton<IClaimPermissionsEvaluator, PermissionsEvaluatorBridge>();

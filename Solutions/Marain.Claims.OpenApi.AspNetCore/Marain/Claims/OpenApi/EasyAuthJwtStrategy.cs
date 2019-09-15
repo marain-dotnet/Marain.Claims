@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.Claims.ClaimsProviderStrategies
+namespace Marain.Claims.OpenApi
 {
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;

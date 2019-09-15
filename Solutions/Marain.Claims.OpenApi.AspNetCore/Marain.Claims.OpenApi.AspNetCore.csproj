@@ -14,12 +14,12 @@
   <Import Project="..\Common.NetStandard_2_0.proj" />
 
   <ItemGroup>
+    <PackageReference Include="Corvus.ContentHandling.Json" Version="0.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Marain.Claims.Abstractions\Marain.Claims.Abstractions.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
   </ItemGroup>
 </Project>

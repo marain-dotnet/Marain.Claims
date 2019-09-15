@@ -2,13 +2,13 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Endjin.OpenApi.Claims
+namespace Microsoft.Extensions.DependencyInjection
 {
     using System;
     using Marain.Claims.Client;
+    using Marain.Claims.OpenApi;
     using Menes;
     using Menes.AccessControlPolicies;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     /// <summary>

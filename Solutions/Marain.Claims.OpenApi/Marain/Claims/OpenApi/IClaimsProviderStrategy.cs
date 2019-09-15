@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.Claims
+namespace Marain.Claims.OpenApi
 {
     using System.Security.Claims;
     using System.Threading.Tasks;

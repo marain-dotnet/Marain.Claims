@@ -2,7 +2,7 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Endjin.OpenApi.Claims
+namespace Marain.Claims.OpenApi
 {
     using System;
     using System.Collections.Generic;

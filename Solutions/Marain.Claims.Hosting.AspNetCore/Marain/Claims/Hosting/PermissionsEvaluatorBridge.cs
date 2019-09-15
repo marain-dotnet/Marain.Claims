@@ -8,7 +8,6 @@ namespace Endjin.Claims.Hosting
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using Endjin.OpenApi.Claims;
     using Marain.Claims;
     using Marain.Claims.OpenApi;
     using Menes;

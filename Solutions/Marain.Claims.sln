@@ -26,9 +26,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Host.Function
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Hosting.AspNetCore", "Marain.Claims.Hosting.AspNetCore\Marain.Claims.Hosting.AspNetCore.csproj", "{8C76D305-5A91-40BB-9916-E6318928E60B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.Claims.OpenApi", "Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj", "{9623D1B0-40C8-44C3-8EEC-531CF965B0D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.OpenApi", "Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj", "{9623D1B0-40C8-44C3-8EEC-531CF965B0D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.Claims.OpenApi.AspNetCore", "Marain.Claims.OpenApi.AspNetCore\Marain.Claims.OpenApi.AspNetCore.csproj", "{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.OpenApi.AspNetCore", "Marain.Claims.OpenApi.AspNetCore\Marain.Claims.OpenApi.AspNetCore.csproj", "{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,8 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Linq;
     using Corvus.ContentHandling;
-    using Marain.Claims;
-    using Marain.Claims.Internal;
+    using Marain.Claims.OpenApi;
     using Marain.Claims.OpenApi.Internal;
     using Menes;
     using Microsoft.AspNetCore.Http;
@@ -28,12 +27,6 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 return services;
             }
-
-            services.AddContentSerialization(contentFactory =>
-            {
-                contentFactory.RegisterTransientContent<ResourceAccessRuleSet>();
-                contentFactory.RegisterTransientContent<ClaimPermissions>();
-            });
 
             services.AddSingleton<IRequestClaimsProvider<HttpRequest>, RequestClaimsProvider<HttpRequest>>();
             return services;
