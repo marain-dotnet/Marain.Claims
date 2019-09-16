@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{19CB7678-3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenApi", "OpenApi", "{17BE0C76-FFF1-4DA8-B077-FBC90DC1D9FA}"
 EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Marain.Claims.Deployment", "Marain.Claims.Deployment\Marain.Claims.Deployment.deployproj", "{26CB64DE-C80A-455A-BFB0-31F31F6390C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

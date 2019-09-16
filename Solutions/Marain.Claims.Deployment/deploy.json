@@ -1,0 +1,190 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "prefix": {
+      "type": "string"
+    },
+    "appName": {
+      "type": "string"
+    },
+    "environment": {
+      "type": "string"
+    },
+    "functionsAppPackageFolder": {
+      "type": "string",
+      "minLength": 1
+    },
+    "functionsAppPackageFileName": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Name of the webdeploy package for host function"
+      }
+    },
+    "functionEasyAuthAadClientId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Enable EasyAuth for AAD using the specified Client ID/App ID"
+      }
+    },
+    "functionEasyAuthAadClientSecret": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The client secret with which to"
+      }
+    },
+    "_artifactsLocation": {
+      "type": "string"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring"
+    },
+    "isDeveloperEnvironment": {
+      "type": "bool",
+      "defaultValue": "false",
+      "metadata": {
+        "description": "If true, only resources needed to support a developer environment will be deployed."
+      }
+    }
+  },
+  "variables": {
+    "defaultName": "[concat(parameters('prefix'), parameters('appName'), parameters('environment'))]",
+    "functionsAppName": "[concat(parameters('prefix'), parameters('appName'), parameters('environment'))]",
+    "appInsightsName": "[variables('defaultName')]",
+    "tenantId": "[subscription().tenantID]",
+    "subscriptionId": "[subscription().subscriptionID]",
+    "tagValues": {
+      "prefix": "[parameters('prefix')]",
+      "appName": "[parameters('appName')]",
+      "environment": "[parameters('environment')]"
+    }
+  },
+  "resources": [
+    {
+      "name": "app-insights",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/app-insights.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appName": {
+            "value": "[variables('appInsightsName')]"
+          },
+          "appType": {
+            "value": "web"
+          },
+          "appLocation": {
+            "value": "[resourceGroup().location]"
+          },
+          "tagValues": {
+            "value": "[variables('tagValues')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "key-vault",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/key-vault.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "tenantId": {
+            "value": "[variables('tenantId')]"
+          },
+          "keyVaultName": {
+            "value": "[variables('defaultName')]"
+          },
+          "diagnosticsStorageAccountName":  {
+            "value": "[variables('defaultName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "cosmos-db",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/cosmos-db.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "accountName": {
+            "value": "[variables('defaultName')]"
+          }
+        }
+      }
+    },
+    {
+      "condition": "[not(parameters('isDeveloperEnvironment'))]",
+      "name": "functions-app",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/functions-app.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "functionsAppName": { "value": "[variables('functionsAppName')]" },
+          "functionsAppPackageFolder": { "value": "[parameters('functionsAppPackageFolder')]" },
+          "functionsAppPackageFileName": { "value": "[parameters('functionsAppPackageFileName')]" },
+          "easyAuthAadClientId": { "value": "[parameters('functionEasyAuthAadClientId')]" },
+          "_artifactsLocation": { "value": "[parameters('_artifactsLocation')]" },
+          "_artifactsLocationSasToken": { "value": "[parameters('_artifactsLocationSasToken')]" }
+        }
+      }
+    },
+    {
+      "condition": "[not(parameters('isDeveloperEnvironment'))]",
+      "name": "functions-app-settings",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'functions-app')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/functions-app-settings.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountConnectionString": { "value": "[reference('functions-app', '2016-09-01').outputs.storageAccountConnectionString.value]" },
+          "functionsAppName": { "value": "[variables('functionsAppName')]" },
+          "tenantId": { "value": "[variables('tenantId')]" },
+          "subscriptionId": { "value": "[variables('subscriptionId')]" },
+          "applicationInsightsInstrumentationKey": { "value": "[reference('app-insights').outputs.instrumentationKey.value]" },
+          "keyVaultName": { "value": "[variables('defaultName')]" },
+          "cosmosDbName": { "value": "[variables('defaultName')]" }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "applicationInsightsInstrumentationKey": {
+      "type": "string",
+      "value": "[reference('app-insights').outputs.instrumentationKey.value]"
+    }
+  }
+}
+
