@@ -35,7 +35,7 @@ namespace Marain.Claims.Functions
         /// <param name="executionContext">The context for the function execution.</param>
         /// <returns>An action result which comes from executing the function.</returns>
         [FunctionName("ClaimsHost-OpenApiHostRoot")]
-        public Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", "put", Route = "{*path}")]HttpRequest req, ExecutionContext executionContext)
+        public Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "{*path}")]HttpRequest req, ExecutionContext executionContext)
         {
             return this.host.HandleRequestAsync(req, new { ExecutionContext = executionContext });
         }

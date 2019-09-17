@@ -31,12 +31,12 @@ namespace Marain.Claims.SpecFlow.Bindings
                 {
                     var configData = new Dictionary<string, string>
                     {
-                        { "STORAGEACCOUNTCONNECTIONSTRING", "UseDevelopmentStorage=true" },
+                        //// { "STORAGEACCOUNTCONNECTIONSTRING", "UseDevelopmentStorage=true" },
                     };
                     IConfigurationRoot config = new ConfigurationBuilder()
                         .AddInMemoryCollection(configData)
-                        .AddJsonFile("local.settings.json", true, true)
                         .AddEnvironmentVariables()
+                        .AddJsonFile("local.settings.json", true, true)
                         .Build();
                     serviceCollection.AddSingleton(config);
                     serviceCollection.AddSingleton<ITenantProvider, FakeTenantProvider>();

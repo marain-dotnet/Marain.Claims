@@ -23,7 +23,7 @@ jobs:
     solution_to_build: $(Endjin_Solution_To_Build)
     postCustomEnvironmentVariables:
       - powershell: |
-          Write-Host "##vso[task.setvariable variable=StorageAccountConnectionString]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
+          Write-Host "##vso[task.setvariable variable=RootTenantBlobStorageConfigurationOptions__AccountName]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
         displayName: 'Set Azure Connection String Environment Variable'
         env:
           ENDJIN_AZURESTORAGECONNECTIONSTRING: $(Endjin_AzureStorageConnectionString)

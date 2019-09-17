@@ -38,13 +38,9 @@ namespace Marain.Operations.ControlHost
 
         private static IConfigurationRoot Configure(IServiceCollection services)
         {
-            var configurationBuilder = new ConfigurationBuilder();
-
-            // Use local.settings if available (not available in Azure)
-            configurationBuilder.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
-
-            // Then use the regular Azure environment variables
-            configurationBuilder.AddEnvironmentVariables();
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
             IConfigurationRoot root = configurationBuilder.Build();
             services.AddSingleton(root);
