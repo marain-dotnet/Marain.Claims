@@ -1,0 +1,74 @@
+{
+  "ruleSets": [
+    {
+      "id": "rs1",
+      "displayName": "Example Rule Set 1",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "some/service/api/path/**/*",
+            "displayName": "GET under some path"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "PUT",
+          "resource": {
+            "uri": "some/service/api/differentPath/**/*",
+            "displayName": "PUT under some other path"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "rs2",
+      "displayName": "Example Rule Set 2",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "some/service/api/**/*",
+            "displayName": "GET everywhere"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "some/service/api/**/*",
+            "displayName": "POST everywhere"
+          },
+          "permission": "allow"
+        }
+      ]
+    }
+  ],
+  "claimPermissions": [
+    {
+      "id": "p1",
+      "resourceAccessRules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "another/service/api/path/**/*",
+            "displayName": "GET under another path"
+          },
+          "permission": "allow"
+        }
+      ],
+      "resourceAccessRuleSets": [
+        { "id": "rs1" }
+      ]
+    },
+    {
+      "id": "p2",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "rs1" },
+        { "id": "rs2" }
+      ]
+    }
+  ]
+}

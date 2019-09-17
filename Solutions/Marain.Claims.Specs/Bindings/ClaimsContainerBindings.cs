@@ -35,6 +35,8 @@ namespace Marain.Claims.SpecFlow.Bindings
                     };
                     IConfigurationRoot config = new ConfigurationBuilder()
                         .AddInMemoryCollection(configData)
+                        .AddJsonFile("local.settings.json", true, true)
+                        .AddEnvironmentVariables()
                         .Build();
                     serviceCollection.AddSingleton(config);
                     serviceCollection.AddSingleton<ITenantProvider, FakeTenantProvider>();
