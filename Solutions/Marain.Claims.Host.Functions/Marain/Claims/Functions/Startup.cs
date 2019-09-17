@@ -38,7 +38,7 @@ namespace Marain.Operations.ControlHost
 
         private static IConfigurationRoot Configure(IServiceCollection services)
         {
-            var configurationBuilder = new ConfigurationBuilder()
+            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 

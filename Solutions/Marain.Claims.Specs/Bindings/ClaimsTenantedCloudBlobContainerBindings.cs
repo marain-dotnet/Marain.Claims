@@ -62,7 +62,7 @@ namespace Marain.Claims.SpecFlow.Bindings
         /// <param name="featureContext">The feature context.</param>
         /// <returns>A <see cref="Task"/> which completes once the operation has completed.</returns>
         [AfterFeature("@setupTenantedCloudBlobContainer", Order = 100000)]
-        public static Task TeardownCosmosDB(FeatureContext featureContext)
+        public static Task TearDownBlobContainers(FeatureContext featureContext)
         {
             return featureContext.RunAndStoreExceptionsAsync(
                 async () =>
