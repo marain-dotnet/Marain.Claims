@@ -16,8 +16,8 @@
   <ItemGroup>
     <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.10.0" />
     <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="0.10.0" />
-    <PackageReference Include="Menes.Abstractions" Version="0.2.0" />
-    <PackageReference Include="Menes.Hosting.AspNetCore" Version="0.2.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.3.0" />
+    <PackageReference Include="Menes.Hosting.AspNetCore" Version="0.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>

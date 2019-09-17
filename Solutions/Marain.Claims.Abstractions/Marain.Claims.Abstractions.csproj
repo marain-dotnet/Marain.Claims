@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.10.0" />
-    <PackageReference Include="Menes.Abstractions" Version="0.2.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
