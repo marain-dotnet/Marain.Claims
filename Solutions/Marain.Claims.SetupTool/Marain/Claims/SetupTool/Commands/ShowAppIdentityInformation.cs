@@ -1,13 +1,14 @@
-﻿// <copyright file="ShowAppIdentityInformation.cs" company="Endjin">
-// Copyright (c) Endjin. All rights reserved.
+﻿// <copyright file="ShowAppIdentityInformation.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.Claims.SetupTool.Commands
 {
     using System;
-    using System.CommandLine;
+    using System.Threading;
     using System.Threading.Tasks;
-    using Endjin.Cli;
+    using Corvus.Cli;
+    using McMaster.Extensions.CommandLineUtils;
     using Microsoft.Azure.Management.AppService.Fluent;
     using Microsoft.Azure.Management.AppService.Fluent.Models;
 
@@ -27,38 +28,39 @@ namespace Marain.Claims.SetupTool.Commands
     {
         private readonly AppServiceManagerSource appServiceManagerSource;
 
-        private AuthenticationOptions authenticationOptions;
+#pragma warning disable IDE0044, CS0649 // These items are set by reflection
         private string subscriptionId;
         private string resourceGroupName;
         private string appName;
+        private bool useAzCliDevAuth;
+        private string tenantId;
+#pragma warning restore IDE0044, CS0649 // These items are set by reflection
 
         /// <summary>
         /// Create a <see cref="ShowAppIdentityInformation"/>.
         /// </summary>
-        /// <param name="appServiceManagerSource">
-        /// Provides management of Azure app service features.
-        /// </param>
-        public ShowAppIdentityInformation(
-            AppServiceManagerSource appServiceManagerSource)
-            : base("show-app-identity")
+        public ShowAppIdentityInformation()
+            : base("show-app-identity", "Display an app identity.")
         {
-            this.appServiceManagerSource = appServiceManagerSource;
+            this.appServiceManagerSource = new AppServiceManagerSource();
         }
 
         /// <inheritdoc/>
-        public override void AddOptionsAndParameters(ArgumentSyntax syntax)
+        public override void AddOptions(CommandLineApplication command)
         {
-            this.authenticationOptions = AuthenticationOptions.FromSyntax(syntax);
-            syntax.DefineOption("s|subscriptionId", ref this.subscriptionId, true, "ID of the Azure subscription to inspect");
-            syntax.DefineOption("g|ResourceGroupName", ref this.resourceGroupName, "The resource group containing the service");
-            syntax.DefineOption("n|Name", ref this.appName, "The name of the web app or function");
+            this.AddBooleanOption(command, "-d|--devAzCliAuth", "Authenticate using the token last fetched by the 'az' CLI", () => this.useAzCliDevAuth);
+            this.AddSingleOption(command, "-t|--tenantId <value>", "The tenant against which to authenticate", () => this.tenantId);
+            this.AddSingleOption(command, "-s|--subscriptionId <value>", "ID of the Azure subscription to inspect", () => this.subscriptionId);
+            this.AddSingleOption(command, "-g|--ResourceGroupName <value>", "The resource group containing the service", () => this.resourceGroupName);
+            this.AddSingleOption(command, "-n|--Name <value>", "The name of the web app or function", () => this.appName);
         }
 
         /// <inheritdoc/>
-        public override async Task ExecuteAsync()
+        public override async Task<int> ExecuteAsync(CancellationToken token)
         {
+            var authenticationOptions = AuthenticationOptions.BuildFrom(this.useAzCliDevAuth, this.tenantId);
             IAppServiceManager appServiceManager = this.appServiceManagerSource.Get(
-                this.authenticationOptions, this.subscriptionId);
+                authenticationOptions, this.subscriptionId);
             IWebAppAuthentication webAppAuthConfig;
             ManagedServiceIdentity managedIdentity;
             IFunctionApp function = null;
@@ -82,7 +84,7 @@ namespace Marain.Claims.SetupTool.Commands
                 if (webApp == null)
                 {
                     Console.WriteLine($"Unable to find either a Function or Web App in resource group '{this.resourceGroupName}' called '{this.appName}'");
-                    return;
+                    return -1;
                 }
 
                 managedIdentity = webApp.Inner.Identity;
@@ -118,6 +120,8 @@ namespace Marain.Claims.SetupTool.Commands
                     }
                 }
             }
+
+            return 0;
         }
     }
 }

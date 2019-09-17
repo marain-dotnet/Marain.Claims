@@ -1,19 +1,20 @@
-﻿// <copyright file="BootstrapClaimsTenant.cs" company="Endjin">
-// Copyright (c) Endjin. All rights reserved.
+﻿// <copyright file="BootstrapClaimsTenant.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.Claims.SetupTool.Commands
 {
     using System;
     using System.Collections.Generic;
-    using System.CommandLine;
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
+    using Corvus.Cli;
+    using Corvus.Tenancy;
     using Marain.Claims.Client;
     using Marain.Claims.Client.Models;
-    using Endjin.Cli;
-    using Corvus.Tenancy;
+    using McMaster.Extensions.CommandLineUtils;
     using Microsoft.Rest;
 
     /// <summary>
@@ -22,92 +23,101 @@ namespace Marain.Claims.SetupTool.Commands
     /// </summary>
     public class BootstrapClaimsTenant : Command<BootstrapClaimsTenant>
     {
-        private AuthenticationOptions authenticationOptions;
+#pragma warning disable IDE0044, CS0649 // These items are set by reflection
         private string claimsAppId;
         private string claimsServiceUrl;
         private string adminRoleName = "ClaimsAdministrator";
         private string keyVault;
         private string secretName = "ClaimsSetupApp";
-        private string endjinTenantId = RootTenant.RootTenantId;
+        private string marainTenantId = RootTenant.RootTenantId;
+        private string tenantId = null;
+        private bool useAzCliDevAuth;
+#pragma warning restore IDE0044, CS0649 // These items are set by reflection
 
         /// <summary>
         /// Create a <see cref="BootstrapClaimsTenant"/>.
         /// </summary>
         public BootstrapClaimsTenant()
-            : base("bootstrap-claims-tenant")
+            : base("bootstrap-claims-tenant", "Boostraps the claims for a new tenant")
         {
         }
 
         /// <inheritdoc/>
-        public override void AddOptionsAndParameters(ArgumentSyntax syntax)
+        public override void AddOptions(CommandLineApplication command)
         {
-            this.authenticationOptions = AuthenticationOptions.FromSyntax(
-                syntax);
-            syntax.DefineOption("c|claimsAppId", ref this.claimsAppId, true, "The Client ID (AppId) of the Azure AD App being used by the Claim Service with Easy Auth");
-            syntax.DefineOption("u|claimsServiceUrl", ref this.claimsServiceUrl, true, "The base URL for the Claims Service");
-            syntax.DefineOption("r|adminRoleName", ref this.adminRoleName, false, "The name of the Application Role in the Claims Service that is to be granted administrative control over the Claims Service");
-            syntax.DefineOption("e|endjinTenant", ref this.endjinTenantId, false, "The endjin tenant ID to pass");
-
-            syntax.DefineOption("v|keyVault", ref this.keyVault, true, "The key vault containing the details of the AAD App to use when authenticating to the Claims service");
-            syntax.DefineOption("s|secretName", ref this.secretName, false, "The name of the key vault secret containing the details of the AAD App to use when authenticating to the Claims service");
+            this.AddBooleanOption(command, "-d|--devAzCliAuth", "Authenticate using the token last fetched by the 'az' CLI", () => this.useAzCliDevAuth);
+            this.AddSingleOption(command, "-t|--tenantId <value>", "The tenant against which to authenticate", () => this.tenantId);
+            this.AddSingleOption(command, "-c|--claimsAppId <value>", "The Client ID (AppId) of the Azure AD App being used by the Claim Service with Easy Auth", () => this.claimsAppId);
+            this.AddSingleOption(command, "-u|--claimsServiceUrl <value>", "The base URL for the Claims Service", () => this.claimsServiceUrl);
+            this.AddSingleOption(command, "-r|--adminRoleName <value>", "The name of the Application Role in the Claims Service that is to be granted administrative control over the Claims Service", () => this.adminRoleName);
+            this.AddSingleOption(command, "-m|--marainTenant <value>", "The Marain tenant ID to pass", () => this.marainTenantId);
+            this.AddSingleOption(command, "-v|--keyVault <value>", "The key vault containing the details of the AAD App to use when authenticating to the Claims service", () => this.keyVault);
+            this.AddSingleOption(command, "-s|--secretName <value>", "The name of the key vault secret containing the details of the AAD App to use when authenticating to the Claims service", () => this.secretName);
         }
 
         /// <inheritdoc/>
-        public override async Task ExecuteAsync()
+        public override async Task<int> ExecuteAsync(CancellationToken token)
         {
-            ServiceClientCredentials credentials = await this.authenticationOptions.GetServiceClientCredentialsFromKeyVault(
+            var authenticationOptions = AuthenticationOptions.BuildFrom(this.useAzCliDevAuth, this.tenantId);
+
+            ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
                 this.claimsAppId, this.keyVault, this.secretName).ConfigureAwait(false);
-            var claimsClient = new ClaimsService(new Uri(this.claimsServiceUrl), credentials);
-
-            try
+            using (var claimsClient = new ClaimsService(new Uri(this.claimsServiceUrl), credentials))
             {
-                HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
-                        this.endjinTenantId,
-                        new Body { AdministratorRoleClaimValue = this.adminRoleName })
-                    .ConfigureAwait(false);
+                try
+                {
+                    HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
+                            this.marainTenantId,
+                            new Body { AdministratorRoleClaimValue = this.adminRoleName })
+                        .ConfigureAwait(false);
 
-                if (result.Response.IsSuccessStatusCode)
-                {
-                    Console.WriteLine("Succeeded");
-                }
-                else
-                {
-                    Console.WriteLine($"Failed with status code {result.Response.StatusCode}");
-                    if (result.Body != null)
+                    if (result.Response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine(result.Body.Title);
-                        Console.WriteLine(result.Body.Detail);
+                        Console.WriteLine("Succeeded");
                     }
-                }
-            }
-            catch (HttpOperationException x)
-            {
-                Console.WriteLine($"Failed with status code {x.Response.StatusCode}");
-                if (!string.IsNullOrWhiteSpace(x.Response.Content))
-                {
-                    Console.WriteLine("Response content:");
-                    Console.WriteLine(x.Response.Content);
-                }
-
-                if (x.Response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Check that you have specified the correct tenant and claims id");
-                }
-
-                if (x.Response.Headers.TryGetValue("WWW-Authenticate", out IEnumerable<string> values))
-                {
-                    var valueList = values.ToList();
-                    if (valueList.Count > 0)
+                    else
                     {
-                        Console.WriteLine("WWW-Authenticate header{0}:", valueList.Count > 1 ? "s" : string.Empty);
-                        foreach (string value in valueList)
+                        Console.WriteLine($"Failed with status code {result.Response.StatusCode}");
+                        if (result.Body != null)
                         {
-                            Console.WriteLine(value);
+                            Console.WriteLine(result.Body.Title);
+                            Console.WriteLine(result.Body.Detail);
                         }
                     }
                 }
+                catch (HttpOperationException x)
+                {
+                    Console.WriteLine($"Failed with status code {x.Response.StatusCode}");
+                    if (!string.IsNullOrWhiteSpace(x.Response.Content))
+                    {
+                        Console.WriteLine("Response content:");
+                        Console.WriteLine(x.Response.Content);
+                    }
+
+                    if (x.Response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Check that you have specified the correct tenant and claims id");
+                    }
+
+                    if (x.Response.Headers.TryGetValue("WWW-Authenticate", out IEnumerable<string> values))
+                    {
+                        var valueList = values.ToList();
+                        if (valueList.Count > 0)
+                        {
+                            Console.WriteLine("WWW-Authenticate header{0}:", valueList.Count > 1 ? "s" : string.Empty);
+                            foreach (string value in valueList)
+                            {
+                                Console.WriteLine(value);
+                            }
+                        }
+                    }
+
+                    return -1;
+                }
             }
+
+            return 0;
         }
     }
 }

@@ -1,19 +1,13 @@
-﻿// <copyright file="Program.cs" company="Endjin">
-// Copyright (c) Endjin. All rights reserved.
+﻿// <copyright file="Program.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.Claims.SetupTool
 {
-    using System;
-    using System.Collections.Generic;
-    using System.CommandLine;
-    using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
+    using Corvus.Cli;
     using Marain.Claims.SetupTool.Commands;
-    using Endjin.Cli;
-    using Endjin.Composition;
-    using Microsoft.Extensions.DependencyInjection;
+    using McMaster.Extensions.CommandLineUtils;
 
     /// <summary>
     /// Program entry point.
@@ -26,34 +20,17 @@ namespace Marain.Claims.SetupTool
         /// <param name="args">Command line arguments.</param>
         private static async Task Main(string[] args)
         {
-            ConfigureContainer();
-
-            var result = ArgumentSyntax.Parse(args, syntax =>
+            var application = new CommandLineApplication
             {
-                syntax.ApplicationName = "ClaimsSetup";
-                IEnumerable<ICommand> commands = ServiceRoot.ServiceProvider.GetServices<ICommand>();
-                commands.ForEach(command => command.Add(syntax));
-            });
+                Name = "ClaimsSetup",
+                Description = "Setup claims for a tenant.",
+            };
 
-            await ((ICommand)result.ActiveCommand.Value).ExecuteAsync().ConfigureAwait(false);
-        }
+            application.AddCommand<BootstrapClaimsTenant>();
+            application.AddCommand<DefineRulesetsAndClaimPermissions>();
+            application.AddCommand<ShowAppIdentityInformation>();
 
-        /// <summary>
-        /// Configures the IoC container.
-        /// </summary>
-        private static void ConfigureContainer()
-        {
-            var services = new ServiceCollection();
-
-            IEnumerable<Type> commands = Assembly
-                .GetExecutingAssembly()
-                .GetExportedTypes()
-                .Where(x => x.Namespace == typeof(ShowAppIdentityInformation).Namespace && typeof(ICommand).IsAssignableFrom(x));
-            commands.ForEach(x => services.AddTransient(typeof(ICommand), x));
-
-            services.AddSingleton<AppServiceManagerSource>();
-
-            services.BuildServices();
+            await application.ExecuteAsync(args);
         }
     }
 }

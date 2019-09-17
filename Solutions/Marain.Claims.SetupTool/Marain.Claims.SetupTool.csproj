@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageDescription></PackageDescription>
+    <PackageTags></PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <AssemblyName>ClaimsSetup</AssemblyName>
+    <PackAsTool>True</PackAsTool>
+  </PropertyGroup>
+
+  <Import Project="..\Common.NetStandard_2_0.proj" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Marain.Claims.Abstractions\Marain.Claims.Abstractions.csproj" />
+    <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Corvus.Extensions.CommandLine" Version="0.1.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.3.0" />
+    <PackageReference Include="Microsoft.Azure.Management.AppService.Fluent" Version="1.26.0" />
+    <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.26.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure.Authentication" Version="2.4.0" />
+  </ItemGroup>
+
+</Project>

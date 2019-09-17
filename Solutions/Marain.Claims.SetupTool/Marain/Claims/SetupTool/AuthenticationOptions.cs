@@ -1,11 +1,10 @@
-﻿// <copyright file="AuthenticationOptions.cs" company="Endjin">
-// Copyright (c) Endjin. All rights reserved.
+﻿// <copyright file="AuthenticationOptions.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.Claims.SetupTool
 {
     using System;
-    using System.CommandLine;
     using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
@@ -27,7 +26,7 @@ namespace Marain.Claims.SetupTool
         // Client ID for the Azure AD Application created specially for this tool, enabling it to
         // log users in via AAD. We use this to obtain access tokens to Azure in cases where the
         // user does not want to use the Azure CLI authentication mechanism.
-        private const string EndjinClaimsSetupAADClientId = "7c814853-82dc-4b38-93e3-f4e627927e00";
+        private const string MarainClaimsSetupAADClientId = "7c814853-82dc-4b38-93e3-f4e627927e00";
         private const string AzureManagementResourceId = "https://management.core.windows.net/";
         private const string GraphApiResourceId = "https://graph.windows.net/";
         private readonly Lazy<AzureServiceTokenProvider> azureServiceTokenProvider;
@@ -35,11 +34,13 @@ namespace Marain.Claims.SetupTool
         /// <summary>
         /// Creates an <see cref="AuthenticationOptions"/>.
         /// </summary>
+        /// <param name="tenantId">The Azure AD tenant against which to authenticate.</param>
+        /// <param name="azureServiceTokenProviderConnectionString">The connection string for the azure service token provide if additional claims are needed.</param>
         private AuthenticationOptions(
             string tenantId,
             string azureServiceTokenProviderConnectionString)
         {
-            this.TenantId = tenantId;
+            this.TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
             this.AzureServiceTokenProviderConnectionString = azureServiceTokenProviderConnectionString;
 
             this.azureServiceTokenProvider =
@@ -63,50 +64,6 @@ namespace Marain.Claims.SetupTool
         private AzureServiceTokenProvider TokenProvider => this.azureServiceTokenProvider.Value;
 
         /// <summary>
-        /// Creates an <see cref="AuthenticationOptions"/> from an <see cref="ArgumentSyntax"/>.
-        /// </summary>
-        /// <param name="syntax">
-        /// The parsed command line arguments.
-        /// </param>
-        /// <param name="willUseNonMicrosoftResources">
-        /// Indicates whether the command will need to access resources other than ARM or the Graph
-        /// API. (E.g., some commands need to authenticate to the Claims service.)
-        /// </param>
-        /// <returns>
-        /// An <see cref="AuthenticationOptions"/> based on the command line options.
-        /// </returns>
-        public static AuthenticationOptions FromSyntax(
-            ArgumentSyntax syntax,
-            bool willUseNonMicrosoftResources = false)
-        {
-            string tenantId = null;
-            syntax.DefineOption("t|tenantId", ref tenantId, true, "The tenant against which to authenticate");
-
-            string azureServiceTokenProviderConnectionString = null;
-            if (!willUseNonMicrosoftResources)
-            {
-                bool useAzCliDevAuth = false;
-                syntax.DefineOption("d|devAzCliAuth", ref useAzCliDevAuth, false, "Authenticate using the token last fetched by the 'az' CLI");
-                if (useAzCliDevAuth)
-                {
-                    // We could also consider other MSI connection strings. E.g., there's
-                    //  RunAs=App;
-                    // That's for when you are running in a context where an MSI is available, although
-                    // I'm not sure we'd actually be running this tool in such a context. (It's normally
-                    // the string to use inside of a deployed Function or Web App.)
-                    // Or more plausibly we might want to use:
-                    //  RunAs=App;AppId={AppId};TenantId={TenantId};AppKey={ClientSecret}
-                    // https://docs.microsoft.com/en-us/azure/key-vault/service-to-service-authentication
-                    azureServiceTokenProviderConnectionString = "RunAs=Developer; DeveloperTool=AzureCLI";
-                }
-            }
-
-            return new AuthenticationOptions(
-                tenantId,
-                azureServiceTokenProviderConnectionString);
-        }
-
-        /// <summary>
         /// Gets an <see cref="AzureCredentials"/> for the specified subscription.
         /// </summary>
         /// <returns>
@@ -119,7 +76,7 @@ namespace Marain.Claims.SetupTool
             {
                 var deviceCredentialInformation = new DeviceCredentialInformation
                 {
-                    ClientId = EndjinClaimsSetupAADClientId,
+                    ClientId = MarainClaimsSetupAADClientId,
                     DeviceCodeFlowHandler = DeviceCodeFlowCallback,
                 };
 
@@ -176,6 +133,31 @@ namespace Marain.Claims.SetupTool
                         .ConfigureAwait(false);
                     return authResult.AccessToken;
                 }));
+        }
+
+        /// <summary>
+        /// Build authentication options from settings.
+        /// </summary>
+        /// <param name="useAzCliDevAuth">Whether to use Azure Dev Authorization.</param>
+        /// <param name="tenantId">The Azure AD tenant ID.</param>
+        /// <returns>A new instance of the configured authentication options.</returns>
+        internal static AuthenticationOptions BuildFrom(bool useAzCliDevAuth, string tenantId)
+        {
+            string azureServiceTokenProviderConnectionString = null;
+            if (useAzCliDevAuth)
+            {
+                // We could also consider other MSI connection strings. E.g., there's
+                //  RunAs=App;
+                // That's for when you are running in a context where an MSI is available, although
+                // I'm not sure we'd actually be running this tool in such a context. (It's normally
+                // the string to use inside of a deployed Function or Web App.)
+                // Or more plausibly we might want to use:
+                //  RunAs=App;AppId={AppId};TenantId={TenantId};AppKey={ClientSecret}
+                // https://docs.microsoft.com/en-us/azure/key-vault/service-to-service-authentication
+                azureServiceTokenProviderConnectionString = "RunAs=Developer; DeveloperTool=AzureCLI";
+            }
+
+            return new AuthenticationOptions(azureServiceTokenProviderConnectionString, tenantId);
         }
 
         /// <summary>
