@@ -14,7 +14,7 @@
   <Import Project="..\Common.NetStandard_2_0.proj" />
 
   <ItemGroup>
-    <PackageReference Include="Corvus.ContentHandling.Json" Version="0.7.0" />
+    <PackageReference Include="Corvus.ContentHandling.Json" Version="0.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
