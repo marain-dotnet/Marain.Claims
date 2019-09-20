@@ -5,6 +5,7 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Linq;
+    using Corvus.ContentHandling;
     using Marain.Claims;
     using Marain.Claims.Internal;
     using Microsoft.Extensions.Configuration;
@@ -39,8 +40,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 return services;
             }
 
+            services.AddContentSerialization(contentFactory =>
+            {
+                contentFactory.RegisterTransientContent<ResourceAccessRuleSet>();
+                contentFactory.RegisterTransientContent<ClaimPermissions>();
+            });
+
             services.AddTenantCloudBlobContainerFactory(configuration);
-            services.AddJsonSerializerSettings();
             services.AddSingleton<IPermissionsStoreFactory, BlobContainerPermissionsStoreFactory>();
 
             return services;

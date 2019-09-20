@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Menes.Abstractions" Version="0.3.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.5.0" />
   </ItemGroup>
 
 </Project>

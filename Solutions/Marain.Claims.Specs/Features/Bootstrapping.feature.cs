@@ -103,42 +103,42 @@ this.ScenarioInitialize(scenarioInfo);
                         "accessType",
                         "permission"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/claimPermissions/**/*",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/**/*",
                         "Read Claim Permissions",
                         "GET",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/claimPermissions/**/*",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/**/*",
                         "Modify Claim Permissions",
                         "PUT",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/claimPermissions",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions",
                         "Create Claim Permissions",
                         "POST",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/claimPermissions/**/*",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/**/*",
                         "Add to Claim Permissions",
                         "POST",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/resourceAccessRuleSet/**/*",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/**/*",
                         "Read Resource Access Rules",
                         "GET",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/resourceAccessRuleSet/**/*",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/**/*",
                         "Modify Resource Access Rules",
                         "PUT",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/resourceAccessRuleSet",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet",
                         "Create Resource Access Rules",
                         "POST",
                         "Allow"});
             table1.AddRow(new string[] {
-                        "RootTenant/marain/claims/api/resourceAccessRuleSet/**/*",
+                        "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/**/*",
                         "Add to Resource Access Rules",
                         "POST",
                         "Allow"});

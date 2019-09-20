@@ -15,14 +15,14 @@ Scenario: Claims framework tenant is uninitialised service unit test
     And the service creates an access rule set with id 'marainClaimsAdministrator' with displayname 'Claims Administrator Permissions'
     And the access rule set created has the following rules
     | resourceUri                                             | resourceDisplayName          | accessType | permission |
-    | RootTenant/marain/claims/api/claimPermissions/**/*      | Read Claim Permissions       | GET        | Allow      |
-    | RootTenant/marain/claims/api/claimPermissions/**/*      | Modify Claim Permissions     | PUT        | Allow      |
-    | RootTenant/marain/claims/api/claimPermissions           | Create Claim Permissions     | POST       | Allow      |
-    | RootTenant/marain/claims/api/claimPermissions/**/*      | Add to Claim Permissions     | POST       | Allow      |
-    | RootTenant/marain/claims/api/resourceAccessRuleSet/**/* | Read Resource Access Rules   | GET        | Allow      |
-    | RootTenant/marain/claims/api/resourceAccessRuleSet/**/* | Modify Resource Access Rules | PUT        | Allow      |
-    | RootTenant/marain/claims/api/resourceAccessRuleSet      | Create Resource Access Rules | POST       | Allow      |
-    | RootTenant/marain/claims/api/resourceAccessRuleSet/**/* | Add to Resource Access Rules | POST       | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/**/*      | Read Claim Permissions       | GET        | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/**/*      | Modify Claim Permissions     | PUT        | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions           | Create Claim Permissions     | POST       | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/**/*      | Add to Claim Permissions     | POST       | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/**/* | Read Resource Access Rules   | GET        | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/**/* | Modify Resource Access Rules | PUT        | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet      | Create Resource Access Rules | POST       | Allow      |
+    | f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/**/* | Add to Resource Access Rules | POST       | Allow      |
 
 @realStore
 Scenario: Claims framework tenant is uninitialised service integration test

@@ -52,12 +52,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 configureHost?.Invoke(config);
             });
 
-            services.AddContentSerialization(contentFactory =>
-            {
-                contentFactory.RegisterTransientContent<ResourceAccessRuleSet>();
-                contentFactory.RegisterTransientContent<ClaimPermissions>();
-            });
-
             services.AddSingleton<IClaimPermissionsEvaluator, PermissionsEvaluatorBridge>();
             services.AddSingleton<IClaimsService, LocalClaimsService>();
 

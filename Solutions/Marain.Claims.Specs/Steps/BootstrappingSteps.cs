@@ -212,7 +212,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/claimPermissions", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to read a claim permissions")]
@@ -220,7 +220,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/claimPermissions/3223", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/3223", "GET", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to read all effective rules for a claims permission")]
@@ -228,7 +228,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/claimPermissions/3223/allResourceAccessRules", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/3223/allResourceAccessRules", "GET", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to add a rule to a claim permissions")]
@@ -236,7 +236,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/claimPermissions/123/resourceAccessRules", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/123/resourceAccessRules", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to set all rules in a claim permissions")]
@@ -244,7 +244,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/claimPermissions/123/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/123/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to add a resource access rule set to the claim permissions")]
@@ -252,7 +252,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to set all resource access rule sets in a claim permissions")]
@@ -260,7 +260,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "PUT", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to create a resource access rule set")]
@@ -268,7 +268,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/resourceAccessRuleSet", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to read a resource access rule set")]
@@ -276,7 +276,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/resourceAccessRuleSet/3233", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/3233", "GET", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to add an access rule to the resource access rule set")]
@@ -284,7 +284,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to set all access rules in a resource access rule set")]
@@ -292,7 +292,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "RootTenant/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
         }
 
         [Then("I am told that the tenant is already is initialised")]
