@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="Corvus.Extensions.CommandLine" Version="0.1.0" />
-    <PackageReference Include="Menes.Abstractions" Version="0.3.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.4.0" />
     <PackageReference Include="Microsoft.Azure.Management.AppService.Fluent" Version="1.26.0" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.26.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
