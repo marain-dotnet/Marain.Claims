@@ -15,7 +15,7 @@
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="0.13.0" />
+    <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="0.15.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.29" />
     <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.1.4" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.0.0" />
