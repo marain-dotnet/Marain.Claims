@@ -14,8 +14,8 @@
   <Import Project="..\Common.NetStandard_2_0.proj" />
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.16.0" />
-    <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="0.16.0" />
+    <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.18.0" />
+    <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="0.18.0" />
     <PackageReference Include="Menes.Abstractions" Version="0.8.0" />
     <PackageReference Include="Menes.Hosting.AspNetCore" Version="0.8.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
