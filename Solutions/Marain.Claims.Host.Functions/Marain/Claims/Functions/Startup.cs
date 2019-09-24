@@ -10,8 +10,6 @@ namespace Marain.Operations.ControlHost
     using Microsoft.Azure.WebJobs.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Serilog;
-    using Serilog.Filters;
 
     /// <summary>
     /// Startup code for the Function.
@@ -23,15 +21,8 @@ namespace Marain.Operations.ControlHost
         {
             IServiceCollection services = builder.Services;
 
-            LoggerConfiguration loggerConfig = new LoggerConfiguration()
-                    .Enrich.FromLogContext()
-                    .MinimumLevel.Debug()
-                    .WriteTo.Logger(lc => lc.Filter.ByExcluding(Matching.FromSource("Menes")).WriteTo.Console().MinimumLevel.Debug())
-                    .WriteTo.Logger(lc => lc.Filter.ByIncludingOnly(Matching.FromSource("Menes")).WriteTo.Console().MinimumLevel.Debug());
-
-            Log.Logger = loggerConfig.CreateLogger();
-
             IConfigurationRoot root = Configure(services);
+            services.AddLogging();
 
             services.AddTenantedClaimsApi(root, config => config.Documents.AddSwaggerEndpoint());
         }
