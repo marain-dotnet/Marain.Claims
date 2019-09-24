@@ -15,7 +15,7 @@ namespace Marain.Claims.SetupTool.Commands
     [Subcommand(typeof(BootstrapClaimsTenant))]
     [Subcommand(typeof(DefineRulesetsAndClaimPermissions))]
     [Subcommand(typeof(ShowAppIdentityInformation))]
-    public class ClaimsSetup : CommandLineApplication
+    public class ClaimsSetup
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ClaimsSetup"/> class.

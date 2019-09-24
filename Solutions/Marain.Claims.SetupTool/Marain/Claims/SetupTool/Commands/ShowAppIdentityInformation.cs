@@ -5,6 +5,8 @@
 namespace Marain.Claims.SetupTool.Commands
 {
     using System;
+    using System.Threading;
+    using System.Threading.Tasks;
     using McMaster.Extensions.CommandLineUtils;
     using Microsoft.Azure.Management.AppService.Fluent;
     using Microsoft.Azure.Management.AppService.Fluent.Models;
@@ -23,7 +25,7 @@ namespace Marain.Claims.SetupTool.Commands
     /// </remarks>
     [Command(Name = "show-app-identity", Description = "Display an app identity.", ThrowOnUnexpectedArgument = false, ShowInHelpText = true)]
     [HelpOption]
-    public class ShowAppIdentityInformation : CommandLineApplication
+    public class ShowAppIdentityInformation
     {
         private readonly AppServiceManagerSource appServiceManagerSource;
 
@@ -33,73 +35,6 @@ namespace Marain.Claims.SetupTool.Commands
         public ShowAppIdentityInformation()
         {
             this.appServiceManagerSource = new AppServiceManagerSource();
-            this.OnExecuteAsync(async ct =>
-            {
-                var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
-                IAppServiceManager appServiceManager = this.appServiceManagerSource.Get(
-                    authenticationOptions, this.SubscriptionId);
-                IWebAppAuthentication webAppAuthConfig;
-                ManagedServiceIdentity managedIdentity;
-                IFunctionApp function = null;
-                try
-                {
-                    function = appServiceManager.FunctionApps.GetByResourceGroup(this.ResourceGroupName, this.AppName);
-                }
-                catch (NullReferenceException)
-                {
-                    // Unhelpfully, we seem to get a null reference exception if the app isn't found
-                }
-
-                if (function != null)
-                {
-                    managedIdentity = function.Inner.Identity;
-                    webAppAuthConfig = await function.GetAuthenticationConfigAsync().ConfigureAwait(false);
-                }
-                else
-                {
-                    IWebApp webApp = appServiceManager.WebApps.GetByResourceGroup(this.ResourceGroupName, this.AppName);
-                    if (webApp == null)
-                    {
-                        this.Error.WriteLine($"Unable to find either a Function or Web App in resource group '{this.ResourceGroupName}' called '{this.AppName}'");
-                        return -1;
-                    }
-
-                    managedIdentity = webApp.Inner.Identity;
-                    webAppAuthConfig = await webApp.GetAuthenticationConfigAsync().ConfigureAwait(false);
-                }
-
-                if (webAppAuthConfig.Inner.Enabled == true)
-                {
-                    this.Out.WriteLine($"Default Easy Auth: {webAppAuthConfig.Inner.DefaultProvider}");
-                    this.Out.WriteLine($" Client ID: {webAppAuthConfig.Inner.ClientId}");
-                }
-                else
-                {
-                    this.Out.WriteLine("Easy Auth not enabled");
-                }
-
-                if (managedIdentity == null)
-                {
-                    this.Out.WriteLine("No managed identity");
-                }
-                else
-                {
-                    this.Out.WriteLine("Managed identity:");
-                    this.Out.WriteLine($" Type:                 {managedIdentity.Type}");
-                    this.Out.WriteLine($" TenantId:             {managedIdentity.TenantId}");
-                    this.Out.WriteLine($" PrincipalId:          {managedIdentity.PrincipalId}");
-
-                    if (managedIdentity.UserAssignedIdentities != null)
-                    {
-                        foreach ((string id, ManagedServiceIdentityUserAssignedIdentitiesValue value) in managedIdentity.UserAssignedIdentities)
-                        {
-                            this.Out.WriteLine($" UserAssignedIdentity: Id = {id}, ClientId = {value.ClientId}, PrincipalId = {value.PrincipalId}");
-                        }
-                    }
-                }
-
-                return 0;
-            });
         }
 
         /// <summary>
@@ -131,5 +66,73 @@ namespace Marain.Claims.SetupTool.Commands
         /// </summary>
         [Option(Description = "Authenticate using the token last fetched by the 'az' CLI", LongName = "devAzCliAuth", ShortName = "d")]
         public bool UseAzCliDevAuth { get; set; }
+
+        private async Task<int> OnExecuteAsync(CommandLineApplication app, CancellationToken cancellationToken = default)
+        {
+            var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
+            IAppServiceManager appServiceManager = this.appServiceManagerSource.Get(
+                authenticationOptions, this.SubscriptionId);
+            IWebAppAuthentication webAppAuthConfig;
+            ManagedServiceIdentity managedIdentity;
+            IFunctionApp function = null;
+            try
+            {
+                function = appServiceManager.FunctionApps.GetByResourceGroup(this.ResourceGroupName, this.AppName);
+            }
+            catch (NullReferenceException)
+            {
+                // Unhelpfully, we seem to get a null reference exception if the app isn't found
+            }
+
+            if (function != null)
+            {
+                managedIdentity = function.Inner.Identity;
+                webAppAuthConfig = await function.GetAuthenticationConfigAsync().ConfigureAwait(false);
+            }
+            else
+            {
+                IWebApp webApp = appServiceManager.WebApps.GetByResourceGroup(this.ResourceGroupName, this.AppName);
+                if (webApp == null)
+                {
+                    app.Error.WriteLine($"Unable to find either a Function or Web App in resource group '{this.ResourceGroupName}' called '{this.AppName}'");
+                    return -1;
+                }
+
+                managedIdentity = webApp.Inner.Identity;
+                webAppAuthConfig = await webApp.GetAuthenticationConfigAsync().ConfigureAwait(false);
+            }
+
+            if (webAppAuthConfig.Inner.Enabled == true)
+            {
+                app.Out.WriteLine($"Default Easy Auth: {webAppAuthConfig.Inner.DefaultProvider}");
+                app.Out.WriteLine($" Client ID: {webAppAuthConfig.Inner.ClientId}");
+            }
+            else
+            {
+                app.Out.WriteLine("Easy Auth not enabled");
+            }
+
+            if (managedIdentity == null)
+            {
+                app.Out.WriteLine("No managed identity");
+            }
+            else
+            {
+                app.Out.WriteLine("Managed identity:");
+                app.Out.WriteLine($" Type:                 {managedIdentity.Type}");
+                app.Out.WriteLine($" TenantId:             {managedIdentity.TenantId}");
+                app.Out.WriteLine($" PrincipalId:          {managedIdentity.PrincipalId}");
+
+                if (managedIdentity.UserAssignedIdentities != null)
+                {
+                    foreach ((string id, ManagedServiceIdentityUserAssignedIdentitiesValue value) in managedIdentity.UserAssignedIdentities)
+                    {
+                        app.Out.WriteLine($" UserAssignedIdentity: Id = {id}, ClientId = {value.ClientId}, PrincipalId = {value.PrincipalId}");
+                    }
+                }
+            }
+
+            return 0;
+        }
     }
 }

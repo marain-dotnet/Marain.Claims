@@ -8,6 +8,8 @@ namespace Marain.Claims.SetupTool.Commands
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Corvus.Tenancy;
     using Marain.Claims.Client;
     using Marain.Claims.Client.Models;
@@ -20,76 +22,13 @@ namespace Marain.Claims.SetupTool.Commands
     /// </summary>
     [Command(Name = "bootstrap-claims-tenant", Description = "Bootstraps the claims for a new tenant.", ThrowOnUnexpectedArgument = false)]
     [HelpOption]
-    public class BootstrapClaimsTenant : CommandLineApplication
+    public class BootstrapClaimsTenant
     {
         /// <summary>
         /// Create a <see cref="BootstrapClaimsTenant"/>.
         /// </summary>
         public BootstrapClaimsTenant()
         {
-            this.OnExecuteAsync(async ct =>
-            {
-                var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
-
-                ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
-                    this.ClaimsAppId, this.KeyVault, this.SecretName).ConfigureAwait(false);
-                using (var claimsClient = new ClaimsService(new Uri(this.ClaimsServiceUrl), credentials))
-                {
-                    try
-                    {
-                        HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
-                                this.MarainTenantId,
-                                new Body { AdministratorRoleClaimValue = this.AdminRoleName })
-                            .ConfigureAwait(false);
-
-                        if (result.Response.IsSuccessStatusCode)
-                        {
-                            this.Out.WriteLine("Succeeded");
-                        }
-                        else
-                        {
-                            this.Error.WriteLine($"Failed with status code {result.Response.StatusCode}");
-                            if (result.Body != null)
-                            {
-                                this.Error.WriteLine(result.Body.Title);
-                                this.Error.WriteLine(result.Body.Detail);
-                            }
-                        }
-                    }
-                    catch (HttpOperationException x)
-                    {
-                        this.Error.WriteLine($"Failed with status code {x.Response.StatusCode}");
-                        if (!string.IsNullOrWhiteSpace(x.Response.Content))
-                        {
-                            this.Error.WriteLine("Response content:");
-                            this.Error.WriteLine(x.Response.Content);
-                        }
-
-                        if (x.Response.StatusCode == HttpStatusCode.Unauthorized)
-                        {
-                            this.Error.WriteLine();
-                            this.Error.WriteLine("Check that you have specified the correct tenant and claims id");
-                        }
-
-                        if (x.Response.Headers.TryGetValue("WWW-Authenticate", out IEnumerable<string> values))
-                        {
-                            var valueList = values.ToList();
-                            if (valueList.Count > 0)
-                            {
-                                Console.WriteLine("WWW-Authenticate header{0}:", valueList.Count > 1 ? "s" : string.Empty);
-                                foreach (string value in valueList)
-                                {
-                                    this.Error.WriteLine(value);
-                                }
-                            }
-                        }
-
-                        return -1;
-                    }
-                }
-
-                return 0;
-            });
         }
 
         /// <summary>
@@ -139,5 +78,69 @@ namespace Marain.Claims.SetupTool.Commands
         /// </summary>
         [Option(Description = "Authenticate using the token last fetched by the 'az' CLI", LongName = "devAzCliAuth", ShortName = "d")]
         public bool UseAzCliDevAuth { get; set; }
+
+        private async Task<int> OnExecuteAsync(CommandLineApplication app, CancellationToken cancellationToken = default)
+        {
+            var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
+
+            ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
+                this.ClaimsAppId, this.KeyVault, this.SecretName).ConfigureAwait(false);
+            using (var claimsClient = new ClaimsService(new Uri(this.ClaimsServiceUrl), credentials))
+            {
+                try
+                {
+                    HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
+                            this.MarainTenantId,
+                            new Body { AdministratorRoleClaimValue = this.AdminRoleName })
+                        .ConfigureAwait(false);
+
+                    if (result.Response.IsSuccessStatusCode)
+                    {
+                        app.Out.WriteLine("Succeeded");
+                    }
+                    else
+                    {
+                        app.Error.WriteLine($"Failed with status code {result.Response.StatusCode}");
+                        if (result.Body != null)
+                        {
+                            app.Error.WriteLine(result.Body.Title);
+                            app.Error.WriteLine(result.Body.Detail);
+                        }
+                    }
+                }
+                catch (HttpOperationException x)
+                {
+                    app.Error.WriteLine($"Failed with status code {x.Response.StatusCode}");
+                    if (!string.IsNullOrWhiteSpace(x.Response.Content))
+                    {
+                        app.Error.WriteLine("Response content:");
+                        app.Error.WriteLine(x.Response.Content);
+                    }
+
+                    if (x.Response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        app.Error.WriteLine();
+                        app.Error.WriteLine("Check that you have specified the correct tenant and claims id");
+                    }
+
+                    if (x.Response.Headers.TryGetValue("WWW-Authenticate", out IEnumerable<string> values))
+                    {
+                        var valueList = values.ToList();
+                        if (valueList.Count > 0)
+                        {
+                            Console.WriteLine("WWW-Authenticate header{0}:", valueList.Count > 1 ? "s" : string.Empty);
+                            foreach (string value in valueList)
+                            {
+                                app.Error.WriteLine(value);
+                            }
+                        }
+                    }
+
+                    return -1;
+                }
+            }
+
+            return 0;
+        }
     }
 }
