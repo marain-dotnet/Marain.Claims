@@ -8,9 +8,6 @@ namespace Marain.Claims.SetupTool.Commands
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Corvus.Cli;
     using Corvus.Tenancy;
     using Marain.Claims.Client;
     using Marain.Claims.Client.Models;
@@ -21,103 +18,126 @@ namespace Marain.Claims.SetupTool.Commands
     /// Command to invoke the bootstrapping endpoint of the Claims service in order to set up the
     /// initial administrative permissions for modifying claims.
     /// </summary>
-    public class BootstrapClaimsTenant : Command<BootstrapClaimsTenant>
+    [Command(Name = "bootstrap-claims-tenant", Description = "Bootstraps the claims for a new tenant.", ThrowOnUnexpectedArgument = false)]
+    [HelpOption]
+    public class BootstrapClaimsTenant : CommandLineApplication
     {
-#pragma warning disable IDE0044, CS0649 // These items are set by reflection
-        private string claimsAppId;
-        private string claimsServiceUrl;
-        private string adminRoleName = "ClaimsAdministrator";
-        private string keyVault;
-        private string secretName = "ClaimsSetupApp";
-        private string marainTenantId = RootTenant.RootTenantId;
-        private string tenantId = null;
-        private bool useAzCliDevAuth;
-#pragma warning restore IDE0044, CS0649 // These items are set by reflection
-
         /// <summary>
         /// Create a <see cref="BootstrapClaimsTenant"/>.
         /// </summary>
         public BootstrapClaimsTenant()
-            : base("bootstrap-claims-tenant", "Boostraps the claims for a new tenant")
         {
-        }
-
-        /// <inheritdoc/>
-        public override void AddOptions(CommandLineApplication command)
-        {
-            this.AddBooleanOption(command, "-d|--devAzCliAuth", "Authenticate using the token last fetched by the 'az' CLI", () => this.useAzCliDevAuth);
-            this.AddSingleOption(command, "-t|--tenantId <value>", "The tenant against which to authenticate", () => this.tenantId);
-            this.AddSingleOption(command, "-c|--claimsAppId <value>", "The Client ID (AppId) of the Azure AD App being used by the Claim Service with Easy Auth", () => this.claimsAppId);
-            this.AddSingleOption(command, "-u|--claimsServiceUrl <value>", "The base URL for the Claims Service", () => this.claimsServiceUrl);
-            this.AddSingleOption(command, "-r|--adminRoleName <value>", "The name of the Application Role in the Claims Service that is to be granted administrative control over the Claims Service", () => this.adminRoleName);
-            this.AddSingleOption(command, "-m|--marainTenant <value>", "The Marain tenant ID to pass", () => this.marainTenantId);
-            this.AddSingleOption(command, "-v|--keyVault <value>", "The key vault containing the details of the AAD App to use when authenticating to the Claims service", () => this.keyVault);
-            this.AddSingleOption(command, "-s|--secretName <value>", "The name of the key vault secret containing the details of the AAD App to use when authenticating to the Claims service", () => this.secretName);
-        }
-
-        /// <inheritdoc/>
-        public override async Task<int> ExecuteAsync(CancellationToken token)
-        {
-            var authenticationOptions = AuthenticationOptions.BuildFrom(this.useAzCliDevAuth, this.tenantId);
-
-            ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
-                this.claimsAppId, this.keyVault, this.secretName).ConfigureAwait(false);
-            using (var claimsClient = new ClaimsService(new Uri(this.claimsServiceUrl), credentials))
+            this.OnExecuteAsync(async ct =>
             {
-                try
-                {
-                    HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
-                            this.marainTenantId,
-                            new Body { AdministratorRoleClaimValue = this.adminRoleName })
-                        .ConfigureAwait(false);
+                var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
 
-                    if (result.Response.IsSuccessStatusCode)
+                ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
+                    this.ClaimsAppId, this.KeyVault, this.SecretName).ConfigureAwait(false);
+                using (var claimsClient = new ClaimsService(new Uri(this.ClaimsServiceUrl), credentials))
+                {
+                    try
                     {
-                        Console.WriteLine("Succeeded");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Failed with status code {result.Response.StatusCode}");
-                        if (result.Body != null)
+                        HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
+                                this.MarainTenantId,
+                                new Body { AdministratorRoleClaimValue = this.AdminRoleName })
+                            .ConfigureAwait(false);
+
+                        if (result.Response.IsSuccessStatusCode)
                         {
-                            Console.WriteLine(result.Body.Title);
-                            Console.WriteLine(result.Body.Detail);
+                            this.Out.WriteLine("Succeeded");
                         }
-                    }
-                }
-                catch (HttpOperationException x)
-                {
-                    Console.WriteLine($"Failed with status code {x.Response.StatusCode}");
-                    if (!string.IsNullOrWhiteSpace(x.Response.Content))
-                    {
-                        Console.WriteLine("Response content:");
-                        Console.WriteLine(x.Response.Content);
-                    }
-
-                    if (x.Response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("Check that you have specified the correct tenant and claims id");
-                    }
-
-                    if (x.Response.Headers.TryGetValue("WWW-Authenticate", out IEnumerable<string> values))
-                    {
-                        var valueList = values.ToList();
-                        if (valueList.Count > 0)
+                        else
                         {
-                            Console.WriteLine("WWW-Authenticate header{0}:", valueList.Count > 1 ? "s" : string.Empty);
-                            foreach (string value in valueList)
+                            this.Error.WriteLine($"Failed with status code {result.Response.StatusCode}");
+                            if (result.Body != null)
                             {
-                                Console.WriteLine(value);
+                                this.Error.WriteLine(result.Body.Title);
+                                this.Error.WriteLine(result.Body.Detail);
                             }
                         }
                     }
+                    catch (HttpOperationException x)
+                    {
+                        this.Error.WriteLine($"Failed with status code {x.Response.StatusCode}");
+                        if (!string.IsNullOrWhiteSpace(x.Response.Content))
+                        {
+                            this.Error.WriteLine("Response content:");
+                            this.Error.WriteLine(x.Response.Content);
+                        }
 
-                    return -1;
+                        if (x.Response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            this.Error.WriteLine();
+                            this.Error.WriteLine("Check that you have specified the correct tenant and claims id");
+                        }
+
+                        if (x.Response.Headers.TryGetValue("WWW-Authenticate", out IEnumerable<string> values))
+                        {
+                            var valueList = values.ToList();
+                            if (valueList.Count > 0)
+                            {
+                                Console.WriteLine("WWW-Authenticate header{0}:", valueList.Count > 1 ? "s" : string.Empty);
+                                foreach (string value in valueList)
+                                {
+                                    this.Error.WriteLine(value);
+                                }
+                            }
+                        }
+
+                        return -1;
+                    }
                 }
-            }
 
-            return 0;
+                return 0;
+            });
         }
+
+        /// <summary>
+        /// Gets or sets the claims app ID.
+        /// </summary>
+        [Option(Description = "The name of the Application Role in the Claims Service that is to be granted administrative control over the Claims Service", LongName = "claimsAppId", ShortName = "c")]
+        public string ClaimsAppId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the admin role name.
+        /// </summary>
+        [Option(Description = "The base URL for the Claims Service", LongName = "claimsServiceUrl", ShortName = "u")]
+        public string ClaimsServiceUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the admin role name.
+        /// </summary>
+        [Option(Description = "The name of the Application Role in the Claims Service that is to be granted administrative control over the Claims Service", LongName = "adminRoleName", ShortName = "r")]
+        public string AdminRoleName { get; set; } = "ClaimsAdministrator";
+
+        /// <summary>
+        /// Gets or sets the key vault name.
+        /// </summary>
+        [Option(Description = "The key vault containing the details of the AAD App to use when authenticating to the Claims service", LongName = "keyVault", ShortName = "v")]
+        public string KeyVault { get; set; }
+
+        /// <summary>
+        /// Gets or sets the secret name.
+        /// </summary>
+        [Option(Description = "The name of the key vault secret containing the details of the AAD App to use when authenticating to the Claims service", LongName = "secretName", ShortName = "s")]
+        public string SecretName { get; set; } = "ClaimsSetupApp";
+
+        /// <summary>
+        /// Gets or sets the Marain tenant ID.
+        /// </summary>
+        [Option(Description = "The Marain tenant ID to pass", LongName = "marainTenant", ShortName = "m")]
+        public string MarainTenantId { get; set; } = RootTenant.RootTenantId;
+
+        /// <summary>
+        /// Gets or sets the AD tenant ID.
+        /// </summary>
+        [Option(Description = "The tenant against which to authenticate", LongName = "tenantId", ShortName = "t")]
+        public string TenantId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use the 'az' CLI token.
+        /// </summary>
+        [Option(Description = "Authenticate using the token last fetched by the 'az' CLI", LongName = "devAzCliAuth", ShortName = "d")]
+        public bool UseAzCliDevAuth { get; set; }
     }
 }
