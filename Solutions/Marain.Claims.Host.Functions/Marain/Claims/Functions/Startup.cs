@@ -10,6 +10,7 @@ namespace Marain.Operations.ControlHost
     using Microsoft.Azure.WebJobs.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Startup code for the Function.
@@ -22,7 +23,26 @@ namespace Marain.Operations.ControlHost
             IServiceCollection services = builder.Services;
 
             IConfigurationRoot root = Configure(services);
-            services.AddLogging();
+
+            services.AddLogging(logging =>
+            {
+#if DEBUG
+                // Ensure you enable the required logging level in host.json
+                // e.g:
+                //
+                // "logging": {
+                //    "fileLoggingMode": "debugOnly",
+                //    "logLevel": {
+                //
+                //    // For all functions
+                //    "Function": "Debug",
+                //
+                //    // Default settings, e.g. for host
+                //    "default": "Debug"
+                // }
+                logging.AddConsole();
+#endif
+            });
 
             services.AddTenantedClaimsApi(root, config => config.Documents.AddSwaggerEndpoint());
         }
