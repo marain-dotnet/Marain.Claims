@@ -24,6 +24,7 @@ namespace Marain.Claims.SpecFlow.Steps
     using Corvus.Extensions.Json;
     using Microsoft.Extensions.DependencyInjection;
     using Marain.Claims.OpenApi;
+    using Microsoft.ApplicationInsights.Extensibility;
 
     [Binding]
     public class BootstrappingSteps
@@ -138,7 +139,7 @@ namespace Marain.Claims.SpecFlow.Steps
                 storeFactory.Object,
                 ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<ITenantProvider>(),
                 ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IJsonSerializerSettingsProvider>(),
-                new Microsoft.ApplicationInsights.TelemetryClient());
+                new Microsoft.ApplicationInsights.TelemetryClient(new TelemetryConfiguration("fakekey")));
 
             var openApiContext = new Mock<IOpenApiContext>();
             openApiContext
