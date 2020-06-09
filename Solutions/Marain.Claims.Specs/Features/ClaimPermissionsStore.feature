@@ -1,5 +1,5 @@
-﻿@setupTenantedCloudBlobContainer
-@setupContainer
+﻿@useTransientTenant
+@perFeatureContainer
 
 Feature: ClaimPermissionsStore
 

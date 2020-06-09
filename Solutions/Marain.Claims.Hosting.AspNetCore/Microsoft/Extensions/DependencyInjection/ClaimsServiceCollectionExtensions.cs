@@ -6,6 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using System;
     using System.Linq;
+    using Corvus.Azure.Storage.Tenancy;
     using Corvus.ContentHandling;
     using Endjin.Claims.Hosting;
     using Marain.Claims;
@@ -40,8 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddLogging();
-            services.AddTenantProviderBlobStore();
-            services.AddTenantedBlobContainerClaimsStore(rootTenantDefaultConfiguration);
+            services.AddTenantedBlobContainerClaimsStore();
             services.AddSingleton<ClaimPermissionsService>();
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());
             services.AddSingleton<ResourceAccessRuleSetService>();

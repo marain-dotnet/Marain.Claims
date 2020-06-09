@@ -66,7 +66,7 @@ namespace Marain.Claims.Storage
         ///     Gets the <see cref="CloudBlobContainer" /> in which claim permissions will
         ///     be stored.
         /// </summary>
-        protected CloudBlobContainer Container { get; }
+        public CloudBlobContainer Container { get; }
 
         /// <inheritdoc/>
         public async Task<ClaimPermissions> GetAsync(string id)

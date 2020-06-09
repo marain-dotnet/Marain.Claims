@@ -52,7 +52,6 @@ namespace Marain.Claims.Internal
         public async Task<IResourceAccessRuleSetStore> GetResourceAccessRuleSetStoreAsync(ITenant tenant)
         {
             CloudBlobContainer container = await this.tenantCloudBlobContainerFactory.GetBlobContainerForTenantAsync(tenant, this.resourceAccessRuleSetRepositoryDefinition);
-
             return new ResourceAccessRuleSetStore(container, this.serializerSettingsProvider);
         }
     }

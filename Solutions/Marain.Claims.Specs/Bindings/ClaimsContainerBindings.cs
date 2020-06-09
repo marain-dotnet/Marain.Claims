@@ -5,9 +5,8 @@
 namespace Marain.Claims.SpecFlow.Bindings
 {
     using System.Collections.Generic;
+    using Corvus.Azure.Storage.Tenancy;
     using Corvus.SpecFlow.Extensions;
-    using Corvus.Tenancy;
-    using Marain.Claims.Specs.Bindings;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using TechTalk.SpecFlow;
@@ -22,25 +21,43 @@ namespace Marain.Claims.SpecFlow.Bindings
         /// Initializes the container before each feature's tests are run.
         /// </summary>
         /// <param name="featureContext">The SpecFlow test context.</param>
-        [BeforeFeature("@setupContainer", Order = ContainerBeforeFeatureOrder.PopulateServiceCollection)]
+        [BeforeFeature("@perFeatureContainer", Order = ContainerBeforeFeatureOrder.PopulateServiceCollection)]
         public static void InitializeContainer(FeatureContext featureContext)
         {
             ContainerBindings.ConfigureServices(
                 featureContext,
                 serviceCollection =>
                 {
-                    var configData = new Dictionary<string, string>
-                    {
-                        //// { "STORAGEACCOUNTCONNECTIONSTRING", "UseDevelopmentStorage=true" },
-                    };
-                    IConfigurationRoot config = new ConfigurationBuilder()
-                        .AddInMemoryCollection(configData)
+                    IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                         .AddEnvironmentVariables()
-                        .AddJsonFile("local.settings.json", true, true)
-                        .Build();
-                    serviceCollection.AddSingleton(config);
-                    serviceCollection.AddSingleton<ITenantProvider, FakeTenantProvider>();
-                    serviceCollection.AddTenantedBlobContainerClaimsStore(config);
+                        .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
+
+                    IConfiguration root = configurationBuilder.Build();
+
+                    string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
+
+                    serviceCollection.AddSingleton(root);
+
+                    serviceCollection.AddLogging();
+
+                    serviceCollection.AddRootTenant();
+                    serviceCollection.AddInMemoryTenantProvider();
+
+                    serviceCollection.AddJsonSerializerSettings();
+
+                    var tenantCloudBlobContainerFactoryOptions = new TenantCloudBlobContainerFactoryOptions
+                    {
+                        AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
+                    };
+
+                    serviceCollection.AddSingleton(tenantCloudBlobContainerFactoryOptions);
+
+                    serviceCollection.AddTenantCloudBlobContainerFactory(tenantCloudBlobContainerFactoryOptions);
+
+                    serviceCollection.AddTenantedBlobContainerClaimsStore();
+
+                    serviceCollection.AddMarainServiceConfiguration();
+                    serviceCollection.AddMarainServicesTenancy();
                 });
         }
     }

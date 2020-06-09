@@ -11,6 +11,7 @@ namespace Marain.Claims.OpenApi
     using Corvus.Tenancy;
     using Marain.Claims;
     using Marain.Claims.Storage;
+    using Marain.Services.Tenancy;
     using Menes;
     using Microsoft.ApplicationInsights;
     using Microsoft.ApplicationInsights.DataContracts;
@@ -24,22 +25,22 @@ namespace Marain.Claims.OpenApi
         private const string GetResourceAccessRuleSetOperationId = "getResourceAccessRuleSet";
         private const string UpdateResourceAccessRuleSetResourceAccessRulesOperationId = "updateResourceAccessRuleSetResourceAccessRules";
         private const string SetResourceAccessRuleSetResourceAccessRulesOperationId = "setResourceAccessRuleSetResourceAccessRules";
-        private readonly ITenantProvider tenantProvider;
+        private readonly IMarainServicesTenancy tenancyHelper;
         private readonly IPermissionsStoreFactory permissionsStoreFactory;
         private readonly TelemetryClient telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAccessRuleSetService"/> class.
         /// </summary>
-        /// <param name="tenantProvider">The tenant provider.</param>
+        /// <param name="tenancyHelper">The tenant provider.</param>
         /// <param name="permissionsStoreFactory">Provides access to the permissions store.</param>
         /// <param name="telemetryClient">A <see cref="TelemetryClient"/> to log telemetry.</param>
         public ResourceAccessRuleSetService(
-            ITenantProvider tenantProvider,
+            IMarainServicesTenancy tenancyHelper,
             IPermissionsStoreFactory permissionsStoreFactory,
             TelemetryClient telemetryClient)
         {
-            this.tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
+            this.tenancyHelper = tenancyHelper ?? throw new ArgumentNullException(nameof(tenancyHelper));
             this.permissionsStoreFactory = permissionsStoreFactory ?? throw new ArgumentNullException(nameof(permissionsStoreFactory));
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
         }
@@ -57,7 +58,8 @@ namespace Marain.Claims.OpenApi
         {
             using (this.telemetryClient.StartOperation<RequestTelemetry>(CreateResourceAccessRuleSetOperationId))
             {
-                ITenant tenant = await this.TenantFromIdAsync(tenantId).ConfigureAwait(false);
+                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+
                 IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
                 ResourceAccessRuleSet result = await store.PersistAsync(body).ConfigureAwait(false);
                 return this.OkResult(result);
@@ -77,7 +79,8 @@ namespace Marain.Claims.OpenApi
         {
             using (this.telemetryClient.StartOperation<RequestTelemetry>(GetResourceAccessRuleSetOperationId))
             {
-                ITenant tenant = await this.TenantFromIdAsync(tenantId).ConfigureAwait(false);
+                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+
                 IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
                 try
                 {
@@ -108,7 +111,8 @@ namespace Marain.Claims.OpenApi
         {
             using (this.telemetryClient.StartOperation<RequestTelemetry>(UpdateResourceAccessRuleSetResourceAccessRulesOperationId))
             {
-                ITenant tenant = await this.TenantFromIdAsync(tenantId).ConfigureAwait(false);
+                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+
                 IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
 
                 ResourceAccessRuleSet ruleSet;
@@ -153,7 +157,8 @@ namespace Marain.Claims.OpenApi
         {
             using (this.telemetryClient.StartOperation<RequestTelemetry>(SetResourceAccessRuleSetResourceAccessRulesOperationId))
             {
-                ITenant tenant = await this.TenantFromIdAsync(tenantId).ConfigureAwait(false);
+                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+
                 IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
 
                 ResourceAccessRuleSet ruleSet;
@@ -174,13 +179,5 @@ namespace Marain.Claims.OpenApi
                 return this.OkResult();
             }
         }
-
-        /// <summary>
-        /// Gets the <see cref="Tenant"/> with the given id.
-        /// </summary>
-        /// <param name="tenantId">The tenant id.</param>
-        /// <returns>A task that produces the <see cref="Tenant"/> with the specified id.</returns>
-        private ValueTask<ITenant> TenantFromIdAsync(string tenantId)
-            => new ValueTask<ITenant>(this.tenantProvider.GetTenantAsync(tenantId));
     }
 }

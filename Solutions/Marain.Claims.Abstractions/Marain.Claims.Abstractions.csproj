@@ -14,8 +14,9 @@
   <Import Project="..\Common.NetStandard_2_0.proj" />
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.19.0" />
-    <PackageReference Include="Menes.Abstractions" Version="0.9.0" />
+    <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.25.0" />
+    <PackageReference Include="Menes.Abstractions" Version="0.11.0" />
+    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="3.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 

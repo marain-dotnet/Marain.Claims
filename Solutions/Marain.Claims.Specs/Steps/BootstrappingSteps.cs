@@ -11,7 +11,6 @@ namespace Marain.Claims.SpecFlow.Steps
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Marain.Claims.SpecFlow.Bindings;
     using Marain.Claims.Storage;
     using Menes;
     using Corvus.Tenancy;
@@ -24,24 +23,30 @@ namespace Marain.Claims.SpecFlow.Steps
     using Corvus.Extensions.Json;
     using Microsoft.Extensions.DependencyInjection;
     using Marain.Claims.OpenApi;
+    using Marain.Services.Tenancy;
+    using Marain.TenantManagement.Testing;
+    using Marain.Claims;
 
     [Binding]
     public class BootstrappingSteps
     {
         private readonly FeatureContext featureContext;
         private readonly ScenarioContext scenarioContext;
+        private readonly TransientTenantManager transientTenantManager;
         private readonly bool useRealDb;
-        private readonly ITenant tenant;
 
         private readonly Mock<IClaimPermissionsStore> permissionStoreMock = new Mock<IClaimPermissionsStore>();
         private readonly Mock<IResourceAccessRuleSetStore> resourceAccessRuleSetStoreMock = new Mock<IResourceAccessRuleSetStore>();
         private readonly List<ClaimPermissions> claimPermissionsPersistedToStore = new List<ClaimPermissions>();
         private readonly List<ResourceAccessRuleSet> resourceAccessRulesPersistedToStore = new List<ResourceAccessRuleSet>();
-        private readonly IClaimPermissionsStore claimPermissionsStore;
-        private readonly IResourceAccessRuleSetStore ruleSetStore;
         private readonly IOpenApiContext openApiContext;
+        
         private ClaimPermissionsService service;
         private OpenApiResult bootstrapTenantResult;
+        
+        private IClaimPermissionsStore claimPermissionsStore;
+        private IResourceAccessRuleSetStore ruleSetStore;
+        private Mock<IPermissionsStoreFactory> permissionsStoreFactoryMock;
 
         public BootstrappingSteps(
             FeatureContext featureContext,
@@ -50,7 +55,7 @@ namespace Marain.Claims.SpecFlow.Steps
             this.featureContext = featureContext;
             this.scenarioContext = scenarioContext;
 
-            this.tenant = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ITenantProvider>().Root;
+            this.transientTenantManager = TransientTenantManager.GetInstance(featureContext);
 
             string[] tags = this.scenarioContext.ScenarioInfo.Tags;
 #pragma warning disable RCS1104 // I disagree with Roslynators contention that what it wants do to would "Simplify" this.
@@ -59,45 +64,18 @@ namespace Marain.Claims.SpecFlow.Steps
                 : (tags.Contains("inMemoryStore") ? false : throw new InvalidOperationException("You must tag this test with either @realStore or @inMemoryStore"));
 #pragma warning restore RCS1104 // Simplify conditional expression.
 
-            if (this.useRealDb)
-            {
-                IJsonSerializerSettingsProvider serializerSettingsProvider = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<IJsonSerializerSettingsProvider>();
-                CloudBlobContainer claimsPermissionsContainer = this.featureContext.Get<CloudBlobContainer>(ClaimsTenantedCloudBlobContainerBindings.ClaimsPermissionsContainer);
-                CloudBlobContainer ruleSetsContainer = this.featureContext.Get<CloudBlobContainer>(ClaimsTenantedCloudBlobContainerBindings.RuleSetsContainer);
-                this.ruleSetStore = new ResourceAccessRuleSetStore(ruleSetsContainer, serializerSettingsProvider);
-                this.claimPermissionsStore = new ClaimPermissionsStore(claimsPermissionsContainer, this.ruleSetStore, serializerSettingsProvider);
-            }
-            else
-            {
-                this.permissionStoreMock
-                    .Setup(m => m.PersistAsync(It.IsAny<ClaimPermissions>()))
-                    .Returns((ClaimPermissions cp) =>
-                    {
-                        this.claimPermissionsPersistedToStore.Add(cp);
-                        return Task.FromResult(cp);
-                    });
-                this.resourceAccessRuleSetStoreMock
-                    .Setup(m => m.PersistAsync(It.IsAny<ResourceAccessRuleSet>()))
-                    .Returns((ResourceAccessRuleSet rs) =>
-                    {
-                        this.resourceAccessRulesPersistedToStore.Add(rs);
-                        return Task.FromResult(rs);
-                    });
-
-                this.claimPermissionsStore = this.permissionStoreMock.Object;
-                this.ruleSetStore = this.resourceAccessRuleSetStoreMock.Object;
-            }
-
             var openApiContextMock = new Mock<IOpenApiContext>();
             openApiContextMock
                 .SetupGet(m => m.CurrentTenantId)
-                .Returns(this.tenant.Id);
+                .Returns(this.transientTenantManager.PrimaryTransientClient.Id);
             this.openApiContext = openApiContextMock.Object;
         }
 
         [Given("the tenant is uninitialised")]
         public async Task GivenTheTenantIsUninitialisedAsync()
         {
+            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync();
+
             if (this.useRealDb)
             {
                 await this.DeleteAllPermissions();
@@ -115,8 +93,10 @@ namespace Marain.Claims.SpecFlow.Steps
         }
 
         [Given("the tenant is initialised")]
-        public void GivenTheTenantIsInitialised()
+        public async Task GivenTheTenantIsInitialisedAsync()
         {
+            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync();
+
             Assert.IsFalse(this.useRealDb, "Tests using this step can only use @inMemoryStore");
             this.permissionStoreMock
                 .Setup(m => m.AnyPermissions())
@@ -127,23 +107,16 @@ namespace Marain.Claims.SpecFlow.Steps
         public async Task WhenIInitialiseTheTenantWithTheRoleId(
             string roleId)
         {
-            var storeFactory = new Mock<IPermissionsStoreFactory>();
-            storeFactory
-                .Setup(m => m.GetClaimPermissionsStoreAsync(this.tenant))
-                .ReturnsAsync(this.claimPermissionsStore);
-            storeFactory
-                .Setup(m => m.GetResourceAccessRuleSetStoreAsync(this.tenant))
-                .ReturnsAsync(this.ruleSetStore);
             this.service = new ClaimPermissionsService(
-                storeFactory.Object,
-                ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<ITenantProvider>(),
+                this.permissionsStoreFactoryMock.Object,
+                ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IMarainServicesTenancy>(),
                 ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IJsonSerializerSettingsProvider>(),
                 new Microsoft.ApplicationInsights.TelemetryClient());
 
             var openApiContext = new Mock<IOpenApiContext>();
             openApiContext
                 .SetupGet(m => m.CurrentTenantId)
-                .Returns(this.tenant.Id);
+                .Returns(this.transientTenantManager.PrimaryTransientClient.Id);
             var body = new JObject
             {
                 ["administratorRoleClaimValue"] = roleId
@@ -179,7 +152,7 @@ namespace Marain.Claims.SpecFlow.Steps
             IList<ResourceAccessRule> rules = this.resourceAccessRulesPersistedToStore.Single().Rules;
             foreach (TableRow row in table.Rows)
             {
-                string resourceUri = row["resourceUri"];
+                string resourceUri = row["resourceUri"].Replace("<tenantid>", this.transientTenantManager.PrimaryTransientClient.Id);
                 string resourceDisplayName = row["resourceDisplayName"];
                 string accessType = row["accessType"];
                 var permission = (Permission)Enum.Parse(typeof(Permission), row["permission"]);
@@ -212,7 +185,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/claimPermissions", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to read a claim permissions")]
@@ -220,7 +193,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/3223", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/claimPermissions/3223", "GET", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to read all effective rules for a claims permission")]
@@ -228,7 +201,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/3223/allResourceAccessRules", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/claimPermissions/3223/allResourceAccessRules", "GET", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to add a rule to a claim permissions")]
@@ -236,7 +209,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/123/resourceAccessRules", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/claimPermissions/123/resourceAccessRules", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to set all rules in a claim permissions")]
@@ -244,7 +217,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/123/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/claimPermissions/123/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to add a resource access rule set to the claim permissions")]
@@ -252,7 +225,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to set all resource access rule sets in a claim permissions")]
@@ -260,7 +233,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/claimPermissions/432/resourceAccessRuleSets", "PUT", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to create a resource access rule set")]
@@ -268,7 +241,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/resourceAccessRuleSet", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to read a resource access rule set")]
@@ -276,7 +249,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/3233", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/resourceAccessRuleSet/3233", "GET", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to add an access rule to the resource access rule set")]
@@ -284,7 +257,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "POST", permission).ConfigureAwait(false);
         }
 
         [Then("a principal in the '(.*)' role gets '(.*)' trying to set all access rules in a resource access rule set")]
@@ -292,7 +265,7 @@ namespace Marain.Claims.SpecFlow.Steps
             string roleId,
             string permission)
         {
-            await this.CheckPermissions(roleId, "f26450ab1668784bb327951c8b08f347/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/api/resourceAccessRuleSet/abc/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
         }
 
         [Then("I am told that the tenant is already is initialised")]
@@ -321,15 +294,13 @@ namespace Marain.Claims.SpecFlow.Steps
 
         private Task DeleteAllPermissions()
         {
-
-            CloudBlobContainer container = this.featureContext.Get<CloudBlobContainer>(ClaimsTenantedCloudBlobContainerBindings.ClaimsPermissionsContainer);
+            CloudBlobContainer container = ((ClaimPermissionsStore)this.claimPermissionsStore).Container;
             return this.DeleteAllDocuments(container);
         }
 
         private Task DeleteAllRuleSets()
         {
-
-            CloudBlobContainer container = this.featureContext.Get<CloudBlobContainer>(ClaimsTenantedCloudBlobContainerBindings.RuleSetsContainer);
+            CloudBlobContainer container = ((ResourceAccessRuleSetStore)this.ruleSetStore).Container;
             return this.DeleteAllDocuments(container);
         }
 
@@ -360,6 +331,45 @@ namespace Marain.Claims.SpecFlow.Steps
             {
                 Assert.AreEqual(404, permissionsResult.StatusCode);
             }
+        }
+
+        private async Task<Mock<IPermissionsStoreFactory>> SetupMockPermissionsStoreFactoryAsync()
+        {
+            if (this.useRealDb)
+            {
+                IPermissionsStoreFactory permissionsStoreFactory = ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IPermissionsStoreFactory>();
+                this.ruleSetStore = await permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(this.transientTenantManager.PrimaryTransientClient);
+                this.claimPermissionsStore = await permissionsStoreFactory.GetClaimPermissionsStoreAsync(this.transientTenantManager.PrimaryTransientClient);
+            }
+            else
+            {
+                this.permissionStoreMock
+                    .Setup(m => m.PersistAsync(It.IsAny<ClaimPermissions>()))
+                    .Returns((ClaimPermissions cp) =>
+                    {
+                        this.claimPermissionsPersistedToStore.Add(cp);
+                        return Task.FromResult(cp);
+                    });
+                this.resourceAccessRuleSetStoreMock
+                    .Setup(m => m.PersistAsync(It.IsAny<ResourceAccessRuleSet>()))
+                    .Returns((ResourceAccessRuleSet rs) =>
+                    {
+                        this.resourceAccessRulesPersistedToStore.Add(rs);
+                        return Task.FromResult(rs);
+                    });
+
+                this.claimPermissionsStore = this.permissionStoreMock.Object;
+                this.ruleSetStore = this.resourceAccessRuleSetStoreMock.Object;
+            }
+
+            var storeFactory = new Mock<IPermissionsStoreFactory>();
+            storeFactory
+                .Setup(m => m.GetClaimPermissionsStoreAsync(It.Is<ITenant>(t => t.Id == this.transientTenantManager.PrimaryTransientClient.Id)))
+                .ReturnsAsync(this.claimPermissionsStore);
+            storeFactory
+                .Setup(m => m.GetResourceAccessRuleSetStoreAsync(It.Is<ITenant>(t => t.Id == this.transientTenantManager.PrimaryTransientClient.Id)))
+                .ReturnsAsync(this.ruleSetStore);
+            return storeFactory;
         }
     }
 }
