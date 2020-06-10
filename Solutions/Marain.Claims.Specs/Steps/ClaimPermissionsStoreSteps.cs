@@ -73,7 +73,7 @@ namespace Marain.Claims.SpecFlow.Steps
         public async Task GivenIHaveSavedTheResourceAccessRulesetsCalledToTheResourceAccessRulesetStore(string rulesetsName)
         {
             List<ResourceAccessRuleSet> rulesets = this.scenarioContext.Get<List<ResourceAccessRuleSet>>(rulesetsName);
-            IResourceAccessRuleSetStore store = await this.GetResourceAccessRuleSetStoreAsync();
+            IResourceAccessRuleSetStore store = await this.GetResourceAccessRuleSetStoreAsync().ConfigureAwait(false);
 
             IEnumerable<Task<ResourceAccessRuleSet>> tasks = rulesets.Select(store.PersistAsync);
 
@@ -84,7 +84,7 @@ namespace Marain.Claims.SpecFlow.Steps
         public async Task GivenIHaveSavedTheClaimPermissionsCalledToTheClaimPermissionsStore(string claimPermissionsName)
         {
             List<ClaimPermissions> claimPermissions = this.scenarioContext.Get<List<ClaimPermissions>>(claimPermissionsName);
-            IClaimPermissionsStore claimPermissionsStore = await this.GetClaimPermissionsStoreAsync();
+            IClaimPermissionsStore claimPermissionsStore = await this.GetClaimPermissionsStoreAsync().ConfigureAwait(false);
 
             IEnumerable<Task<ClaimPermissions>> tasks = claimPermissions.Select(claimPermissionsStore.PersistAsync);
 
@@ -94,7 +94,7 @@ namespace Marain.Claims.SpecFlow.Steps
         [When(@"I request the claim permission with Id ""(.*)"" from the claim permissions store")]
         public async Task WhenIRequestTheClaimPermissionWithIdFromTheClaimPermissionsStore(string p0)
         {
-            IClaimPermissionsStore store = await this.GetClaimPermissionsStoreAsync();
+            IClaimPermissionsStore store = await this.GetClaimPermissionsStoreAsync().ConfigureAwait(false);
 
             try
             {
@@ -144,18 +144,18 @@ namespace Marain.Claims.SpecFlow.Steps
             Assert.AreEqual(p0, exception.GetType().Name);
         }
 
-        private async Task<IResourceAccessRuleSetStore> GetResourceAccessRuleSetStoreAsync()
+        private Task<IResourceAccessRuleSetStore> GetResourceAccessRuleSetStoreAsync()
         {
             ITenant transientTenant = TransientTenantManager.GetInstance(featureContext).PrimaryTransientClient;
             IPermissionsStoreFactory permissionsStoreFactory = this.serviceProvider.GetRequiredService<IPermissionsStoreFactory>();
-            return await permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(transientTenant);
+            return permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(transientTenant);
         }
 
-        private async Task<IClaimPermissionsStore> GetClaimPermissionsStoreAsync()
+        private Task<IClaimPermissionsStore> GetClaimPermissionsStoreAsync()
         {
             ITenant transientTenant = TransientTenantManager.GetInstance(featureContext).PrimaryTransientClient;
             IPermissionsStoreFactory permissionsStoreFactory = this.serviceProvider.GetRequiredService<IPermissionsStoreFactory>();
-            return await permissionsStoreFactory.GetClaimPermissionsStoreAsync(transientTenant);
+            return permissionsStoreFactory.GetClaimPermissionsStoreAsync(transientTenant);
         }
     }
 }

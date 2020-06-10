@@ -74,7 +74,7 @@ namespace Marain.Claims.SpecFlow.Steps
         [Given("the tenant is uninitialised")]
         public async Task GivenTheTenantIsUninitialisedAsync()
         {
-            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync();
+            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
 
             if (this.useRealDb)
             {
@@ -95,7 +95,7 @@ namespace Marain.Claims.SpecFlow.Steps
         [Given("the tenant is initialised")]
         public async Task GivenTheTenantIsInitialisedAsync()
         {
-            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync();
+            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
 
             Assert.IsFalse(this.useRealDb, "Tests using this step can only use @inMemoryStore");
             this.permissionStoreMock
@@ -338,8 +338,8 @@ namespace Marain.Claims.SpecFlow.Steps
             if (this.useRealDb)
             {
                 IPermissionsStoreFactory permissionsStoreFactory = ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IPermissionsStoreFactory>();
-                this.ruleSetStore = await permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(this.transientTenantManager.PrimaryTransientClient);
-                this.claimPermissionsStore = await permissionsStoreFactory.GetClaimPermissionsStoreAsync(this.transientTenantManager.PrimaryTransientClient);
+                this.ruleSetStore = await permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(this.transientTenantManager.PrimaryTransientClient).ConfigureAwait(false);
+                this.claimPermissionsStore = await permissionsStoreFactory.GetClaimPermissionsStoreAsync(this.transientTenantManager.PrimaryTransientClient).ConfigureAwait(false);
             }
             else
             {
