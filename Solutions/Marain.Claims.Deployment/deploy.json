@@ -46,7 +46,7 @@
     "tenantId": "[subscription().tenantID]",
     "keyVaultDeployName": "[concat(deployment().name, '-key-vault')]",
     "diagnosticsStorageDeployName": "[concat(variables('keyVaultDeployName'), '-diagnostics-storage-account')]",
-    "appDeployName": "[concat(deployment().name, '-functions-app-engine')]",
+    "appDeployName": "[concat(deployment().name, '-functions-app')]",
     "appStorageDeployName": "[concat(deployment().name, '-storage-account')]",
     "claimsStorageAccountKeySecretName": "claimsstorageaccountkey"
   },
@@ -158,7 +158,7 @@
       }
     },
     {
-      "name": "functions-app",
+      "name": "[variables('appDeployName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [],
@@ -180,7 +180,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
-        "functions-app"
+        "[variables('appDeployName')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -209,7 +209,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
       "dependsOn": [
-        "functions-app"
+        "[variables('appDeployName')]"
       ],
       "properties": {
         "mode": "Incremental",
