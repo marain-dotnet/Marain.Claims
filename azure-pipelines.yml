@@ -45,7 +45,7 @@ jobs:
     - task: ArchiveFiles@2
       displayName: 'Archive Deployment Artifacts'
       inputs:
-        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/Marain.Claims.Deployment'
+        rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
