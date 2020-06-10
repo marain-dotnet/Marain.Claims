@@ -7,11 +7,12 @@ namespace Microsoft.Extensions.DependencyInjection
     using System;
     using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
-    using Corvus.ContentHandling;
+    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Endjin.Claims.Hosting;
     using Marain.Claims;
     using Marain.Claims.Client;
     using Marain.Claims.OpenApi;
+    using Marain.Tenancy.Client;
     using Menes;
     using Menes.AccessControlPolicies;
     using Microsoft.Extensions.Configuration;
@@ -41,7 +42,31 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddLogging();
+
+            // Work around the fact that the tenancy client currently tries to fetch the root tenant on startup.
+            services.AddMarainServiceConfiguration();
+
+            services.AddRootTenant();
+            services.AddMarainServicesTenancy();
+            services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
+            services.AddTenantProviderServiceClient();
+
+            services.AddAzureManagedIdentityBasedTokenSource(
+                sp => new AzureManagedIdentityTokenSourceOptions
+                {
+                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                });
+
+            services.AddTenantCloudBlobContainerFactory(
+                sp => new TenantCloudBlobContainerFactoryOptions
+                {
+                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                });
+
             services.AddTenantedBlobContainerClaimsStore();
+
+            services.AddJsonSerializerSettings();
+
             services.AddSingleton<ClaimPermissionsService>();
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());
             services.AddSingleton<ResourceAccessRuleSetService>();

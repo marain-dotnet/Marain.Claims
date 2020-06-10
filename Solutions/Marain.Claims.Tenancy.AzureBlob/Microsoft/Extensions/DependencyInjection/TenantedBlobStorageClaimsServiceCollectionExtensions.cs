@@ -5,7 +5,6 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Linq;
-    using Corvus.Azure.Storage.Tenancy;
     using Corvus.ContentHandling;
     using Marain.Claims;
     using Marain.Claims.Internal;
@@ -39,7 +38,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 contentFactory.RegisterTransientContent<ClaimPermissions>();
             });
 
-            services.AddTenantCloudBlobContainerFactory(sp => sp.GetRequiredService<TenantCloudBlobContainerFactoryOptions>());
             services.AddSingleton<IPermissionsStoreFactory, BlobContainerPermissionsStoreFactory>();
 
             return services;
