@@ -12,6 +12,7 @@ Function MarainDeployment([MarainServiceDeploymentContext] $ServiceDeploymentCon
     $TenancyReaderAppRoleId = "60743a6a-63b6-42e5-a464-a08698a0e9ed"
     $ServiceDeploymentContext.AssignServicePrincipalToCommonServiceAppRole(
         "Marain.Tenancy",
-        $TenancyReaderAppRoleId
+        $TenancyReaderAppRoleId,
+        ""
     )
 }
