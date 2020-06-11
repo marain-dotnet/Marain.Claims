@@ -231,10 +231,6 @@
     }
   ],
   "outputs": {
-    "applicationInsightsInstrumentationKey": {
-      "type": "string",
-      "value": "[reference('app-insights').outputs.instrumentationKey.value]"
-    },
     "functionServicePrincipalId": {
       "type": "string",
       "value": "[reference('functions-app').outputs.servicePrincipalId.value]"
