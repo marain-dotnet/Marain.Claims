@@ -233,7 +233,7 @@
   "outputs": {
     "functionServicePrincipalId": {
       "type": "string",
-      "value": "[reference('functions-app').outputs.servicePrincipalId.value]"
+      "value": "[reference(variables('appDeployName')).outputs.servicePrincipalId.value]"
     }
   }
 }
