@@ -57,7 +57,7 @@ namespace Marain.Claims.Storage
         ///     Gets the <see cref="CloudBlobContainer" /> in which resource access rule sets will
         ///     be stored.
         /// </summary>
-        protected CloudBlobContainer Container { get; }
+        public CloudBlobContainer Container { get; }
 
         /// <inheritdoc/>
         public Task<ResourceAccessRuleSet> GetAsync(string id, string eTag)

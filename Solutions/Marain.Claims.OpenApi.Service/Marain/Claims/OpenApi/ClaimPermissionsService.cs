@@ -12,6 +12,7 @@ namespace Marain.Claims.OpenApi
     using Corvus.Extensions.Json;
     using Corvus.Tenancy;
     using Marain.Claims.Storage;
+    using Marain.Services.Tenancy;
     using Menes;
     using Microsoft.ApplicationInsights;
     using Microsoft.ApplicationInsights.DataContracts;
@@ -53,7 +54,7 @@ namespace Marain.Claims.OpenApi
         private const string SetClaimPermissionsResourceAccessRuleSetsOperationId = "setClaimPermissionsResourceAccessRuleSets";
 
         private readonly IPermissionsStoreFactory permissionsStoreFactory;
-        private readonly ITenantProvider tenantProvider;
+        private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
         private readonly TelemetryClient telemetryClient;
 
@@ -61,17 +62,17 @@ namespace Marain.Claims.OpenApi
         /// Initializes a new instance of the <see cref="ClaimPermissionsService"/> class.
         /// </summary>
         /// <param name="permissionsStoreFactory">Provides access to the permissions store.</param>
-        /// <param name="tenantProvider">The tenant provider.</param>
+        /// <param name="marainServicesTenancy">The Marain services tenancy provider.</param>
         /// <param name="serializerSettingsProvider">The serializer settings provider.</param>
         /// <param name="telemetryClient">A <see cref="TelemetryClient"/> to log telemetry.</param>
         public ClaimPermissionsService(
             IPermissionsStoreFactory permissionsStoreFactory,
-            ITenantProvider tenantProvider,
+            IMarainServicesTenancy marainServicesTenancy,
             IJsonSerializerSettingsProvider serializerSettingsProvider,
             TelemetryClient telemetryClient)
         {
             this.permissionsStoreFactory = permissionsStoreFactory ?? throw new ArgumentNullException(nameof(permissionsStoreFactory));
-            this.tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(tenantProvider));
+            this.marainServicesTenancy = marainServicesTenancy ?? throw new ArgumentNullException(nameof(marainServicesTenancy));
             this.serializerSettingsProvider = serializerSettingsProvider ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
             this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
         }
@@ -99,7 +100,8 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(CreateClaimPermissionsOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
                 ClaimPermissions result = await store.PersistAsync(body).ConfigureAwait(false);
                 return this.OkResult(result);
@@ -129,7 +131,8 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
                 try
                 {
@@ -166,7 +169,8 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsResourceAccessRulesOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
                 try
@@ -213,7 +217,8 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(UpdateClaimPermissionsResourceAccessRulesOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
                 ClaimPermissions claimPermissions;
@@ -273,7 +278,8 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(SetClaimPermissionsResourceAccessRulesOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
                 ClaimPermissions claimPermissions;
@@ -327,7 +333,7 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(UpdateClaimPermissionsResourceAccessRuleSetsOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
 
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
@@ -388,7 +394,7 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(SetClaimPermissionsResourceAccessRuleSetsOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
 
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
@@ -450,7 +456,7 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsPermissionOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
 
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
@@ -501,7 +507,7 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsPermissionOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
 
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
@@ -568,7 +574,8 @@ namespace Marain.Claims.OpenApi
 
             using (this.telemetryClient.StartOperation<RequestTelemetry>(InitializeTenantOperationId))
             {
-                ITenant tenant = await this.tenantProvider.GetTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
                 IClaimPermissionsStore permissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
                 IResourceAccessRuleSetStore ruleSetStore = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
 

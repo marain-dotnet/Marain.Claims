@@ -23,7 +23,13 @@ jobs:
     solution_to_build: $(Endjin_Solution_To_Build)
     postCustomEnvironmentVariables:
       - powershell: |
-          Write-Host "##vso[task.setvariable variable=RootTenantBlobStorageConfigurationOptions__AccountName]$Env:ENDJIN_AZURESTORAGECONNECTIONSTRING"
+          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccountName]$Env:ENDJIN_BLOBSTORAGEACCOUNTNAME"
+          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccountKeySecretName]$Env:ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME"
+          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__KeyVaultName]$Env:ENDJIN_BLOBSTORAGEKEYVAULTNAME"
+          Write-Host "##vso[task.setvariable variable=AzureServicesAuthConnectionString]$Env:ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING"
         displayName: 'Set Azure Connection String Environment Variable'
         env:
-          ENDJIN_AZURESTORAGECONNECTIONSTRING: $(Endjin_AzureStorageConnectionString)
+          ENDJIN_BLOBSTORAGEACCOUNTNAME: $(Endjin_BlobStorageAccountName)
+          ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME: $(Endjin_BlobStorageAccountKeySecretName)
+          ENDJIN_BLOBSTORAGEKEYVAULTNAME: $(Endjin_BlobStorageKeyVaultName)
+          ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING: $(Endjin_AzureServicesAuthConnectionString)

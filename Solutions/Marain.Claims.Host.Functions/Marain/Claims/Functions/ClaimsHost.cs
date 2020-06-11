@@ -10,7 +10,6 @@ namespace Marain.Claims.Functions
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.WebJobs;
     using Microsoft.Azure.WebJobs.Extensions.Http;
-    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// The host for the claims services.
@@ -37,7 +36,7 @@ namespace Marain.Claims.Functions
         [FunctionName("ClaimsHost-OpenApiHostRoot")]
         public Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", "put", Route = "{*path}")]HttpRequest req, ExecutionContext executionContext)
         {
-            return this.host.HandleRequestAsync(req, new { ExecutionContext = executionContext });
+            return this.host.HandleRequestAsync(req.Path, req.Method, req, new { ExecutionContext = executionContext });
         }
     }
 }

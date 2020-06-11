@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
     using Corvus.ContentHandling;
     using Marain.Claims;
     using Marain.Claims.Internal;
-    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// Service collection extensions to add implementations of claims stores.
@@ -22,31 +21,23 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">
         /// The collection.
         /// </param>
-        /// <param name="configuration">The configuration from which to initialize the container factory.</param>
         /// <returns>
         /// The configured <see cref="IServiceCollection"/>.
         /// </returns>
         public static IServiceCollection AddTenantedBlobContainerClaimsStore(
-            this IServiceCollection services,
-            IConfiguration configuration)
+            this IServiceCollection services)
         {
-            if (configuration is null)
-            {
-                throw new System.ArgumentNullException(nameof(configuration));
-            }
-
             if (services.Any(s => s.ServiceType is IPermissionsStoreFactory))
             {
                 return services;
             }
 
-            services.AddContentSerialization(contentFactory =>
+            services.AddContent(contentFactory =>
             {
                 contentFactory.RegisterTransientContent<ResourceAccessRuleSet>();
                 contentFactory.RegisterTransientContent<ClaimPermissions>();
             });
 
-            services.AddTenantCloudBlobContainerFactory(configuration);
             services.AddSingleton<IPermissionsStoreFactory, BlobContainerPermissionsStoreFactory>();
 
             return services;

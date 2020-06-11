@@ -37,6 +37,8 @@
     <None Include="Scripts\Grant-KeyVaultSecretGetToMsi.ps1" />
     <None Include="Scripts\Revoke-CurrentAadUserKeyVaultSecretAccess.ps1" />
     <None Include="Scripts\Update-LocalConfigFiles.ps1" />
+    <None Include="ServiceManifests\ClaimsServiceManifest.jsonc" />
+    <None Include="ServiceManifests\Configuration\ClaimsConfigForStorageEmulator.json" />
     <None Include="Templates\app-insights.json" />
     <None Include="Templates\cosmos-db.json" />
     <None Include="Templates\functions-app-settings.json" />
