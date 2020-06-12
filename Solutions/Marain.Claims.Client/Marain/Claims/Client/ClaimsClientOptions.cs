@@ -1,4 +1,4 @@
-﻿// <copyright file="ClaimsClientServiceCollectionExtensions.cs" company="Endjin">
+﻿// <copyright file="ClaimsClientOptions.cs" company="Endjin">
 // Copyright (c) Endjin. All rights reserved.
 // </copyright>
 
