@@ -5,6 +5,7 @@
 namespace Marain.Claims.Client
 {
     using System;
+    using System.Linq;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Rest;
@@ -18,24 +19,42 @@ namespace Marain.Claims.Client
         /// Adds the Claims client to a service collection.
         /// </summary>
         /// <param name="services">The service collection.</param>
-        /// <param name="baseUri">The base URI of the Operations control service.</param>
-        /// <param name="resourceIdForMsiAuthentication">
-        /// The resource id to use when obtaining an authentication token representing the
-        /// hosting service's identity. Pass null to run without authentication.
-        /// </param>
         /// <returns>The modified service collection.</returns>
+        /// <remarks>
+        /// This requires the <see cref="ClaimsClientOptions"/> to be available from DI in order
+        /// to discover the base URI of the Claims service, and, if required, to
+        /// specify the resource id to use when obtaining an authentication token representing the
+        /// hosting service's identity.
+        /// </remarks>
         public static IServiceCollection AddClaimsClient(
-            this IServiceCollection services,
-            Uri baseUri,
-            string resourceIdForMsiAuthentication = null)
+            this IServiceCollection services)
         {
-            return resourceIdForMsiAuthentication == null
-                ? services.AddSingleton<IClaimsService>(new UnauthenticatedClaimsService(baseUri))
-                : services.AddSingleton<IClaimsService>(sp =>
-                    new ClaimsService(baseUri, new TokenCredentials(
+            if (services.Any(s => s.ServiceType == typeof(IClaimsService)))
+            {
+                return services;
+            }
+
+            services.AddSingleton((Func<IServiceProvider, IClaimsService>)(sp =>
+            {
+                ClaimsClientOptions options = sp.GetRequiredService<ClaimsClientOptions>();
+
+                ClaimsService service;
+                if (string.IsNullOrWhiteSpace(options.ResourceIdForMsiAuthentication))
+                {
+                    service = new UnauthenticatedClaimsService(options.ClaimsServiceBaseUri);
+                }
+                else
+                {
+                    service = new ClaimsService(options.ClaimsServiceBaseUri, new TokenCredentials(
                         new ServiceIdentityTokenProvider(
                             sp.GetRequiredService<IServiceIdentityTokenSource>(),
-                            resourceIdForMsiAuthentication))));
+                            options.ResourceIdForMsiAuthentication)));
+                }
+
+                return service;
+            }));
+
+            return services;
         }
     }
 }
