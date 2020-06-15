@@ -19,13 +19,7 @@
     public class ClaimsBenchmarks
     {
         private readonly IClaimsService claimsService;
-        private readonly ITenancyService tenancyService;
-        //private readonly ITenantManagementService tenantManagementService;
-
-        private readonly string serviceTenantId;
         private readonly string clientTenantId;
-        //private readonly BlobStorageConfiguration blobStorageConfiguration;
-        //private ITenant clientTenant;
 
         public ClaimsBenchmarks()
         {
@@ -38,11 +32,7 @@
             var claimsBaseUri = new Uri(root["ClaimsClient:BaseUrl"]);
             string claimsResourceIdForMsiAuthentication = root["ClaimsClient:ResourceIdForMsiAuthentication"];
 
-            //this.serviceTenantId = root["MarainServiceConfiguration:ServiceTenantId"];
             this.clientTenantId = root["ClientTenantId"];
-
-            //this.blobStorageConfiguration = 
-            //    root.GetSection("TestBlobStorageConfiguration").Get<BlobStorageConfiguration>();
 
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddClaimsClient(claimsBaseUri, claimsResourceIdForMsiAuthentication)
@@ -53,11 +43,9 @@
                     {
                         AzureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"],
                     })
-                //.AddMarainTenantManagement()
                 .BuildServiceProvider();
 
             this.claimsService = serviceProvider.GetRequiredService<IClaimsService>();
-            this.tenancyService = serviceProvider.GetRequiredService<ITenancyService>();
         }
 
         /// <summary>
@@ -66,10 +54,7 @@
         [GlobalSetup]
         public void GlobalSetup()
         {
-            //this.clientTenant = this.SetupClientTenantAsync(this.serviceTenantId, this.blobStorageConfiguration).Result;
-
             this.SetupTestDataAsync(this.clientTenantId).Wait();
-
         }
 
         /// <summary>
@@ -79,46 +64,23 @@
         public void GlobalCleanup()
         {
             //this.DeleteTestDataAsync(this.clientTenant.Id).Wait();
-
-            //this.DeleteClientTenantAsync(this.clientTenant, this.serviceTenantId, this.blobStorageConfiguration).Wait();
         }
 
         /// <summary>
-        /// Benchmark: 
+        /// Benchmark: TODO
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
         public Task B1() => Task.CompletedTask;
 
-        //private async Task<ITenant> SetupClientTenantAsync(string serviceTenantId, BlobStorageConfiguration blobStorageConfiguration)
-        //{
-        //    string clientName = $"benchmark_{Guid.NewGuid()}";
-
-        //    ITenant clientTenant = await this.tenantManagementService.CreateClientTenantAsync(clientName);
-        //    ITenant serviceTenant = await this.tenantManagementService.GetServiceTenantAsync(serviceTenantId);
-
-        //    var enrollmentConfig = new EnrollmentBlobStorageConfigurationItem
-        //    {
-        //        Configuration = blobStorageConfiguration
-        //    };
-
-        //    await this.tenantManagementService.EnrollInServiceAsync(clientTenant, serviceTenant, new EnrollmentConfigurationItem[] { enrollmentConfig });
-
-        //    return clientTenant;
-        //}
-
-        //private async Task DeleteClientTenantAsync(ITenant clientTenant, string serviceTenantId, BlobStorageConfiguration blobStorageConfiguration)
-        //{
-        //    ITenant serviceTenant = await this.tenantManagementService.GetServiceTenantAsync(serviceTenantId);
-
-        //    await this.tenantManagementService.UnenrollFromServiceAsync(clientTenant, serviceTenant);
-
-        //    //TODO: delete the tenant - method does not currently exist in tenant management service
-        //}
-
         private async Task SetupTestDataAsync(string clientTenantId)
         {
             ProblemDetails initializeTenantResponse = await this.claimsService.InitializeTenantAsync(clientTenantId, new Body { AdministratorRoleClaimValue = "ClaimsAdministrator" });
+
+            if ((initializeTenantResponse.Status < 200 || initializeTenantResponse.Status >= 300) && initializeTenantResponse.Detail != "Tenant already initialized")
+            {
+                throw new Exception(initializeTenantResponse.Detail);
+            }
 
             var ruleSets =
                 Enumerable
