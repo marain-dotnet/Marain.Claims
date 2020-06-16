@@ -7,16 +7,12 @@ namespace Marain.Claims.OpenApi
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using Corvus.Extensions;
-    using Marain.Claims.Client;
-    using Marain.Claims.Client.Models;
     using Menes;
     using Menes.Exceptions;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Rest;
 
     /// <summary>
     /// An OpenApi access control policy that implements application-role based security on top of
@@ -50,16 +46,18 @@ namespace Marain.Claims.OpenApi
     /// </remarks>
     public class RoleBasedOpenApiAccessControlPolicy : IOpenApiAccessControlPolicy
     {
-        private readonly IClaimsService claimsClient;
         private readonly string resourcePrefix;
         private readonly bool allowOnlyIfAll;
+        private readonly IResourceAccessEvaluator resourceAccessEvaluator;
         private readonly ILogger<RoleBasedOpenApiAccessControlPolicy> logger;
 
         /// <summary>
         /// Create a <see cref="RoleBasedOpenApiAccessControlPolicy"/>.
         /// </summary>
-        /// <param name="claimsClient">
-        /// Client providing access to the Claims service.
+        /// <param name="resourceAccessEvaluator">
+        /// Evaluates the resource access requests. This will normally be a wrapper around the claims service
+        /// client, but in the special case where we are running inside the claims service, this
+        /// will use the OpenAPI service implementation directly.
         /// </param>
         /// <param name="logger">Diagnostic logger.</param>
         /// <param name="resourcePrefix">
@@ -85,14 +83,14 @@ namespace Marain.Claims.OpenApi
         /// </para>
         /// </remarks>
         internal RoleBasedOpenApiAccessControlPolicy(
-            IClaimsService claimsClient,
+            IResourceAccessEvaluator resourceAccessEvaluator,
             ILogger<RoleBasedOpenApiAccessControlPolicy> logger,
             string resourcePrefix,
             bool allowOnlyIfAll)
         {
-            this.claimsClient = claimsClient;
             this.resourcePrefix = resourcePrefix;
             this.allowOnlyIfAll = allowOnlyIfAll;
+            this.resourceAccessEvaluator = resourceAccessEvaluator;
             this.logger = logger;
         }
 
@@ -128,36 +126,27 @@ namespace Marain.Claims.OpenApi
 
             // Now translate the set of requested evaluations into a set of requests for the claims service. This is built
             // from the cartesian product of the roles and requests lists.
-            var batchRequest = roles.SelectMany(role => requests.Select(request => new ClaimPermissionsBatchRequestItemWithPostExample
+            var submissions = roles.SelectMany(role => requests.Select(request => new ResourceAccessSubmission
             {
                 ClaimPermissionsId = role,
                 ResourceAccessType = request.Method,
                 ResourceUri = pathToResourceUriMap[request.Path],
             })).ToList();
 
-            // Now send this batch of requests to the claims service.
-            HttpOperationResponse<object> batchResponse = await this.claimsClient.GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(context.CurrentTenantId, batchRequest).ConfigureAwait(false);
+            List<ResourceAccessEvaluation> evaluations;
 
-            // If evaluation failed entirely, log this and throw an exception.
-            if (!batchResponse.Response.IsSuccessStatusCode)
+            try
             {
-                string details = string.Join(Environment.NewLine, batchRequest.Select(x => $"\trole [{x.ClaimPermissionsId}] accessing [{x.ResourceUri}], [{x.ResourceAccessType}]"));
-                string rolesString = string.Join(",", roles);
-
-                this.logger.LogError(
-                    "Permission evaluation for roles [{roles}] failed with status code [{statusCode}]. Details follow:\r\n{details}",
-                    rolesString,
-                    batchResponse.Response.StatusCode,
-                    details);
-
-                throw new OpenApiAccessControlPolicyEvaluationFailedException(
-                    nameof(RoleBasedOpenApiAccessControlPolicy),
-                    requests,
-                    $"Permission evaluation failed with status code [{batchResponse.Response.StatusCode}]",
-                    null).AddProblemDetailsExtension("Roles", rolesString);
+                evaluations = await this.resourceAccessEvaluator.EvaluateAsync(context.CurrentTenantId, submissions);
             }
-
-            var batchResponseBody = (IList<ClaimPermissionsBatchResponseItemWithExample>)batchResponse.Body;
+            catch (Exception ex)
+            {
+                throw new OpenApiAccessControlPolicyEvaluationFailedException(
+                   nameof(RoleBasedOpenApiAccessControlPolicy),
+                   requests,
+                   $"Permission evaluation failed.",
+                   ex).AddProblemDetailsExtension("Roles", string.Join(",", roles));
+            }
 
             // For each of the operation descriptors supplied in the requests parameters, the response body will
             // contain one result per user role. We now need to aggregate these into a single response for each
@@ -165,28 +154,14 @@ namespace Marain.Claims.OpenApi
             return requests.ToDictionary(request => request, request =>
             {
                 // Find the subset of responses that match this particular request.
-                IEnumerable<ClaimPermissionsBatchResponseItem> evaluatedPermissions = batchResponseBody.Where(x => x.ResourceUri == pathToResourceUriMap[request.Path] && x.ResourceAccessType == request.Method);
+                IList<ResourceAccessEvaluation> evaluatedPermissions = evaluations.Where(x => x.Submission.ResourceUri == pathToResourceUriMap[request.Path] && x.Submission.ResourceAccessType == request.Method).ToList();
 
-                // If any of the requests didn't return an OK result, we need to log a warning, as this is most likely due to
-                // misconfiguration of the claims service (e.g. a missing role/ClaimPermissionsId. However, we can still carry
-                // on and evaluate using any successful responses.
-                foreach (ClaimPermissionsBatchResponseItem currentEvaluatedPermission in evaluatedPermissions.Where(x => x.ResponseCode != (int)HttpStatusCode.OK))
-                {
-                    this.logger.LogWarning(
-                        "Claims service returned [{statusCode}] permission evaluation for role [{roleId}] accessing resource [{resourceUri}], [{httpMethod}]",
-                        currentEvaluatedPermission.ResponseCode,
-                        currentEvaluatedPermission.ClaimPermissionsId,
-                        currentEvaluatedPermission.ResourceUri,
-                        currentEvaluatedPermission.ResourceAccessType);
-                }
-
-                // Get the list of successful evaluations (i.e. evaluations that were able to return a permission response).
-                var evaluatedPermissionsWithSuccessfulResponse = evaluatedPermissions.Where(x => x.ResponseCode == (int)HttpStatusCode.OK).ToList();
+                bool noRequestsFailed = evaluatedPermissions.Count == roles.Count;
 
                 // Aggregate the responses based on the rule set for this.
                 bool allow = this.allowOnlyIfAll
-                    ? evaluatedPermissionsWithSuccessfulResponse.AllAndAtLeastOne(p => p?.Permission == "allow")
-                    : evaluatedPermissionsWithSuccessfulResponse.Any(p => p?.Permission == "allow");
+                    ? evaluatedPermissions.AllAndAtLeastOne(p => p.Result.Permission == Permission.Allow) && noRequestsFailed
+                    : evaluatedPermissions.Any(p => p.Result.Permission == Permission.Allow);
 
                 // If denying permission, log this out.
                 if (!allow)
