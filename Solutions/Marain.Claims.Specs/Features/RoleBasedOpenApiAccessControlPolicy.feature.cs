@@ -249,7 +249,7 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 38
-    testRunner.And("the claims service returns \'allow\' for role 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("the evaluator returns \'Allow\' for role 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 39
     testRunner.Then("the result should grant access", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -291,7 +291,7 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 44
-    testRunner.And("the claims service returns \'deny\' for role 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("the evaluator returns \'Deny\' for role 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 45
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -333,7 +333,7 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 50
-    testRunner.And("the claims service returns produces a 404 not found for role 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("the evaluator does not find the role 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 51
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -448,15 +448,15 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table8.AddRow(new string[] {
                             "0",
-                            "allow"});
+                            "Allow"});
                 table8.AddRow(new string[] {
                             "1",
-                            "allow"});
+                            "Allow"});
                 table8.AddRow(new string[] {
                             "2",
-                            "allow"});
+                            "Allow"});
 #line 69
- testRunner.And("the claims service returns the following results", ((string)(null)), table8, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table8, "And ");
 #line hidden
 #line 74
     testRunner.Then("the result should grant access", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -502,15 +502,15 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table9.AddRow(new string[] {
                             "0",
-                            "deny"});
+                            "Deny"});
                 table9.AddRow(new string[] {
                             "1",
-                            "deny"});
+                            "Deny"});
                 table9.AddRow(new string[] {
                             "2",
-                            "deny"});
+                            "Deny"});
 #line 79
- testRunner.And("the claims service returns the following results", ((string)(null)), table9, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table9, "And ");
 #line hidden
 #line 84
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -556,15 +556,15 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table10.AddRow(new string[] {
                             "0",
-                            "allow"});
+                            "Allow"});
                 table10.AddRow(new string[] {
                             "1",
-                            "deny"});
+                            "Deny"});
                 table10.AddRow(new string[] {
                             "2",
-                            "deny"});
+                            "Deny"});
 #line 89
- testRunner.And("the claims service returns the following results", ((string)(null)), table10, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table10, "And ");
 #line hidden
 #line 94
     testRunner.Then("the result should grant access", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -610,15 +610,15 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table11.AddRow(new string[] {
                             "0",
-                            "allow"});
+                            "Allow"});
                 table11.AddRow(new string[] {
                             "1",
-                            "allow"});
+                            "Allow"});
                 table11.AddRow(new string[] {
                             "2",
-                            "deny"});
+                            "Deny"});
 #line 99
- testRunner.And("the claims service returns the following results", ((string)(null)), table11, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table11, "And ");
 #line hidden
 #line 104
     testRunner.Then("the result should grant access", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -669,15 +669,15 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table12.AddRow(new string[] {
                             "0",
-                            "allow"});
+                            "Allow"});
                 table12.AddRow(new string[] {
                             "1",
-                            "deny"});
+                            "Deny"});
                 table12.AddRow(new string[] {
                             "2",
-                            "deny"});
+                            "Deny"});
 #line 110
- testRunner.And("the claims service returns the following results", ((string)(null)), table12, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table12, "And ");
 #line hidden
 #line 115
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -728,15 +728,15 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table13.AddRow(new string[] {
                             "0",
-                            "allow"});
+                            "Allow"});
                 table13.AddRow(new string[] {
                             "1",
-                            "allow"});
+                            "Allow"});
                 table13.AddRow(new string[] {
                             "2",
-                            "deny"});
+                            "Deny"});
 #line 121
- testRunner.And("the claims service returns the following results", ((string)(null)), table13, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table13, "And ");
 #line hidden
 #line 126
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
