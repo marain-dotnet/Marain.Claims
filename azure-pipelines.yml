@@ -33,3 +33,20 @@ jobs:
           ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME: $(Endjin_BlobStorageAccountKeySecretName)
           ENDJIN_BLOBSTORAGEKEYVAULTNAME: $(Endjin_BlobStorageKeyVaultName)
           ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING: $(Endjin_AzureServicesAuthConnectionString)
+    postSpecs:
+    - task: ArchiveFiles@2
+      displayName: 'Archive Function App'
+      inputs:
+        rootFolderOrFile: 'Solutions/Marain.Claims.Host.Functions/bin/Release/netcoreapp3.1/'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Host.Functions.zip'
+        replaceExistingArchive: true
+    - task: ArchiveFiles@2
+      displayName: 'Archive Deployment Artifacts'
+      inputs:
+        rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
+        replaceExistingArchive: true

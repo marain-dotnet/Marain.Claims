@@ -71,6 +71,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());
             services.AddSingleton<ResourceAccessRuleSetService>();
             services.AddSingleton<IOpenApiService, ResourceAccessRuleSetService>(s => s.GetRequiredService<ResourceAccessRuleSetService>());
+
+            services.AddApplicationInsightsInstrumentationTelemetry();
+
             services.AddOpenApiHttpRequestHosting<SimpleOpenApiContext>((config) =>
             {
                 config.Documents.RegisterOpenApiServiceWithEmbeddedDefinition<ClaimPermissionsService>();
