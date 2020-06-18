@@ -37,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// See <see cref="RoleBasedOpenApiAccessControlPolicy"/> for details on how this works.
         /// </para>
         /// <para>
-        /// You will typically use <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClient(IServiceCollection, Uri, string)"/>
+        /// You will typically use <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClient(IServiceCollection, Func{IServiceProvider, ClaimsClientOptions})"/>
         /// to configure the <see cref="IClaimsService"/> that this requires.
         /// </para>
         /// </remarks>
@@ -81,7 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// See <see cref="RoleBasedOpenApiAccessControlPolicy"/> for details on how this works.
         /// </para>
         /// <para>
-        /// You will typically use <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClient(IServiceCollection, Uri, string)"/>
+        /// You will typically use <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClient(IServiceCollection, Func{IServiceProvider, ClaimsClientOptions})"/>
         /// to configure the <see cref="IClaimsService"/> that this requires.
         /// </para>
         /// </remarks>
