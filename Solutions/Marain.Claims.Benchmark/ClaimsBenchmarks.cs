@@ -29,13 +29,10 @@
 
             IConfiguration root = configurationBuilder.Build();
 
-            var claimsBaseUri = new Uri(root["ClaimsClient:BaseUrl"]);
-            string claimsResourceIdForMsiAuthentication = root["ClaimsClient:ResourceIdForMsiAuthentication"];
-
             this.clientTenantId = root["ClientTenantId"];
 
             ServiceProvider serviceProvider = new ServiceCollection()
-                .AddClaimsClient(claimsBaseUri, claimsResourceIdForMsiAuthentication)
+                .AddClaimsClient(sp => root.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
                 .AddSingleton(root.GetSection("TenancyClient").Get<TenancyClientOptions>())
                 .AddTenancyClient()
                 .AddAzureManagedIdentityBasedTokenSource(

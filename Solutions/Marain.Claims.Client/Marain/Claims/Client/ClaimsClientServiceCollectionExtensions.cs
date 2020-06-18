@@ -28,7 +28,7 @@ namespace Marain.Claims.Client
             this IServiceCollection services,
             Func<IServiceProvider, ClaimsClientOptions> getOptions)
         {
-            return services.AddSingleton(sp => 
+            return services.AddSingleton<IClaimsService>(sp => 
             { 
                 ClaimsClientOptions options = getOptions(sp);
                 IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
@@ -51,7 +51,7 @@ namespace Marain.Claims.Client
            this IServiceCollection services,
            Func<IServiceProvider, ClaimsClientWithCachingOptions> getOptions)
         {
-            return services.AddSingleton(sp =>
+            return services.AddSingleton<IClaimsService>(sp =>
             {
                 ClaimsClientWithCachingOptions options = getOptions(sp);
 
