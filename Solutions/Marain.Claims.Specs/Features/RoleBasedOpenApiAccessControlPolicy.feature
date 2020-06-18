@@ -68,9 +68,9 @@ Scenario: All of the client's roles grant it permission
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| Role | Result |
-	| 0    | Allow  |
-	| 1    | Allow  |
-	| 2    | Allow  |
+	| 0    | allow  |
+	| 1    | allow  |
+	| 2    | allow  |
     Then the result should grant access
 
 Scenario: All of the client's roles deny it permission
@@ -78,9 +78,9 @@ Scenario: All of the client's roles deny it permission
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| Role | Result |
-	| 0    | Deny   |
-	| 1    | Deny   |
-	| 2    | Deny   |
+	| 0    | deny   |
+	| 1    | deny   |
+	| 2    | deny   |
     Then the result type should be 'NotAllowed'
 
 Scenario: One client role grants permission and the other two deny it in Allow If Any mode
@@ -88,9 +88,9 @@ Scenario: One client role grants permission and the other two deny it in Allow I
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| Role | Result |
-	| 0    | Allow  |
-	| 1    | Deny   |
-	| 2    | Deny   |
+	| 0    | allow  |
+	| 1    | deny   |
+	| 2    | deny   |
     Then the result should grant access
 
 Scenario: Two client roles grant permission and the other denies it in Allow If Any mode
@@ -98,9 +98,9 @@ Scenario: Two client roles grant permission and the other denies it in Allow If 
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| Role | Result |
-	| 0    | Allow  |
-	| 1    | Allow  |
-	| 2    | Deny   |
+	| 0    | allow  |
+	| 1    | allow  |
+	| 2    | deny   |
     Then the result should grant access
 
 Scenario: One client role grants permission and the other two deny it in All Only If All mode
@@ -109,9 +109,9 @@ Scenario: One client role grants permission and the other two deny it in All Onl
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| Role | Result |
-	| 0    | Allow  |
-	| 1    | Deny   |
-	| 2    | Deny   |
+	| 0    | allow  |
+	| 1    | deny   |
+	| 2    | deny   |
     Then the result type should be 'NotAllowed'
 
 Scenario: Two client roles grant permission and the other denies it in All Only If All mode
@@ -120,7 +120,7 @@ Scenario: Two client roles grant permission and the other denies it in All Only 
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| Role | Result |
-	| 0    | Allow  |
-	| 1    | Allow  |
-	| 2    | Deny   |
+	| 0    | allow  |
+	| 1    | allow  |
+	| 2    | deny   |
     Then the result type should be 'NotAllowed'

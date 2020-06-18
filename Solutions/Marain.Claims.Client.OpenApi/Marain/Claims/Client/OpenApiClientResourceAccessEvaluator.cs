@@ -85,7 +85,7 @@ namespace Marain.Claims.Client
                 .Select(item =>
                     new ResourceAccessEvaluation
                     {
-                        Result = new Claims.PermissionResult { Permission = Enum.TryParse(item.Permission, out Permission permission) ? permission : throw new FormatException() },
+                        Result = new Claims.PermissionResult { Permission = Enum.TryParse(item.Permission, true, out Permission permission) ? permission : throw new FormatException() },
                         Submission = new ResourceAccessSubmission { ClaimPermissionsId = item.ClaimPermissionsId, ResourceAccessType = item.ResourceAccessType, ResourceUri = item.ResourceUri },
                     })
                 .ToList();

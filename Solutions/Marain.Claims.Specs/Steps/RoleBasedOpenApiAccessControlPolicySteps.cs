@@ -136,7 +136,7 @@ namespace Marain.Claims.Specs.Steps
                         },
                         Result = new Claims.PermissionResult
                         {
-                            Permission = Enum.TryParse(current["Result"], out Permission permission) ? permission : throw new FormatException()
+                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException()
                         }
                     });
             }
@@ -166,7 +166,7 @@ namespace Marain.Claims.Specs.Steps
                 },
                 Result = new Claims.PermissionResult
                 {
-                    Permission = Enum.TryParse(allowOrDeny, out Permission permission) ? permission : throw new FormatException()
+                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException()
                 }
             });
 

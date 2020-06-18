@@ -448,13 +448,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table8.AddRow(new string[] {
                             "0",
-                            "Allow"});
+                            "allow"});
                 table8.AddRow(new string[] {
                             "1",
-                            "Allow"});
+                            "allow"});
                 table8.AddRow(new string[] {
                             "2",
-                            "Allow"});
+                            "allow"});
 #line 69
  testRunner.And("the evaluator returns the following results", ((string)(null)), table8, "And ");
 #line hidden
@@ -502,13 +502,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table9.AddRow(new string[] {
                             "0",
-                            "Deny"});
+                            "deny"});
                 table9.AddRow(new string[] {
                             "1",
-                            "Deny"});
+                            "deny"});
                 table9.AddRow(new string[] {
                             "2",
-                            "Deny"});
+                            "deny"});
 #line 79
  testRunner.And("the evaluator returns the following results", ((string)(null)), table9, "And ");
 #line hidden
@@ -556,13 +556,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table10.AddRow(new string[] {
                             "0",
-                            "Allow"});
+                            "allow"});
                 table10.AddRow(new string[] {
                             "1",
-                            "Deny"});
+                            "deny"});
                 table10.AddRow(new string[] {
                             "2",
-                            "Deny"});
+                            "deny"});
 #line 89
  testRunner.And("the evaluator returns the following results", ((string)(null)), table10, "And ");
 #line hidden
@@ -610,13 +610,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table11.AddRow(new string[] {
                             "0",
-                            "Allow"});
+                            "allow"});
                 table11.AddRow(new string[] {
                             "1",
-                            "Allow"});
+                            "allow"});
                 table11.AddRow(new string[] {
                             "2",
-                            "Deny"});
+                            "deny"});
 #line 99
  testRunner.And("the evaluator returns the following results", ((string)(null)), table11, "And ");
 #line hidden
@@ -669,13 +669,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table12.AddRow(new string[] {
                             "0",
-                            "Allow"});
+                            "allow"});
                 table12.AddRow(new string[] {
                             "1",
-                            "Deny"});
+                            "deny"});
                 table12.AddRow(new string[] {
                             "2",
-                            "Deny"});
+                            "deny"});
 #line 110
  testRunner.And("the evaluator returns the following results", ((string)(null)), table12, "And ");
 #line hidden
@@ -728,13 +728,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Result"});
                 table13.AddRow(new string[] {
                             "0",
-                            "Allow"});
+                            "allow"});
                 table13.AddRow(new string[] {
                             "1",
-                            "Allow"});
+                            "allow"});
                 table13.AddRow(new string[] {
                             "2",
-                            "Deny"});
+                            "deny"});
 #line 121
  testRunner.And("the evaluator returns the following results", ((string)(null)), table13, "And ");
 #line hidden

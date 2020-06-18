@@ -60,7 +60,7 @@ namespace Marain.Claims.Hosting.AspNetCore
                 {
                     Result = new PermissionResult
                     {
-                        Permission = Enum.TryParse(x.Permission, out Permission permission) ? permission : throw new FormatException(),
+                        Permission = Enum.TryParse(x.Permission, true, out Permission permission) ? permission : throw new FormatException(),
                     },
                     Submission = new ResourceAccessSubmission
                     {
