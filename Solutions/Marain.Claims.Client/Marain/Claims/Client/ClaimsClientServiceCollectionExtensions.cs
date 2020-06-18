@@ -5,6 +5,10 @@
 namespace Marain.Claims.Client
 {
     using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using Cimpress.Extensions.Http.Caching.InMemory;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Rest;
@@ -18,24 +22,49 @@ namespace Marain.Claims.Client
         /// Adds the Claims client to a service collection.
         /// </summary>
         /// <param name="services">The service collection.</param>
-        /// <param name="baseUri">The base URI of the Operations control service.</param>
-        /// <param name="resourceIdForMsiAuthentication">
-        /// The resource id to use when obtaining an authentication token representing the
-        /// hosting service's identity. Pass null to run without authentication.
-        /// </param>
+        /// <param name="getOptions">A callback method to retrieve options for the client.</param>
         /// <returns>The modified service collection.</returns>
         public static IServiceCollection AddClaimsClient(
             this IServiceCollection services,
-            Uri baseUri,
-            string resourceIdForMsiAuthentication = null)
+            Func<IServiceProvider, ClaimsClientOptions> getOptions)
         {
-            return resourceIdForMsiAuthentication == null
-                ? services.AddSingleton<IClaimsService>(new UnauthenticatedClaimsService(baseUri))
-                : services.AddSingleton<IClaimsService>(sp =>
-                    new ClaimsService(baseUri, new TokenCredentials(
+            return services.AddSingleton(sp => 
+            { 
+                ClaimsClientOptions options = getOptions(sp);
+                IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
+                return options.ResourceIdForMsiAuthentication == null
+                   ? new UnauthenticatedClaimsService(options.BaseUri)
+                   : new ClaimsService(options.BaseUri, new TokenCredentials(
+                           new ServiceIdentityTokenProvider(
+                               serviceIdentityTokenSource,
+                               options.ResourceIdForMsiAuthentication)));
+            });
+        }
+
+        /// <summary>
+        /// Adds the Claims client (with caching enabled) to a service collection.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="getOptions">A callback method to retrieve options for the client.</param>
+        /// <returns>The modified service collection.</returns>
+        public static IServiceCollection AddClaimsClientWithCaching(
+           this IServiceCollection services,
+           Func<IServiceProvider, ClaimsClientWithCachingOptions> getOptions)
+        {
+            return services.AddSingleton(sp =>
+            {
+                ClaimsClientWithCachingOptions options = getOptions(sp);
+
+                var handler = new InMemoryCacheHandler(new HttpClientHandler(), options.CacheExpirationPerHttpResponseCode);
+                IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
+                return options.ResourceIdForMsiAuthentication == null
+                ? new UnauthenticatedClaimsService(options.BaseUri, handler)
+                : new ClaimsService(options.BaseUri, new TokenCredentials(
                         new ServiceIdentityTokenProvider(
-                            sp.GetRequiredService<IServiceIdentityTokenSource>(),
-                            resourceIdForMsiAuthentication))));
+                            serviceIdentityTokenSource,
+                            options.ResourceIdForMsiAuthentication)),
+                        handler);
+            });
         }
     }
 }
