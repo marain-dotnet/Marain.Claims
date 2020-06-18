@@ -49,25 +49,13 @@ namespace Marain.Claims.Client
         /// <returns>The modified service collection.</returns>
         public static IServiceCollection AddClaimsClientWithCaching(
            this IServiceCollection services,
-           Func<IServiceProvider, ClaimsClientOptions> getOptions)
+           Func<IServiceProvider, ClaimsClientWithCachingOptions> getOptions)
         {
-            // This cache handler comes from https://github.com/Cimpress-MCP/dotnet-core-httputils
-            // Default cache expiration is 1 day; we want to tweak so we don't cache errors for that long.
-            // You can map individual status codes, or you can map by category (200/300/400/500) which is
-            // what we'll do.
-            var cachePeriods = new Dictionary<HttpStatusCode, TimeSpan>
-            {
-                { HttpStatusCode.OK, TimeSpan.FromDays(1) }, // All 200 codes
-                { HttpStatusCode.MultipleChoices, TimeSpan.FromSeconds(5) }, // All 300 codes
-                { HttpStatusCode.BadRequest, TimeSpan.FromSeconds(5) }, // All 400 codes
-                { HttpStatusCode.InternalServerError, TimeSpan.FromSeconds(5) }, // All 500 codes
-            };
-
-            var handler = new InMemoryCacheHandler(new HttpClientHandler());
-
             return services.AddSingleton(sp =>
             {
-                ClaimsClientOptions options = getOptions(sp);
+                ClaimsClientWithCachingOptions options = getOptions(sp);
+
+                var handler = new InMemoryCacheHandler(new HttpClientHandler(), options.CacheExpirationPerHttpResponseCode);
                 IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 return options.ResourceIdForMsiAuthentication == null
                 ? new UnauthenticatedClaimsService(options.BaseUri, handler)

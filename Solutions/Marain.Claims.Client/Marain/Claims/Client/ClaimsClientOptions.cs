@@ -1,4 +1,4 @@
-﻿// <copyright file="MarainClaimsClientOptions.cs" company="Endjin Limited">
+﻿// <copyright file="ClaimsClientOptions.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -7,7 +7,7 @@ namespace Marain.Claims.Client
     using System;
 
     /// <summary>
-    /// Options for configuring <see cref="ClaimsService"/> via <see cref="ClaimsClientServiceCollectionExtensions"/>
+    /// Options for configuring <see cref="ClaimsService"/> via <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClient(Microsoft.Extensions.DependencyInjection.IServiceCollection, System.Func{System.IServiceProvider, ClaimsClientOptions})"/>
     /// </summary>
     public class ClaimsClientOptions
     {
