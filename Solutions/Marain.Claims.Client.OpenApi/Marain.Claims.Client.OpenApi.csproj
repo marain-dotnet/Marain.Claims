@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
+  
+   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
@@ -13,13 +13,9 @@
 
   <Import Project="..\Common.NetStandard_2_0.proj" />
 
-<ItemGroup>
-    <ProjectReference Include="..\Marain.Claims.Abstractions\Marain.Claims.Abstractions.csproj" />
-    <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
-  </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Menes.Abstractions" Version="0.11.0" />
+    <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
+    <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
   </ItemGroup>
 
 </Project>

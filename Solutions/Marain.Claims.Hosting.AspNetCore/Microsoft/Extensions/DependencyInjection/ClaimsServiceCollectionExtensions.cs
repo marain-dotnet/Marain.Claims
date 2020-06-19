@@ -8,9 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using System.Linq;
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
-    using Endjin.Claims.Hosting;
-    using Marain.Claims;
-    using Marain.Claims.Client;
+    using Marain.Claims.Hosting.AspNetCore;
     using Marain.Claims.OpenApi;
     using Marain.Tenancy.Client;
     using Menes;
@@ -80,8 +78,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 configureHost?.Invoke(config);
             });
 
-            services.AddSingleton<IClaimPermissionsEvaluator, PermissionsEvaluatorBridge>();
-            services.AddSingleton<IClaimsService, LocalClaimsService>();
+            services.AddSingleton<IResourceAccessEvaluator, LocalResourceAccessEvaluator>();
 
             services.AddOpenApiClaims();
 

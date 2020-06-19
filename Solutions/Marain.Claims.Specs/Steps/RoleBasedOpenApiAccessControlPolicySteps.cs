@@ -10,19 +10,13 @@ namespace Marain.Claims.Specs.Steps
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
-    using System.Net.Http;
     using System.Security.Claims;
-    using System.Threading;
     using System.Threading.Tasks;
     using Idg.AsyncTest.TaskExtensions;
-    using Marain.Claims.Client;
-    using Marain.Claims.Client.Models;
     using Marain.Claims.OpenApi;
     using Menes;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Rest;
     using Moq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
@@ -34,9 +28,9 @@ namespace Marain.Claims.Specs.Steps
         private string tenantId;
         private string resourcePrefix;
         private bool allowOnlyIfAll;
-        private Mock<IClaimsService> claimsClient;
-        private List<(GetClaimPermissionsPermissionBatchArgs args, TaskCompletionSource<HttpOperationResponse<object>> taskSource)> getPermissionCalls;
-        private List<ClaimPermissionsBatchResponseItemWithExample> responseBody;
+        private Mock<IResourceAccessEvaluator> resourceAccessEvaluator;
+        private List<(ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource)> evaluateCalls;
+        private List<ResourceAccessEvaluation> evaluations;
         private Task<IDictionary<AccessCheckOperationDescriptor, AccessControlPolicyResult>> policyResultTask;
 
         [Given("I am accepting the default unauthenticated behaviour")]
@@ -81,22 +75,21 @@ namespace Marain.Claims.Specs.Steps
         [When("I invoke the policy with a path of '(.*)' and a method of '(.*)'")]
         public void WhenIInvokeThePolicyWithAPathOfAndAMethodOf(string path, string method)
         {
-            this.getPermissionCalls = new List<(GetClaimPermissionsPermissionBatchArgs args, TaskCompletionSource<HttpOperationResponse<object>> taskSource)>();
-            this.responseBody = new List<ClaimPermissionsBatchResponseItemWithExample>();
-            this.claimsClient = new Mock<IClaimsService>();
-            this.claimsClient
-                .Setup(m => m.GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(It.IsAny<string>(), It.IsAny<IList<ClaimPermissionsBatchRequestItemWithPostExample>>(), It.IsAny<Dictionary<string, List<string>>>(), It.IsAny<CancellationToken>()))
-                .Returns((string tenantId, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, Dictionary<string, List<string>> _, CancellationToken cancellationToken) =>
+            this.evaluateCalls = new List<(ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource)>();
+            this.evaluations = new List<ResourceAccessEvaluation>();
+            this.resourceAccessEvaluator = new Mock<IResourceAccessEvaluator>();
+            this.resourceAccessEvaluator
+                .Setup(m => m.EvaluateAsync(It.IsAny<string>(), It.IsAny<IEnumerable<ResourceAccessSubmission>>()))
+                .Returns((string tenantId, IList<ResourceAccessSubmission> submissions) =>
                 {
-                    var args = new GetClaimPermissionsPermissionBatchArgs
+                    var args = new ResourceAccessEvaluatorArgs
                     {
-                        Requests = body,
+                        Submissions = submissions,
                         TenantId = tenantId,
-                        CancellationToken = cancellationToken,
                     };
 
-                    var completionSource = new TaskCompletionSource<HttpOperationResponse<object>>();
-                    this.getPermissionCalls.Add((args, completionSource));
+                    var completionSource = new TaskCompletionSource<List<ResourceAccessEvaluation>>();
+                    this.evaluateCalls.Add((args, completionSource));
 
                     return completionSource.Task;
                 });
@@ -106,7 +99,7 @@ namespace Marain.Claims.Specs.Steps
             serviceCollection.AddRoleBasedOpenApiAccessControl(
                 this.resourcePrefix ?? "",
                 this.allowOnlyIfAll);
-            serviceCollection.AddSingleton(this.claimsClient.Object);
+            serviceCollection.AddSingleton(this.resourceAccessEvaluator.Object);
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
             IOpenApiAccessControlPolicy policy = serviceProvider.GetRequiredService<IOpenApiAccessControlPolicy>();
@@ -114,82 +107,88 @@ namespace Marain.Claims.Specs.Steps
             this.policyResultTask = policy.ShouldAllowAsync(new SimpleOpenApiContext { CurrentPrincipal = this.claimsPrincipal, CurrentTenantId = this.tenantId }, new AccessCheckOperationDescriptor(path, "op123", method));
         }
 
-        [When("the claims service returns the following results")]
-        public void WhenTheClaimsServiceReturnsTheFollowingResults(Table table)
+        [When("the evaluator returns the following results")]
+        public void WhenTheEvaluatorReturnsTheFollowingResults(Table table)
         {
-            var responses = new Dictionary<TaskCompletionSource<HttpOperationResponse<object>>, List<ClaimPermissionsBatchResponseItemWithExample>>();
+            var responses = new Dictionary<TaskCompletionSource<List<ResourceAccessEvaluation>>, List<ResourceAccessEvaluation>>();
 
             foreach (TableRow current in table.Rows)
             {
                 string roleId = GetRoleId(Convert.ToInt32(current["Role"]));
 
-                (GetClaimPermissionsPermissionBatchArgs args, TaskCompletionSource<HttpOperationResponse<object>> taskSource) = this.getPermissionCalls.FirstOrDefault(x => x.args.Requests.Any(r => r.ClaimPermissionsId == roleId));
+                (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
 
-                if (!responses.TryGetValue(taskSource, out List<ClaimPermissionsBatchResponseItemWithExample> taskSourceResults))
+                if (!responses.TryGetValue(taskSource, out List<ResourceAccessEvaluation> taskSourceResults))
                 {
-                    taskSourceResults = new List<ClaimPermissionsBatchResponseItemWithExample>();
+                    taskSourceResults = new List<ResourceAccessEvaluation>();
                     responses.Add(taskSource, taskSourceResults);
                 }
 
-                ClaimPermissionsBatchRequestItemWithPostExample targetRequest = args.Requests.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
-                taskSourceResults.Add(new ClaimPermissionsBatchResponseItemWithExample(targetRequest.ClaimPermissionsId, targetRequest.ResourceUri, targetRequest.ResourceAccessType, (int)HttpStatusCode.OK, current["Result"]));
+                ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
+                taskSourceResults.Add(
+                    new ResourceAccessEvaluation
+                    {
+                        Submission = new ResourceAccessSubmission
+                        {
+                            ClaimPermissionsId = submission.ClaimPermissionsId,
+                            ResourceUri = submission.ResourceUri,
+                            ResourceAccessType = submission.ResourceAccessType,
+                        },
+                        Result = new Claims.PermissionResult
+                        {
+                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException()
+                        }
+                    });
             }
 
-            foreach (KeyValuePair<TaskCompletionSource<HttpOperationResponse<object>>, List<ClaimPermissionsBatchResponseItemWithExample>> current in responses)
+            foreach (KeyValuePair<TaskCompletionSource<List<ResourceAccessEvaluation>>, List<ResourceAccessEvaluation>> current in responses)
             {
-                var result = new HttpOperationResponse<object>
+                current.Key.SetResult(current.Value);
+            }
+        }
+
+        [When("the evaluator returns '(.*)' for role (.*)")]
+        public void WhenTheEvaluatorReturnsForRole(string allowOrDeny, int roleIndex)
+        {
+            string roleId = GetRoleId(roleIndex);
+
+            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+
+            ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
+
+            this.evaluations.Add(new ResourceAccessEvaluation
+            {
+                Submission = new ResourceAccessSubmission
                 {
-                    Body = current.Value,
-                    Response = new HttpResponseMessage(HttpStatusCode.OK),
-                };
+                    ClaimPermissionsId = submission.ClaimPermissionsId,
+                    ResourceUri = submission.ResourceUri,
+                    ResourceAccessType = submission.ResourceAccessType,
+                },
+                Result = new Claims.PermissionResult
+                {
+                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException()
+                }
+            });
 
-                current.Key.SetResult(result);
-            }
+            taskSource.SetResult(this.evaluations);
         }
 
-        [When("the claims service returns '(.*)' for role (.*)")]
-        public void WhenTheClaimsServiceReturnsForRole(string allowOrDeny, int roleIndex)
+        [When("the evaluator does not find the role (.*)")]
+        public void WhenThEvaluatorDoesNotFindTheRole(int roleIndex)
         {
             string roleId = GetRoleId(roleIndex);
 
-            (GetClaimPermissionsPermissionBatchArgs args, TaskCompletionSource<HttpOperationResponse<object>> taskSource) = this.getPermissionCalls.FirstOrDefault(x => x.args.Requests.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
 
-            ClaimPermissionsBatchRequestItemWithPostExample targetRequest = args.Requests.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
+            ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
 
-            this.responseBody.Add(new ClaimPermissionsBatchResponseItemWithExample(targetRequest.ClaimPermissionsId, targetRequest.ResourceUri, targetRequest.ResourceAccessType, (int)HttpStatusCode.OK, allowOrDeny));
-
-            var result = new HttpOperationResponse<object>
-            {
-                Body = this.responseBody,
-                Response = new HttpResponseMessage(HttpStatusCode.OK),
-            };
-
-            taskSource.SetResult(result);
-        }
-
-        [When("the claims service returns produces a 404 not found for role (.*)")]
-        public void WhenTheClaimsServiceReturnsProducesANotFoundRole(int roleIndex)
-        {
-            string roleId = GetRoleId(roleIndex);
-
-            (GetClaimPermissionsPermissionBatchArgs args, TaskCompletionSource<HttpOperationResponse<object>> taskSource) = this.getPermissionCalls.FirstOrDefault(x => x.args.Requests.Any(r => r.ClaimPermissionsId == roleId));
-
-            ClaimPermissionsBatchRequestItemWithPostExample targetRequest = args.Requests.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
-
-            this.responseBody.Add(new ClaimPermissionsBatchResponseItemWithExample(targetRequest.ClaimPermissionsId, targetRequest.ResourceUri, targetRequest.ResourceAccessType, (int)HttpStatusCode.NotFound, null));
-
-            var result = new HttpOperationResponse<object>
-            {
-                Response = new HttpResponseMessage(HttpStatusCode.OK),
-                Body = this.responseBody,
-            };
-            taskSource.SetResult(result);
+            taskSource.SetResult(this.evaluations);
         }
 
         [Then("the policy should not have attempted to use the claims service")]
         public void ThenThePolicyShouldNotHaveAttemptedToUseTheClaimsService()
         {
-            Assert.IsEmpty(this.getPermissionCalls);
+            Assert.IsEmpty(this.evaluateCalls);
         }
 
         [Then("the policy should pass the claim permissions id for role (.*) to the claims service")]
@@ -197,7 +196,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string roleId = GetRoleId(roleIndex);
 
-            (GetClaimPermissionsPermissionBatchArgs args, _) = this.getPermissionCalls.FirstOrDefault(x => x.args.Requests.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
 
             Assert.IsNotNull(args);
         }
@@ -207,7 +206,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string roleId = GetRoleId(roleIndex);
 
-            (GetClaimPermissionsPermissionBatchArgs args, _) = this.getPermissionCalls.FirstOrDefault(x => x.args.Requests.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
 
             Assert.AreEqual(this.tenantId, args?.TenantId);
         }
@@ -219,9 +218,9 @@ namespace Marain.Claims.Specs.Steps
         {
             string roleId = GetRoleId(roleIndex);
 
-            (GetClaimPermissionsPermissionBatchArgs args, _) = this.getPermissionCalls.FirstOrDefault(x => x.args.Requests.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
 
-            Assert.IsTrue(args.Requests.Any(x => x.ResourceUri == resourceUri));
+            Assert.IsTrue(args.Submissions.Any(x => x.ResourceUri == resourceUri));
         }
 
         [Then("the policy should pass an access type of '(.*)' to the claims service in call for role (.*)")]
@@ -231,9 +230,9 @@ namespace Marain.Claims.Specs.Steps
         {
             string roleId = GetRoleId(roleIndex);
 
-            (GetClaimPermissionsPermissionBatchArgs args, _) = this.getPermissionCalls.FirstOrDefault(x => x.args.Requests.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
 
-            Assert.IsTrue(args.Requests.Any(x => x.ResourceAccessType == accessType));
+            Assert.IsTrue(args.Submissions.Any(x => x.ResourceAccessType == accessType));
         }
 
         [Then("the result should grant access")]
@@ -252,13 +251,11 @@ namespace Marain.Claims.Specs.Steps
 
         private static string GetRoleId(int roleNumber) => $"RoleId{roleNumber}";
 
-        private class GetClaimPermissionsPermissionBatchArgs
+        private class ResourceAccessEvaluatorArgs
         {
-            public IList<ClaimPermissionsBatchRequestItemWithPostExample> Requests { get; set; }
+            public IList<ResourceAccessSubmission> Submissions { get; set; }
 
             public string TenantId { get; set; }
-
-            public CancellationToken CancellationToken { get; set; }
         }
     }
 }

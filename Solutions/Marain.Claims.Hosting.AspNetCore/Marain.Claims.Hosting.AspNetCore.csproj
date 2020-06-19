@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Corvus.Monitoring.ApplicationInsights" Version="0.2.0-preview.12" />
+    <PackageReference Include="Corvus.Identity.ManagedServiceIdentity.ClientAuthentication" Version="0.2.0-preview.15" />
     <PackageReference Include="Corvus.Tenancy.Abstractions" Version="0.25.0" />
     <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="0.25.0" />
     <PackageReference Include="Marain.Services.Tenancy" Version="0.1.0-preview.35" />
@@ -24,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Marain.Claims.InProcessClient\Marain.Claims.InProcessClient.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi.AspNetCore\Marain.Claims.OpenApi.AspNetCore.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi.Service\Marain.Claims.OpenApi.Service.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />

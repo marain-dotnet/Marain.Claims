@@ -1,24 +1,22 @@
-﻿// <copyright file="OpenApiClaimsServiceCollectionExtensions.cs" company="Endjin Limited">
+﻿// <copyright file="OpenApiRoleBasedAccessControlServiceCollectionExtensions.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    using System;
-    using Marain.Claims.Client;
     using Marain.Claims.OpenApi;
     using Menes;
     using Menes.AccessControlPolicies;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
-    /// Extension methods for configuring OpenApi claims behaviours.
+    /// Extension methods for configuring OpenApi role based access control.
     /// </summary>
-    public static class OpenApiClaimsServiceCollectionExtensions
+    public static class OpenApiRoleBasedAccessControlServiceCollectionExtensions
     {
         /// <summary>
         /// Adds services required to enable role-based OpenApi access control. Requires an
-        /// implementation of <see cref="IClaimsService"/> to be registered.
+        /// implementation of <see cref="IResourceAccessEvaluator"/> to be registered.
         /// </summary>
         /// <param name="services">The service collection to which to add services.</param>
         /// <param name="resourcePrefix">
@@ -38,8 +36,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// See <see cref="RoleBasedOpenApiAccessControlPolicy"/> for details on how this works.
         /// </para>
         /// <para>
-        /// You will typically use <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClient(IServiceCollection, Func{IServiceProvider,ClaimsClientOptions})"/>
-        /// to configure the <see cref="IClaimsService"/> that this requires.
+        /// You will typically use this indirectly via the Marain.Claims.Client.OpenApi NuGet package's
+        /// AddClaimsClientRoleBasedOpenApiAccessControl method.
         /// </para>
         /// </remarks>
         public static IServiceCollection AddRoleBasedOpenApiAccessControl(
@@ -49,7 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSingleton<IOpenApiAccessControlPolicy>(sp =>
                 new RoleBasedOpenApiAccessControlPolicy(
-                    sp.GetRequiredService<IClaimsService>(),
+                    sp.GetRequiredService<IResourceAccessEvaluator>(),
                     sp.GetRequiredService<ILogger<RoleBasedOpenApiAccessControlPolicy>>(),
                     resourcePrefix,
                     allowOnlyIfAll));
@@ -60,7 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Adds services required to enable role-based OpenApi access control, with the ability
         /// to exempt some operations without the overhead of invoking the service. Requires an
-        /// implementation of <see cref="IClaimsService"/> to be registered.
+        /// implementation of <see cref="IResourceAccessEvaluator"/> to be registered.
         /// </summary>
         /// <param name="services">The service collection to which to add services.</param>
         /// <param name="exemptionPolicy">
@@ -85,8 +83,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// See <see cref="RoleBasedOpenApiAccessControlPolicy"/> for details on how this works.
         /// </para>
         /// <para>
-        /// You will typically use <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClient(IServiceCollection, Func{IServiceProvider,ClaimsClientOptions})"/>
-        /// to configure the <see cref="IClaimsService"/> that this requires.
+        /// You will typically use this indirectly via the Marain.Claims.Client.OpenApi NuGet package's
+        /// AddClaimsClientRoleBasedOpenApiAccessControlWithPreemptiveExemptions method.
         /// </para>
         /// </remarks>
         public static IServiceCollection AddRoleBasedOpenApiAccessControlWithPreemptiveExemptions(
@@ -98,7 +96,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IOpenApiAccessControlPolicy>(sp =>
             {
                 IOpenApiAccessControlPolicy roleBasedPolicy = new RoleBasedOpenApiAccessControlPolicy(
-                                sp.GetRequiredService<IClaimsService>(),
+                                sp.GetRequiredService<IResourceAccessEvaluator>(),
                                 sp.GetRequiredService<ILogger<RoleBasedOpenApiAccessControlPolicy>>(),
                                 resourcePrefix,
                                 allowOnlyIfAll);

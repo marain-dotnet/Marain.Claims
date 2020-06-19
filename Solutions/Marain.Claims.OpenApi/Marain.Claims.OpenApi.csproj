@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
+    <ProjectReference Include="..\Marain.Claims.Abstractions\Marain.Claims.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
