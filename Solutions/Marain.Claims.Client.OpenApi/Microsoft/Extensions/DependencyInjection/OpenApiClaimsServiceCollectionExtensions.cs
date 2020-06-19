@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="resourcePrefix">
         /// An optional prefix to add to the URI path when forming the Resource URI that will be
         /// passed when asking the Claims service what permissions each role has for accessing
-        /// the resrouce.
+        /// the resource.
         /// </param>
         /// <param name="allowOnlyIfAll">
         /// Configures the behaviour when multiple <c>roles</c> claims are present, and the Claims
