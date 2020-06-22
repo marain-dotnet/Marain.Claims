@@ -35,19 +35,19 @@ Scenario Outline: The client belongs to one role
 Scenario: The client's only role grants it permission
     Given I have a ClaimsPrincipal with 1 roles claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-    And the claims service returns 'allow' for role 0
+    And the evaluator returns 'Allow' for role 0
     Then the result should grant access
 
 Scenario: The client's only role denies it permission
     Given I have a ClaimsPrincipal with 1 roles claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-    And the claims service returns 'deny' for role 0
+    And the evaluator returns 'Deny' for role 0
     Then the result type should be 'NotAllowed'
 
 Scenario: The claims service doesn't recognize the role
     Given I have a ClaimsPrincipal with 1 roles claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-    And the claims service returns produces a 404 not found for role 0
+    And the evaluator does not find the role 0
     Then the result type should be 'NotAllowed'
 
 Scenario: The client belongs to three roles
@@ -66,7 +66,7 @@ Scenario: The client belongs to three roles
 Scenario: All of the client's roles grant it permission
     Given I have a ClaimsPrincipal with 3 roles claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-	And the claims service returns the following results
+	And the evaluator returns the following results
 	| Role | Result |
 	| 0    | allow  |
 	| 1    | allow  |
@@ -76,7 +76,7 @@ Scenario: All of the client's roles grant it permission
 Scenario: All of the client's roles deny it permission
     Given I have a ClaimsPrincipal with 3 roles claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-	And the claims service returns the following results
+	And the evaluator returns the following results
 	| Role | Result |
 	| 0    | deny   |
 	| 1    | deny   |
@@ -86,7 +86,7 @@ Scenario: All of the client's roles deny it permission
 Scenario: One client role grants permission and the other two deny it in Allow If Any mode
     Given I have a ClaimsPrincipal with 3 roles claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-	And the claims service returns the following results
+	And the evaluator returns the following results
 	| Role | Result |
 	| 0    | allow  |
 	| 1    | deny   |
@@ -96,7 +96,7 @@ Scenario: One client role grants permission and the other two deny it in Allow I
 Scenario: Two client roles grant permission and the other denies it in Allow If Any mode
     Given I have a ClaimsPrincipal with 3 roles claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-	And the claims service returns the following results
+	And the evaluator returns the following results
 	| Role | Result |
 	| 0    | allow  |
 	| 1    | allow  |
@@ -107,7 +107,7 @@ Scenario: One client role grants permission and the other two deny it in All Onl
     Given I have a ClaimsPrincipal with 3 roles claims
     And the policy is configured in allow only if all mode
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-	And the claims service returns the following results
+	And the evaluator returns the following results
 	| Role | Result |
 	| 0    | allow  |
 	| 1    | deny   |
@@ -118,7 +118,7 @@ Scenario: Two client roles grant permission and the other denies it in All Only 
     Given I have a ClaimsPrincipal with 3 roles claims
     And the policy is configured in allow only if all mode
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
-	And the claims service returns the following results
+	And the evaluator returns the following results
 	| Role | Result |
 	| 0    | allow  |
 	| 1    | allow  |
