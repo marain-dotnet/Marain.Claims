@@ -104,7 +104,7 @@ namespace Marain.Claims.OpenApi
 
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
                 ClaimPermissions result = await store.PersistAsync(body).ConfigureAwait(false);
-                return this.OkResult(result);
+                return this.OkResult(result, "application/json");
             }
         }
 
@@ -137,7 +137,7 @@ namespace Marain.Claims.OpenApi
                 try
                 {
                     ClaimPermissions claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                    return this.OkResult(claimPermissions);
+                    return this.OkResult(claimPermissions, "application/json");
                 }
                 catch (ClaimPermissionsNotFoundException)
                 {
@@ -176,7 +176,7 @@ namespace Marain.Claims.OpenApi
                 try
                 {
                     ClaimPermissions claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                    return this.OkResult(claimPermissions.AllResourceAccessRules);
+                    return this.OkResult(claimPermissions.AllResourceAccessRules, "application/json");
                 }
                 catch (ClaimPermissionsNotFoundException)
                 {
@@ -477,7 +477,7 @@ namespace Marain.Claims.OpenApi
                         Permission = claimPermissions.HasPermissionFor(new Uri(resourceUri, UriKind.RelativeOrAbsolute), accessType) ? Permission.Allow : Permission.Deny,
                     };
 
-                return this.OkResult(result);
+                return this.OkResult(result, "application/json");
             }
         }
 
@@ -547,7 +547,7 @@ namespace Marain.Claims.OpenApi
                     return responseItem;
                 }).ToArray();
 
-                return this.OkResult(result);
+                return this.OkResult(result, "application/json");
             }
         }
 
@@ -596,14 +596,14 @@ namespace Marain.Claims.OpenApi
 
                 (string accessType, string resourceUri, string displayName)[] ruleData =
                 {
-                    ("GET", "api/claimPermissions/**/*", "Read Claim Permissions"),
-                    ("PUT", "api/claimPermissions/**/*", "Modify Claim Permissions"),
-                    ("POST", "api/claimPermissions", "Create Claim Permissions"),
-                    ("POST", "api/claimPermissions/**/*", "Add to Claim Permissions"),
-                    ("GET", "api/resourceAccessRuleSet/**/*", "Read Resource Access Rules"),
-                    ("PUT", "api/resourceAccessRuleSet/**/*", "Modify Resource Access Rules"),
-                    ("POST", "api/resourceAccessRuleSet", "Create Resource Access Rules"),
-                    ("POST", "api/resourceAccessRuleSet/**/*", "Add to Resource Access Rules"),
+                    ("GET", "claimPermissions/**/*", "Read Claim Permissions"),
+                    ("PUT", "claimPermissions/**/*", "Modify Claim Permissions"),
+                    ("POST", "claimPermissions", "Create Claim Permissions"),
+                    ("POST", "claimPermissions/**/*", "Add to Claim Permissions"),
+                    ("GET", "resourceAccessRuleSet/**/*", "Read Resource Access Rules"),
+                    ("PUT", "resourceAccessRuleSet/**/*", "Modify Resource Access Rules"),
+                    ("POST", "resourceAccessRuleSet", "Create Resource Access Rules"),
+                    ("POST", "resourceAccessRuleSet/**/*", "Add to Resource Access Rules"),
                 };
 
                 string prefix = ClaimsResourceTemplate.Replace("{tenantId}", context.CurrentTenantId);

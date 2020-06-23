@@ -1,7 +1,7 @@
 ﻿
-# This requires the Claims function to be running locally on its default port of 7095
+# This requires the Claims function to be running locally on its default port of 7076
 $tmp = (New-TemporaryFile).FullName
-Invoke-WebRequest http://localhost:7079/api/swagger -o $tmp
+Invoke-WebRequest http://localhost:7076/swagger -o $tmp
 
 $OutputFolder = Join-Path $PSScriptRoot "Marain\Claims\Client"
 

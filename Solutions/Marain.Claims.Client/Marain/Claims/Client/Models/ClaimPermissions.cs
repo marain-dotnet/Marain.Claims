@@ -32,6 +32,13 @@ namespace Marain.Claims.Client.Models
             ResourceAccessRuleSets = resourceAccessRuleSets;
             CustomInit();
         }
+        /// <summary>
+        /// Static constructor for ClaimPermissions class.
+        /// </summary>
+        static ClaimPermissions()
+        {
+            ContentType = "application/vnd.marain.claims.claimpermissions";
+        }
 
         /// <summary>
         /// An initialization method that performs custom operations like setting defaults
@@ -52,6 +59,11 @@ namespace Marain.Claims.Client.Models
         /// </summary>
         [JsonProperty(PropertyName = "ResourceAccessRuleSets")]
         public IList<ResourceAccessRuleSet> ResourceAccessRuleSets { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "contentType")]
+        public static string ContentType { get; private set; }
 
         /// <summary>
         /// Validate the object.

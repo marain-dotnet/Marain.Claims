@@ -31,6 +31,13 @@ namespace Marain.Claims.Client.Models
             ResourceAccessType = resourceAccessType;
             CustomInit();
         }
+        /// <summary>
+        /// Static constructor for ClaimPermissionsBatchRequestItem class.
+        /// </summary>
+        static ClaimPermissionsBatchRequestItem()
+        {
+            ContentType = "application/vnd.marain.claims.claimpermissionsbatchrequestitem";
+        }
 
         /// <summary>
         /// An initialization method that performs custom operations like setting defaults
@@ -51,6 +58,11 @@ namespace Marain.Claims.Client.Models
         /// </summary>
         [JsonProperty(PropertyName = "resourceAccessType")]
         public string ResourceAccessType { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "contentType")]
+        public static string ContentType { get; private set; }
 
     }
 }
