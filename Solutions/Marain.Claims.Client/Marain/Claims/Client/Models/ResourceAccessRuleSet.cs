@@ -25,12 +25,20 @@ namespace Marain.Claims.Client.Models
         /// <summary>
         /// Initializes a new instance of the ResourceAccessRuleSet class.
         /// </summary>
-        public ResourceAccessRuleSet(string id, string displayName = default(string), IList<ResourceAccessRule> rules = default(IList<ResourceAccessRule>))
+        public ResourceAccessRuleSet(string id, string eTag = default(string), string displayName = default(string), IList<ResourceAccessRule> rules = default(IList<ResourceAccessRule>))
         {
             Id = id;
+            ETag = eTag;
             DisplayName = displayName;
             Rules = rules;
             CustomInit();
+        }
+        /// <summary>
+        /// Static constructor for ResourceAccessRuleSet class.
+        /// </summary>
+        static ResourceAccessRuleSet()
+        {
+            ContentType = "application/vnd.marain.claims.resourceaccessruleset";
         }
 
         /// <summary>
@@ -45,6 +53,11 @@ namespace Marain.Claims.Client.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "eTag")]
+        public string ETag { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "displayName")]
         public string DisplayName { get; set; }
 
@@ -52,6 +65,11 @@ namespace Marain.Claims.Client.Models
         /// </summary>
         [JsonProperty(PropertyName = "rules")]
         public IList<ResourceAccessRule> Rules { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "contentType")]
+        public static string ContentType { get; private set; }
 
         /// <summary>
         /// Validate the object.
