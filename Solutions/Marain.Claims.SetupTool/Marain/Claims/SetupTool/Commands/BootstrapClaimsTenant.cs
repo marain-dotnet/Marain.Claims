@@ -38,7 +38,7 @@ namespace Marain.Claims.SetupTool.Commands
         public string ClaimsAppId { get; set; }
 
         /// <summary>
-        /// Gets or sets the admin role name.
+        /// Gets or sets the claims service URL
         /// </summary>
         [Option(Description = "The base URL for the Claims Service", LongName = "claimsServiceUrl", ShortName = "u")]
         public string ClaimsServiceUrl { get; set; }
@@ -85,6 +85,7 @@ namespace Marain.Claims.SetupTool.Commands
 
             ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
                 this.ClaimsAppId, this.KeyVault, this.SecretName).ConfigureAwait(false);
+
             using (var claimsClient = new ClaimsService(new Uri(this.ClaimsServiceUrl), credentials))
             {
                 try
