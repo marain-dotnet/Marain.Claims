@@ -10,7 +10,7 @@ namespace Marain.Claims.OpenApi
     using Microsoft.AspNetCore.Http;
 
     /// <summary>
-    /// Builds a claims identity using the serialized payload from the 'X-ENDJIN-CLAIMS' header on the request.
+    /// Builds a claims identity using the serialized payload from the 'X-MARAIN-CLAIMS' header on the request.
     /// </summary>
     /// <remarks>
     /// The 'X-ENDJIN-CLAIMS' header should be a JSON serialized <see cref="JwtPayload"/>. The 'name' claim is used

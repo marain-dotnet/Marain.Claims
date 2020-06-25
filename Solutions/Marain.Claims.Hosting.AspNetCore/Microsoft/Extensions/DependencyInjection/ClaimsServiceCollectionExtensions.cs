@@ -84,6 +84,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 #if DEBUG
             services.AddClaimsProviderStrategy<UnsafeJwtAuthorizationBearerTokenStrategy>();
+            services.AddClaimsProviderStrategy<MarainClaimsStrategy>();
 #endif
 
             services.AddClaimsProviderStrategy<EasyAuthJwtStrategy>();
