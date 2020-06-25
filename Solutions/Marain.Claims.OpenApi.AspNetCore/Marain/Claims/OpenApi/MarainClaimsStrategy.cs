@@ -13,7 +13,7 @@ namespace Marain.Claims.OpenApi
     /// Builds a claims identity using the serialized payload from the 'X-MARAIN-CLAIMS' header on the request.
     /// </summary>
     /// <remarks>
-    /// The 'X-ENDJIN-CLAIMS' header should be a JSON serialized <see cref="JwtPayload"/>. The 'name' claim is used
+    /// The 'X-MARAIN-CLAIMS' header should be a JSON serialized <see cref="JwtPayload"/>. The 'name' claim is used
     /// as the identity name type, and the 'roles' claim is used as the identity role type.
     /// Example serialized payload:
     /// {"name": "mike", "roles": ["admin", "editor"], "company": "endjin"}.
