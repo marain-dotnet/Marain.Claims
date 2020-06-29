@@ -62,7 +62,7 @@ namespace Marain.Claims.OpenApi
 
                 IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
                 ResourceAccessRuleSet result = await store.PersistAsync(body).ConfigureAwait(false);
-                return this.OkResult(result);
+                return this.OkResult(result, "application/json");
             }
         }
 
@@ -85,7 +85,7 @@ namespace Marain.Claims.OpenApi
                 try
                 {
                     ResourceAccessRuleSet result = await store.GetAsync(resourceAccessRuleSetId).ConfigureAwait(false);
-                    return this.OkResult(result);
+                    return this.OkResult(result, "application/json");
                 }
                 catch (ResourceAccessRuleSetNotFoundException)
                 {

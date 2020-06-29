@@ -38,7 +38,7 @@ namespace Marain.Claims.SetupTool.Commands
         public string ClaimsAppId { get; set; }
 
         /// <summary>
-        /// Gets or sets the admin role name.
+        /// Gets or sets the claims service URL
         /// </summary>
         [Option(Description = "The base URL for the Claims Service", LongName = "claimsServiceUrl", ShortName = "u")]
         public string ClaimsServiceUrl { get; set; }
@@ -79,13 +79,32 @@ namespace Marain.Claims.SetupTool.Commands
         [Option(Description = "Authenticate using the token last fetched by the 'az' CLI", LongName = "devAzCliAuth", ShortName = "d")]
         public bool UseAzCliDevAuth { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value used for roles in X-MARAIN-CLAIMS header.
+        /// </summary>
+        [Option(Description = "Used for when running against a local debug instance of Claims. Will send X-MARAIN-CLAIMS header with {\"roles\":[\"<this-value>\"]} to authenticate, instead of using OAuth2.", LongName = "marainClaimsHeaderValue", ShortName = "x")]
+        public string MarainClaimsHeaderRoleValue { get; set; }
+
         private async Task<int> OnExecuteAsync(CommandLineApplication app, CancellationToken cancellationToken = default)
         {
-            var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
+            ClaimsService claimsClient;
 
-            ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
-                this.ClaimsAppId, this.KeyVault, this.SecretName).ConfigureAwait(false);
-            using (var claimsClient = new ClaimsService(new Uri(this.ClaimsServiceUrl), credentials))
+            if (string.IsNullOrEmpty(this.MarainClaimsHeaderRoleValue))
+            {
+                var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
+
+                ServiceClientCredentials credentials = await authenticationOptions.GetServiceClientCredentialsFromKeyVault(
+                    this.ClaimsAppId, this.KeyVault, this.SecretName).ConfigureAwait(false);
+
+                claimsClient = new ClaimsService(new Uri(this.ClaimsServiceUrl), credentials);
+            }
+            else
+            {
+                claimsClient = new ClaimsService(new Uri(this.ClaimsServiceUrl), new BasicAuthenticationCredentials());
+                claimsClient.HttpClient.DefaultRequestHeaders.Add("X-MARAIN-CLAIMS", $"{{ \"roles\": [ \"{this.MarainClaimsHeaderRoleValue}\" ] }}");
+            }
+
+            using (claimsClient)
             {
                 try
                 {

@@ -157,7 +157,7 @@ namespace Marain.Claims.SetupTool
                 azureServiceTokenProviderConnectionString = "RunAs=Developer; DeveloperTool=AzureCLI";
             }
 
-            return new AuthenticationOptions(azureServiceTokenProviderConnectionString, tenantId);
+            return new AuthenticationOptions(tenantId, azureServiceTokenProviderConnectionString);
         }
 
         /// <summary>

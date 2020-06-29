@@ -469,14 +469,22 @@ components:
       properties:
         id:
           type: string
+        eTag:
+          type: string
         displayName:
           type: string
         rules:
           type: array
           items:
             $ref: '#/components/schemas/ResourceAccessRule'
+        contentType:
+          type: string
+          enum:
+            - "application/vnd.marain.claims.resourceaccessruleset"
+          example: "application/vnd.marain.claims.resourceaccessruleset"
       required:
         - id
+        - contentType
     ResourceAccessRuleSetId:
       type: object
       properties:
@@ -521,8 +529,14 @@ components:
           $ref: '#/components/schemas/ResourceAccessRules'
         ResourceAccessRuleSets:
           $ref: '#/components/schemas/ResourceAccessRuleSets'
+        contentType:
+          type: string
+          enum:
+            - "application/vnd.marain.claims.claimpermissions"
+          example: "application/vnd.marain.claims.claimpermissions"
       required:
         - id
+        - contentType
     ClaimPermissionsWithGetExample:
       allOf:
         - $ref: '#/components/schemas/ClaimPermissions'
@@ -569,6 +583,13 @@ components:
           format: url
         resourceAccessType:
           type: string
+        contentType:
+          type: string
+          enum:
+            - "application/vnd.marain.claims.claimpermissionsbatchrequestitem"
+          example: "application/vnd.marain.claims.claimpermissionsbatchrequestitem"
+      required:
+        - contentType
 
     ClaimPermissionsBatchRequestItemWithPostExample:
       allOf:

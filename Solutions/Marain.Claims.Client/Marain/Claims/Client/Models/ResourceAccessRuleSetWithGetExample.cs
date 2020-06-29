@@ -25,8 +25,8 @@ namespace Marain.Claims.Client.Models
         /// Initializes a new instance of the
         /// ResourceAccessRuleSetWithGetExample class.
         /// </summary>
-        public ResourceAccessRuleSetWithGetExample(string id, string displayName = default(string), IList<ResourceAccessRule> rules = default(IList<ResourceAccessRule>))
-            : base(id, displayName, rules)
+        public ResourceAccessRuleSetWithGetExample(string id, string eTag = default(string), string displayName = default(string), IList<ResourceAccessRule> rules = default(IList<ResourceAccessRule>))
+            : base(id, eTag, displayName, rules)
         {
             CustomInit();
         }

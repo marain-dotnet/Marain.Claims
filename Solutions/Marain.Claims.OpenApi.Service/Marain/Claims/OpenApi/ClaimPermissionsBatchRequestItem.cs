@@ -12,6 +12,11 @@ namespace Marain.Claims.OpenApi
     public class ClaimPermissionsBatchRequestItem
     {
         /// <summary>
+        /// The registered content type used when this object is serialized/deserialized.
+        /// </summary>
+        public const string RegisteredContentType = "application/vnd.marain.claims.claimpermissionsbatchrequestitem";
+
+        /// <summary>
         /// Initializes a new instance of the ClaimPermissionsBatchRequestItem
         /// class.
         /// </summary>
@@ -32,6 +37,10 @@ namespace Marain.Claims.OpenApi
             this.ResourceUri = resourceUri;
             this.ResourceAccessType = resourceAccessType;
         }
+        /// <summary>
+        /// Gets the content type used when this object is serialized/deserialized.
+        /// </summary>
+        public string ContentType => RegisteredContentType;
 
         /// <summary>
         /// Gets or sets the claim permissions ID.

@@ -122,7 +122,7 @@ namespace Marain.Claims.OpenApi
             // We don't evaluate claims for the paths that are supplied in the parameters; we do it for the combination of
             // resource prefix and path, which we call the Resource Uri. In order to simplify this, we create a mapping of
             // requested path to the resource Uri
-            var pathToResourceUriMap = requests.Select(x => x.Path).Distinct().ToDictionary(x => x, x => this.resourcePrefix.Replace("{tenantId}", context.CurrentTenantId) + x.TrimStart('/'));
+            var pathToResourceUriMap = requests.Select(x => x.Path).Distinct().ToDictionary(x => x, x => (this.resourcePrefix?.Replace("{tenantId}", context.CurrentTenantId) ?? string.Empty) + x.TrimStart('/'));
 
             // Now translate the set of requested evaluations into a set of requests for the claims service. This is built
             // from the cartesian product of the roles and requests lists.

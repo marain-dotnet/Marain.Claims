@@ -132,42 +132,42 @@ this.ScenarioInitialize(scenarioInfo);
                             "accessType",
                             "permission"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/claimPermissions/**/*",
+                            "<tenantid>/marain/claims/claimPermissions/**/*",
                             "Read Claim Permissions",
                             "GET",
                             "Allow"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/claimPermissions/**/*",
+                            "<tenantid>/marain/claims/claimPermissions/**/*",
                             "Modify Claim Permissions",
                             "PUT",
                             "Allow"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/claimPermissions",
+                            "<tenantid>/marain/claims/claimPermissions",
                             "Create Claim Permissions",
                             "POST",
                             "Allow"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/claimPermissions/**/*",
+                            "<tenantid>/marain/claims/claimPermissions/**/*",
                             "Add to Claim Permissions",
                             "POST",
                             "Allow"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/resourceAccessRuleSet/**/*",
+                            "<tenantid>/marain/claims/resourceAccessRuleSet/**/*",
                             "Read Resource Access Rules",
                             "GET",
                             "Allow"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/resourceAccessRuleSet/**/*",
+                            "<tenantid>/marain/claims/resourceAccessRuleSet/**/*",
                             "Modify Resource Access Rules",
                             "PUT",
                             "Allow"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/resourceAccessRuleSet",
+                            "<tenantid>/marain/claims/resourceAccessRuleSet",
                             "Create Resource Access Rules",
                             "POST",
                             "Allow"});
                 table1.AddRow(new string[] {
-                            "<tenantid>/marain/claims/api/resourceAccessRuleSet/**/*",
+                            "<tenantid>/marain/claims/resourceAccessRuleSet/**/*",
                             "Add to Resource Access Rules",
                             "POST",
                             "Allow"});
