@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class ClaimsSerializationServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the standard set of core claims types
+        /// Adds the standard set of core claims types.
         /// </summary>
         /// <param name="services">
         /// The <see cref="IServiceCollection" /> to add the types to.
