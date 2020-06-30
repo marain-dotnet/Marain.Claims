@@ -26,6 +26,8 @@
     /// with Marain Claims. The principal you use for running the benchmarks (either yourself or a service principal, 
     /// set via the AzureServicesAuthConnectionString setting in local.settings.json), must have access to both the 
     /// Claims API and the Key Vault containing the claims tenant configuration.
+    /// Also, be aware that running these benchmarks will delete all data in the specified claims tenant storage,
+    /// so do not use this against production instances.
     /// </remarks>
     [JsonExporterAttribute.Full]
     [MarkdownExporter]
