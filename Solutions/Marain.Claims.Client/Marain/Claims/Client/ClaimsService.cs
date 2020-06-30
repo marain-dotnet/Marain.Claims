@@ -340,7 +340,7 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> CreateClaimPermissionsWithHttpMessagesAsync(string tenantId, ClaimPermissionsWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ClaimPermissions>> CreateClaimPermissionsWithHttpMessagesAsync(string tenantId, ClaimPermissions body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (tenantId == null)
             {
@@ -441,7 +441,7 @@ namespace Marain.Claims.Client
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ClaimPermissionsWithGetExample>();
+            var _result = new HttpOperationResponse<ClaimPermissions>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -450,7 +450,7 @@ namespace Marain.Claims.Client
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ClaimPermissionsWithGetExample>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ClaimPermissions>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -502,7 +502,7 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ClaimPermissionsWithGetExample>> GetClaimPermissionsWithHttpMessagesAsync(string claimPermissionsId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ClaimPermissions>> GetClaimPermissionsWithHttpMessagesAsync(string claimPermissionsId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (claimPermissionsId == null)
             {
@@ -594,7 +594,7 @@ namespace Marain.Claims.Client
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ClaimPermissionsWithGetExample>();
+            var _result = new HttpOperationResponse<ClaimPermissions>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -603,7 +603,7 @@ namespace Marain.Claims.Client
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ClaimPermissionsWithGetExample>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ClaimPermissions>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1184,7 +1184,7 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSet> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (tenantId == null)
             {
@@ -1374,7 +1374,7 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetId> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSet> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (tenantId == null)
             {
@@ -1747,7 +1747,7 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(string tenantId, IList<ClaimPermissionsBatchRequestItemWithPostExample> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(string tenantId, IList<ClaimPermissionsBatchRequestItem> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (tenantId == null)
             {
@@ -1853,7 +1853,7 @@ namespace Marain.Claims.Client
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<ClaimPermissionsBatchResponseItemWithExample>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<ClaimPermissionsBatchResponseItem>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1922,7 +1922,7 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<object>> CreateResourceAccessRuleSetWithHttpMessagesAsync(string tenantId, ResourceAccessRuleSetWithPostExample body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> CreateResourceAccessRuleSetWithHttpMessagesAsync(string tenantId, ResourceAccessRuleSet body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (tenantId == null)
             {
@@ -2032,7 +2032,7 @@ namespace Marain.Claims.Client
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ResourceAccessRuleSetWithGetExample>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ResourceAccessRuleSet>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -2102,7 +2102,7 @@ namespace Marain.Claims.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ResourceAccessRuleSetWithGetExample>> GetResourceAccessRuleSetWithHttpMessagesAsync(string resourceAccessRuleSetId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ResourceAccessRuleSet>> GetResourceAccessRuleSetWithHttpMessagesAsync(string resourceAccessRuleSetId, string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (resourceAccessRuleSetId == null)
             {
@@ -2194,7 +2194,7 @@ namespace Marain.Claims.Client
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ResourceAccessRuleSetWithGetExample>();
+            var _result = new HttpOperationResponse<ResourceAccessRuleSet>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2203,7 +2203,7 @@ namespace Marain.Claims.Client
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ResourceAccessRuleSetWithGetExample>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<ResourceAccessRuleSet>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
