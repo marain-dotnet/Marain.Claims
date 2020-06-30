@@ -104,7 +104,7 @@
         [Benchmark]
         public Task CreateClaimPermissions() => this.claimsService.CreateClaimPermissionsAsync(
             this.clientTenantId, 
-            new ClaimPermissionsWithPostExample
+            new ClaimPermissions
             {
                 Id = $"benchmark{this.iterationStr}",
                 ResourceAccessRules = new List<ResourceAccessRule>
@@ -121,7 +121,7 @@
         [Benchmark]
         public Task CreateResourceAccessRuleSet() => this.claimsService.CreateResourceAccessRuleSetAsync(
             this.clientTenantId, 
-            new ResourceAccessRuleSetWithPostExample
+            new ResourceAccessRuleSet
             {
                 DisplayName = $"benchmark{this.iterationStr}",
                 Id = $"benchmark{this.iterationStr}",
@@ -146,18 +146,18 @@
         [Benchmark]
         public Task GetClaimPermissionsPermissionBatch() => this.claimsService.GetClaimPermissionsPermissionBatchAsync(
             this.clientTenantId, 
-            new List<ClaimPermissionsBatchRequestItemWithPostExample> 
+            new List<ClaimPermissionsBatchRequestItem> 
             { 
-                new ClaimPermissionsBatchRequestItemWithPostExample("0", "0", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("1", "1", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("2", "2", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("3", "3", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("4", "4", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("5", "5", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("6", "6", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("7", "7", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("8", "8", "GET"),
-                new ClaimPermissionsBatchRequestItemWithPostExample("9", "9", "GET"),
+                new ClaimPermissionsBatchRequestItem("0", "0", "GET"),
+                new ClaimPermissionsBatchRequestItem("1", "1", "GET"),
+                new ClaimPermissionsBatchRequestItem("2", "2", "GET"),
+                new ClaimPermissionsBatchRequestItem("3", "3", "GET"),
+                new ClaimPermissionsBatchRequestItem("4", "4", "GET"),
+                new ClaimPermissionsBatchRequestItem("5", "5", "GET"),
+                new ClaimPermissionsBatchRequestItem("6", "6", "GET"),
+                new ClaimPermissionsBatchRequestItem("7", "7", "GET"),
+                new ClaimPermissionsBatchRequestItem("8", "8", "GET"),
+                new ClaimPermissionsBatchRequestItem("9", "9", "GET"),
             }
         );
 
@@ -197,9 +197,9 @@
         public Task SetClaimPermissionsResourceAccessRuleSets() => this.claimsService.SetClaimPermissionsResourceAccessRuleSetsAsync(
             this.clientTenantId,
             this.iterationStr,
-            new List<ResourceAccessRuleSetId>
+            new List<ResourceAccessRuleSet>
             {
-                new ResourceAccessRuleSetId(this.iterationStr)
+                new ResourceAccessRuleSet(this.iterationStr)
             }
         );
 
@@ -286,7 +286,7 @@
                 Enumerable
                     .Range(0, 50)
                     .Select(i => i.ToString())
-                    .Select(i => new ResourceAccessRuleSetWithPostExample
+                    .Select(i => new ResourceAccessRuleSet
                     {
                         DisplayName = i,
                         Id = i,
@@ -297,16 +297,16 @@
                     })
                     .ToList();
 
-            foreach (ResourceAccessRuleSetWithPostExample ruleSet in ruleSets)
+            foreach (ResourceAccessRuleSet ruleSet in ruleSets)
             {
                 object response = await this.claimsService.CreateResourceAccessRuleSetAsync(clientTenantId, ruleSet);
             }
 
-            var claimPermissionSets =
+            var claimPermissionsList =
                 Enumerable
                     .Range(0, 50)
                     .Select(i => i.ToString())
-                    .Select(i => new ClaimPermissionsWithPostExample
+                    .Select(i => new ClaimPermissions
                     {
                         Id = i.ToString(),
                         ResourceAccessRules = new List<ResourceAccessRule>
@@ -320,7 +320,7 @@
                     })
                     .ToList();
 
-            foreach (ClaimPermissionsWithPostExample claimPermissions in claimPermissionSets)
+            foreach (ClaimPermissions claimPermissions in claimPermissionsList)
             {
                 object response = await this.claimsService.CreateClaimPermissionsAsync(clientTenantId, claimPermissions);
             }
