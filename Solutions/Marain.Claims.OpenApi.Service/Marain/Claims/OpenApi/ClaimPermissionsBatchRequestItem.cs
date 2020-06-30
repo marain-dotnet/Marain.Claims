@@ -37,6 +37,7 @@ namespace Marain.Claims.OpenApi
             this.ResourceUri = resourceUri;
             this.ResourceAccessType = resourceAccessType;
         }
+
         /// <summary>
         /// Gets the content type used when this object is serialized/deserialized.
         /// </summary>

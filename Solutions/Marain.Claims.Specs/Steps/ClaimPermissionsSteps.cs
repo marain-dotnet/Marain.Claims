@@ -7,10 +7,10 @@
 
 namespace Marain.Claims.SpecFlow.Steps
 {
-    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using NUnit.Framework;
     using TechTalk.SpecFlow;
 
     [Binding]
@@ -68,7 +68,7 @@ namespace Marain.Claims.SpecFlow.Steps
             var claimPermissions = new ClaimPermissions
             {
                 Id = ClaimPermissionsId,
-                ResourceAccessRules = this.directResourceAccessRules
+                ResourceAccessRules = this.directResourceAccessRules,
             };
 
             this.scenarioContext.Set(claimPermissions, ClaimPermissionsKey);
@@ -83,14 +83,14 @@ namespace Marain.Claims.SpecFlow.Steps
                 {
                     DisplayName = "1",
                     Id = "1",
-                    Rules = this.resourceAccessRuleSet1ResourceAccessRules
+                    Rules = this.resourceAccessRuleSet1ResourceAccessRules,
                 },
                 new ResourceAccessRuleSet
                 {
                     DisplayName = "2",
                     Id = "2",
-                    Rules = this.resourceAccessRuleSet2ResourceAccessRules
-                }
+                    Rules = this.resourceAccessRuleSet2ResourceAccessRules,
+                },
             };
 
             this.scenarioContext.Set(resourceAccessRuleSets, ResourceAccessRuleSetsKey);
@@ -104,7 +104,7 @@ namespace Marain.Claims.SpecFlow.Steps
             var claimPermissions = new ClaimPermissions
             {
                 Id = ClaimPermissionsId,
-                ResourceAccessRuleSets = resourceAccessRuleSets
+                ResourceAccessRuleSets = resourceAccessRuleSets,
             };
 
             this.scenarioContext.Set(claimPermissions, ClaimPermissionsKey);
@@ -119,14 +119,14 @@ namespace Marain.Claims.SpecFlow.Steps
                 {
                     DisplayName = "1",
                     Id = "1",
-                    Rules = this.resourceAccessRuleSet1ResourceAccessRules
+                    Rules = this.resourceAccessRuleSet1ResourceAccessRules,
                 },
                 new ResourceAccessRuleSet
                 {
                     DisplayName = "3",
                     Id = "3",
-                    Rules = this.resourceAccessRuleSet3ResourceAccessRules
-                }
+                    Rules = this.resourceAccessRuleSet3ResourceAccessRules,
+                },
             };
 
             this.scenarioContext.Set(resourceAccessRuleSets, ResourceAccessRuleSetsKey);
@@ -141,7 +141,7 @@ namespace Marain.Claims.SpecFlow.Steps
             {
                 Id = ClaimPermissionsId,
                 ResourceAccessRuleSets = resourceAccessRuleSets,
-                ResourceAccessRules = this.directResourceAccessRules
+                ResourceAccessRules = this.directResourceAccessRules,
             };
 
             this.scenarioContext.Set(claimPermissions, ClaimPermissionsKey);
@@ -156,7 +156,7 @@ namespace Marain.Claims.SpecFlow.Steps
             {
                 Id = ClaimPermissionsId,
                 ResourceAccessRuleSets = resourceAccessRuleSets,
-                ResourceAccessRules = this.directOverlappingResourceAccessRules
+                ResourceAccessRules = this.directOverlappingResourceAccessRules,
             };
 
             this.scenarioContext.Set(claimPermissions, ClaimPermissionsKey);

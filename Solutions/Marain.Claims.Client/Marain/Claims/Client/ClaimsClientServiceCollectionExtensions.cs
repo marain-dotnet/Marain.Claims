@@ -28,8 +28,8 @@ namespace Marain.Claims.Client
             this IServiceCollection services,
             Func<IServiceProvider, ClaimsClientOptions> getOptions)
         {
-            return services.AddSingleton<IClaimsService>(sp => 
-            { 
+            return services.AddSingleton<IClaimsService>(sp =>
+            {
                 ClaimsClientOptions options = getOptions(sp);
                 IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 return options.ResourceIdForMsiAuthentication == null

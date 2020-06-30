@@ -11,21 +11,21 @@ namespace Marain.Claims.SpecFlow.Steps
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Marain.Claims.Storage;
-    using Menes;
+    using Corvus.Extensions.Json;
+    using Corvus.SpecFlow.Extensions;
     using Corvus.Tenancy;
+    using Marain.Claims;
+    using Marain.Claims.OpenApi;
+    using Marain.Claims.Storage;
+    using Marain.Services.Tenancy;
+    using Marain.TenantManagement.Testing;
+    using Menes;
+    using Microsoft.Azure.Storage.Blob;
+    using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
-    using Microsoft.Azure.Storage.Blob;
-    using Corvus.SpecFlow.Extensions;
-    using Corvus.Extensions.Json;
-    using Microsoft.Extensions.DependencyInjection;
-    using Marain.Claims.OpenApi;
-    using Marain.Services.Tenancy;
-    using Marain.TenantManagement.Testing;
-    using Marain.Claims;
 
     [Binding]
     public class BootstrappingSteps
@@ -40,10 +40,10 @@ namespace Marain.Claims.SpecFlow.Steps
         private readonly List<ClaimPermissions> claimPermissionsPersistedToStore = new List<ClaimPermissions>();
         private readonly List<ResourceAccessRuleSet> resourceAccessRulesPersistedToStore = new List<ResourceAccessRuleSet>();
         private readonly IOpenApiContext openApiContext;
-        
+
         private ClaimPermissionsService service;
         private OpenApiResult bootstrapTenantResult;
-        
+
         private IClaimPermissionsStore claimPermissionsStore;
         private IResourceAccessRuleSetStore ruleSetStore;
         private Mock<IPermissionsStoreFactory> permissionsStoreFactoryMock;
@@ -74,7 +74,7 @@ namespace Marain.Claims.SpecFlow.Steps
         [Given("the tenant is uninitialised")]
         public async Task GivenTheTenantIsUninitialisedAsync()
         {
-            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
+            this.permissionsStoreFactoryMock = await this.SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
 
             if (this.useRealDb)
             {
@@ -95,7 +95,7 @@ namespace Marain.Claims.SpecFlow.Steps
         [Given("the tenant is initialised")]
         public async Task GivenTheTenantIsInitialisedAsync()
         {
-            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
+            this.permissionsStoreFactoryMock = await this.SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
 
             Assert.IsFalse(this.useRealDb, "Tests using this step can only use @inMemoryStore");
             this.permissionStoreMock
@@ -119,7 +119,7 @@ namespace Marain.Claims.SpecFlow.Steps
                 .Returns(this.transientTenantManager.PrimaryTransientClient.Id);
             var body = new JObject
             {
-                ["administratorRoleClaimValue"] = roleId
+                ["administratorRoleClaimValue"] = roleId,
             };
             this.bootstrapTenantResult = await this.service.BootstrapTenantAsync(
                 openApiContext.Object,

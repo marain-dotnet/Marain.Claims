@@ -38,7 +38,7 @@ namespace Marain.Claims.SetupTool.Commands
         public string ClaimsAppId { get; set; }
 
         /// <summary>
-        /// Gets or sets the claims service URL
+        /// Gets or sets the claims service URL.
         /// </summary>
         [Option(Description = "The base URL for the Claims Service", LongName = "claimsServiceUrl", ShortName = "u")]
         public string ClaimsServiceUrl { get; set; }

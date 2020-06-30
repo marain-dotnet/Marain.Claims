@@ -7,8 +7,8 @@
 
 namespace Marain.Claims.SpecFlow.Steps
 {
-    using NUnit.Framework;
     using System;
+    using NUnit.Framework;
     using TechTalk.SpecFlow;
 
     [Binding]
@@ -31,8 +31,8 @@ namespace Marain.Claims.SpecFlow.Steps
             var resource1 = new Resource(new Uri("foo/bar/*", UriKind.Relative), "Foo bar");
             var resource2 = new Resource(new Uri("foo/bar/*", UriKind.Relative), "Foo bar");
 
-           this.scenarioContext.Set(resource1, Resource1Key);
-           this.scenarioContext.Set(resource2, Resource2Key);
+            this.scenarioContext.Set(resource1, Resource1Key);
+            this.scenarioContext.Set(resource2, Resource2Key);
         }
 
         [Given("two resources have differing names")]
@@ -41,8 +41,8 @@ namespace Marain.Claims.SpecFlow.Steps
             var resource1 = new Resource(new Uri("foo/bar", UriKind.Relative), "Foo bar");
             var resource2 = new Resource(new Uri("foo/bar/*", UriKind.Relative), "Foo bar");
 
-           this.scenarioContext.Set(resource1, Resource1Key);
-           this.scenarioContext.Set(resource2, Resource2Key);
+            this.scenarioContext.Set(resource1, Resource1Key);
+            this.scenarioContext.Set(resource2, Resource2Key);
         }
 
         [Given("two resources have differing display names")]
@@ -51,8 +51,8 @@ namespace Marain.Claims.SpecFlow.Steps
             var resource1 = new Resource(new Uri("foo/bar/*", UriKind.Relative), "Foo bar");
             var resource2 = new Resource(new Uri("foo/bar/*", UriKind.Relative), "Bar foo");
 
-           this.scenarioContext.Set(resource1, Resource1Key);
-           this.scenarioContext.Set(resource2, Resource2Key);
+            this.scenarioContext.Set(resource1, Resource1Key);
+            this.scenarioContext.Set(resource2, Resource2Key);
         }
 
         [When("the resources are compared")]

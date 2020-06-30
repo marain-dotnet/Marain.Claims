@@ -97,7 +97,7 @@ namespace Marain.Claims.Specs.Steps
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(new Mock<ILogger<RoleBasedOpenApiAccessControlPolicy>>().Object);
             serviceCollection.AddRoleBasedOpenApiAccessControl(
-                this.resourcePrefix ?? "",
+                this.resourcePrefix ?? string.Empty,
                 this.allowOnlyIfAll);
             serviceCollection.AddSingleton(this.resourceAccessEvaluator.Object);
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
@@ -136,8 +136,8 @@ namespace Marain.Claims.Specs.Steps
                         },
                         Result = new Claims.PermissionResult
                         {
-                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException()
-                        }
+                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException(),
+                        },
                     });
             }
 
@@ -166,8 +166,8 @@ namespace Marain.Claims.Specs.Steps
                 },
                 Result = new Claims.PermissionResult
                 {
-                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException()
-                }
+                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException(),
+                },
             });
 
             taskSource.SetResult(this.evaluations);
