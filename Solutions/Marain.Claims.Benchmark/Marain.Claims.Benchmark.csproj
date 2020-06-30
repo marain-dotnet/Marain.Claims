@@ -21,4 +21,10 @@
     <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="local.settings.template.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
