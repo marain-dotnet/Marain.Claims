@@ -22,9 +22,13 @@
     /// Defines all of the benchmarks and global setup/teardown.
     /// </summary>
     /// <remarks>
-    /// You must grant the service principal (or yourself) permission to read secrets from the tenant's key vault.
+    /// In order to run the benchmarks, you must have a configured Marain client tenant that has been enrolled
+    /// with Marain Claims. The principal you use for running the benchmarks (either yourself or a service principal, 
+    /// set via the AzureServicesAuthConnectionString setting in local.settings.json), must have access to both the 
+    /// Claims API and the Key Vault containing the claims tenant configuration.
     /// </remarks>
     [JsonExporterAttribute.Full]
+    [MarkdownExporter]
     public class ClaimsBenchmarks
     {
         private readonly IClaimsService claimsService;
@@ -32,6 +36,9 @@
         private readonly ITenantCloudBlobContainerFactory tenantCloudBlobContainerFactory;
         private readonly IPropertyBagFactory propertyBagFactory;
         private readonly string clientTenantId;
+
+        private string iterationStr = "1";
+        private int iteration = 1;
 
         public ClaimsBenchmarks()
         {
@@ -47,10 +54,10 @@
                 .AddClaimsClient(sp => root.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
                 .AddSingleton(sp => new TenancyClientOptions { TenancyServiceBaseUri = new Uri(root["TenancyClient:TenancyServiceBaseUri"]), ResourceIdForMsiAuthentication = root["TenancyClient:ResourceIdForMsiAuthentication"] })
                 .AddTenancyClient()
-                .AddTenantCloudBlobContainerFactory(sp => new TenantCloudBlobContainerFactoryOptions 
-                    { 
-                        AzureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"] 
-                    })
+                .AddTenantCloudBlobContainerFactory(sp => new TenantCloudBlobContainerFactoryOptions
+                {
+                    AzureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"]
+                })
                 .AddAzureManagedIdentityBasedTokenSource(
                     sp => new AzureManagedIdentityTokenSourceOptions
                     {
@@ -83,12 +90,162 @@
             this.DeleteTestDataAsync().Wait();
         }
 
+        [IterationCleanup]
+        public void IterationCleanup()
+        {
+            this.iteration++;
+            this.iterationStr = this.iteration.ToString();
+        }
+
         /// <summary>
-        /// Benchmark: TODO
+        /// Benchmark: CreateClaimPermissions
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task B1() => Task.CompletedTask;
+        public Task CreateClaimPermissions() => this.claimsService.CreateClaimPermissionsAsync(
+            this.clientTenantId, 
+            new ClaimPermissionsWithPostExample
+            {
+                Id = $"benchmark{this.iterationStr}",
+                ResourceAccessRules = new List<ResourceAccessRule>
+                {
+                    new ResourceAccessRule("GET", new Resource($"benchmark{this.iterationStr}", $"benchmark{this.iterationStr}"), "allow")
+                }
+            }
+        );
+
+        /// <summary>
+        /// Benchmark: CreateResourceAccessRuleSet
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task CreateResourceAccessRuleSet() => this.claimsService.CreateResourceAccessRuleSetAsync(
+            this.clientTenantId, 
+            new ResourceAccessRuleSetWithPostExample
+            {
+                DisplayName = $"benchmark{this.iterationStr}",
+                Id = $"benchmark{this.iterationStr}",
+                Rules = new List<ResourceAccessRule>
+                {
+                    new ResourceAccessRule("GET", new Resource($"benchmark{this.iterationStr}", $"benchmark{this.iterationStr}"), "allow")
+                }
+            }
+        );
+
+        /// <summary>
+        /// Benchmark: GetClaimPermissions
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task GetClaimPermissions() => this.claimsService.GetClaimPermissionsAsync(this.iterationStr, this.clientTenantId);
+
+        /// <summary>
+        /// Benchmark: GetClaimPermissionsPermissionBatch
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task GetClaimPermissionsPermissionBatch() => this.claimsService.GetClaimPermissionsPermissionBatchAsync(
+            this.clientTenantId, 
+            new List<ClaimPermissionsBatchRequestItemWithPostExample> 
+            { 
+                new ClaimPermissionsBatchRequestItemWithPostExample("0", "0", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("1", "1", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("2", "2", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("3", "3", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("4", "4", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("5", "5", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("6", "6", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("7", "7", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("8", "8", "GET"),
+                new ClaimPermissionsBatchRequestItemWithPostExample("9", "9", "GET"),
+            }
+        );
+
+        /// <summary>
+        /// Benchmark: GetClaimPermissionsResourceAccessRules
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task GetClaimPermissionsResourceAccessRules() => this.claimsService.GetClaimPermissionsResourceAccessRulesAsync("0", this.clientTenantId);
+
+        /// <summary>
+        /// Benchmark: GetResourceAccessRuleSet
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task GetResourceAccessRuleSet() => this.claimsService.GetResourceAccessRuleSetAsync("0", this.clientTenantId);
+
+        /// <summary>
+        /// Benchmark: SetClaimPermissionsResourceAccessRules
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task SetClaimPermissionsResourceAccessRules() => this.claimsService.SetClaimPermissionsResourceAccessRulesAsync(
+            this.clientTenantId,
+            this.iterationStr, 
+            new List<ResourceAccessRule>
+            {
+                new ResourceAccessRule("GET", new Resource($"benchmark{this.iterationStr}", $"benchmark{this.iterationStr}"), "deny")
+            }
+        );
+
+        /// <summary>
+        /// Benchmark: SetClaimPermissionsResourceAccessRuleSets
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task SetClaimPermissionsResourceAccessRuleSets() => this.claimsService.SetClaimPermissionsResourceAccessRuleSetsAsync(
+            this.clientTenantId,
+            this.iterationStr,
+            new List<ResourceAccessRuleSetId>
+            {
+                new ResourceAccessRuleSetId(this.iterationStr)
+            }
+        );
+
+        /// <summary>
+        /// Benchmark: SetResourceAccessRuleSetResourceAccessRules
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task SetResourceAccessRuleSetResourceAccessRules() => this.claimsService.SetResourceAccessRuleSetResourceAccessRulesAsync(
+            this.clientTenantId,
+            this.iterationStr,
+            new List<ResourceAccessRule>
+            {
+                new ResourceAccessRule("GET", new Resource($"benchmark{this.iterationStr}", $"benchmark{this.iterationStr}"), "deny")
+            }
+        );
+
+        /// <summary>
+        /// Benchmark: UpdateClaimPermissionsResourceAccessRules
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task UpdateClaimPermissionsResourceAccessRules() => this.claimsService.UpdateClaimPermissionsResourceAccessRulesAsync(
+            this.clientTenantId,
+            this.iterationStr,
+            "add",
+            new List<ResourceAccessRule>
+            {
+                new ResourceAccessRule("POST", new Resource($"benchmark{this.iterationStr}", $"benchmark{this.iterationStr}"), "allow")
+            }
+        );
+
+        /// <summary>
+        /// Benchmark: UpdateResourceAccessRuleSetResourceAccessRules
+        /// </summary>
+        /// <returns>A task that completes when the benchmark has finished.</returns>
+        [Benchmark]
+        public Task UpdateResourceAccessRuleSetResourceAccessRules() => this.claimsService.UpdateResourceAccessRuleSetResourceAccessRulesAsync(
+            this.clientTenantId,
+            this.iterationStr,
+            "add",
+            new List<ResourceAccessRule>
+            {
+                new ResourceAccessRule("POST", new Resource($"benchmark{this.iterationStr}", $"benchmark{this.iterationStr}"), "allow")
+            }
+        );
 
         private async Task DeleteTestDataAsync()
         {
