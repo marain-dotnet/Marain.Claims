@@ -1,12 +1,10 @@
-﻿// <copyright file="ClaimsClientServiceCollectionExtensions.cs" company="Endjin">
-// Copyright (c) Endjin. All rights reserved.
+﻿// <copyright file="ClaimsClientServiceCollectionExtensions.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.Claims.Client
 {
     using System;
-    using System.Collections.Generic;
-    using System.Net;
     using System.Net.Http;
     using Cimpress.Extensions.Http.Caching.InMemory;
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
@@ -59,11 +57,13 @@ namespace Marain.Claims.Client
                 IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 return options.ResourceIdForMsiAuthentication == null
                 ? new UnauthenticatedClaimsService(options.BaseUri, handler)
-                : new ClaimsService(options.BaseUri, new TokenCredentials(
+                : new ClaimsService(
+                    options.BaseUri,
+                    new TokenCredentials(
                         new ServiceIdentityTokenProvider(
                             serviceIdentityTokenSource,
                             options.ResourceIdForMsiAuthentication)),
-                        handler);
+                    handler);
             });
         }
     }

@@ -1,5 +1,5 @@
-﻿// <copyright file="ClaimsClientWithCachingOptions.cs" company="Endjin">
-// Copyright (c) Endjin. All rights reserved.
+﻿// <copyright file="ClaimsClientWithCachingOptions.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
 namespace Marain.Claims.Client
@@ -9,7 +9,7 @@ namespace Marain.Claims.Client
     using System.Net;
 
     /// <summary>
-    /// Options for configuring <see cref="ClaimsService"/> via <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClientWithCaching(Microsoft.Extensions.DependencyInjection.IServiceCollection, System.Func{System.IServiceProvider, ClaimsClientWithCachingOptions})"/>
+    /// Options for configuring <see cref="ClaimsService"/> via <see cref="ClaimsClientServiceCollectionExtensions.AddClaimsClientWithCaching(Microsoft.Extensions.DependencyInjection.IServiceCollection, System.Func{System.IServiceProvider, ClaimsClientWithCachingOptions})"/>.
     /// </summary>
     public class ClaimsClientWithCachingOptions : ClaimsClientOptions
     {
