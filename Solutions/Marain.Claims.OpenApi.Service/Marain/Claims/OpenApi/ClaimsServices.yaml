@@ -19,14 +19,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClaimPermissionsWithPostExample'
+              $ref: '#/components/schemas/ClaimPermissions'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClaimPermissionsWithGetExample'
+                $ref: '#/components/schemas/ClaimPermissions'
         '403':
           description: Forbidden
   /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}:
@@ -45,7 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClaimPermissionsWithGetExample'
+                $ref: '#/components/schemas/ClaimPermissions'
         '403':
           description: Forbidden
         '404':
@@ -151,7 +151,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResourceAccessRuleSetsWithPostExample'
+              $ref: '#/components/schemas/ResourceAccessRuleSets'
       responses:
         '201':
           description: Successful operation
@@ -180,7 +180,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResourceAccessRuleSetsWithPostExample'
+              $ref: '#/components/schemas/ResourceAccessRuleSets'
       responses:
         '200':
           description: Successful operation
@@ -252,7 +252,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/ClaimPermissionsBatchRequestItemWithPostExample'
+                $ref: '#/components/schemas/ClaimPermissionsBatchRequestItem'
       responses:
         '200':
           description: Successful operation
@@ -261,7 +261,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ClaimPermissionsBatchResponseItemWithExample'
+                  $ref: '#/components/schemas/ClaimPermissionsBatchResponseItem'
         '400':
           description: Invalid request
           content:
@@ -286,14 +286,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResourceAccessRuleSetWithPostExample'
+              $ref: '#/components/schemas/ResourceAccessRuleSet'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResourceAccessRuleSetWithGetExample'
+                $ref: '#/components/schemas/ResourceAccessRuleSet'
         '400':
           description: Invalid request
           content:
@@ -321,7 +321,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResourceAccessRuleSetWithGetExample'
+                $ref: '#/components/schemas/ResourceAccessRuleSet'
         '403':
           description: Forbidden
         '404':
@@ -438,6 +438,7 @@ components:
       required:
         - name
         - displayName
+        
     ResourceAccessRule:
       type: object
       properties:
@@ -460,10 +461,12 @@ components:
           uri: page/home
           displayName: Home page
         permission: allow
+        
     ResourceAccessRules:
       type: array
       items:
         $ref: '#/components/schemas/ResourceAccessRule'
+        
     ResourceAccessRuleSet:
       type: object
       properties:
@@ -485,41 +488,13 @@ components:
       required:
         - id
         - contentType
-    ResourceAccessRuleSetId:
-      type: object
-      properties:
-        id:
-          type: string
-      required:
-        - id
-    ResourceAccessRuleSetWithGetExample:
-      allOf:
-        - $ref: '#/components/schemas/ResourceAccessRuleSet'
-      example:
-        id: admin
-        displayName: admin
-        rules:
-          - accessType: view
-            resource:
-              name: page/admin
-              displayName: Admin page
-            permission: allow
-    ResourceAccessRuleSetWithPostExample:
-      allOf:
-        - $ref: '#/components/schemas/ResourceAccessRuleSet'
-      required:
-        - displayName
-      example:
-        id: admin
-        displayName: admin
+        
     ResourceAccessRuleSets:
       type: array
       items:
         $ref: '#/components/schemas/ResourceAccessRuleSet'
-    ResourceAccessRuleSetsWithPostExample:
-      type: array
-      items:
-        $ref: '#/components/schemas/ResourceAccessRuleSetId'
+
+        
     ClaimPermissions:
       type: object
       properties:
@@ -537,32 +512,7 @@ components:
       required:
         - id
         - contentType
-    ClaimPermissionsWithGetExample:
-      allOf:
-        - $ref: '#/components/schemas/ClaimPermissions'
-        - example:
-            contentType: application/vnd.marain.claims.claimpermissions
-            id: Mike
-            resourceAccessRules:
-              - accessType: view
-                resource:
-                  name: page/home
-                  displayName: Home page
-                permission: allow
-            resourceAccessRuleSets:
-              id: 1
-              displayName: admin
-              rules:
-                - accessType: view
-                  resource:
-                    name: page/admin
-                    displayName: Admin page
-                  permission: allow
-    ClaimPermissionsWithPostExample:
-      allOf:
-        - $ref: '#/components/schemas/ClaimPermissions'
-        - example:
-            id: Mike
+        
     PermissionResult:
       type: object
       properties:
@@ -590,14 +540,10 @@ components:
           example: "application/vnd.marain.claims.claimpermissionsbatchrequestitem"
       required:
         - contentType
-
-    ClaimPermissionsBatchRequestItemWithPostExample:
-      allOf:
-        - $ref: '#/components/schemas/ClaimPermissionsBatchRequestItem'
-        - example:
-            claimPermissionsId: UserAdministrator
-            resourceUri: page/home
-            resourceAccessType: get
+      example:
+        claimPermissionsId: UserAdministrator
+        resourceUri: page/home
+        resourceAccessType: get
 
     ClaimPermissionsBatchResponseItem:
       allOf:
@@ -610,10 +556,6 @@ components:
               enum: 
                 - allow
                 - deny
-
-    ClaimPermissionsBatchResponseItemWithExample:
-      allOf:
-        - $ref: "#/components/schemas/ClaimPermissionsBatchResponseItem"
         - example:
             claimPermissionsId: UserAdministrator
             resourceUri: page/home
@@ -650,6 +592,7 @@ components:
               - type: object
               - type: string
       additionalProperties: true
+      
   parameters:
     tenant:
       name: tenantId
