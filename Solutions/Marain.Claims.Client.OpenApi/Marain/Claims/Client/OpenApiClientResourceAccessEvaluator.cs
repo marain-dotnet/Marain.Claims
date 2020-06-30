@@ -40,7 +40,7 @@ namespace Marain.Claims.Client
         {
             // Now translate the set of requested evaluations into a set of requests for the claims service. This is built
             // from the cartesian product of the roles and requests lists.
-            var batchRequest = submissions.Select(submission => new ClaimPermissionsBatchRequestItemWithPostExample
+            var batchRequest = submissions.Select(submission => new ClaimPermissionsBatchRequestItem
             {
                 ClaimPermissionsId = submission.ClaimPermissionsId,
                 ResourceAccessType = submission.ResourceAccessType,
@@ -65,12 +65,12 @@ namespace Marain.Claims.Client
                 batchResponse.Response.EnsureSuccessStatusCode();
             }
 
-            var batchResponseBody = (IList<ClaimPermissionsBatchResponseItemWithExample>)batchResponse.Body;
+            var batchResponseBody = (IList<ClaimPermissionsBatchResponseItem>)batchResponse.Body;
 
             // If any of the requests didn't return an OK result, we need to log a warning, as this is most likely due to
             // misconfiguration of the claims service (e.g. a missing ClaimPermissionsId). The caller may still be able to carry
             // on and evaluate the remaining results.
-            foreach (ClaimPermissionsBatchResponseItemWithExample currentEvaluatedPermission in batchResponseBody.Where(x => x.ResponseCode != (int)HttpStatusCode.OK))
+            foreach (ClaimPermissionsBatchResponseItem currentEvaluatedPermission in batchResponseBody.Where(x => x.ResponseCode != (int)HttpStatusCode.OK))
             {
                 this.logger.LogWarning(
                     "Claims service returned [{statusCode}] permission evaluation for claim permission ID [{claimPermissionID}] accessing resource [{resourceUri}], [{httpMethod}]",
