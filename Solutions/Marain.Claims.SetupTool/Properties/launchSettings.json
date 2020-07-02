@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Marain.Claims.SetupTool": {
+      "commandName": "Project",
+      "commandLineArgs": "bootstrap-claims-tenant -m 75b9261673c2714681f14c97bc0439fb60f47c70dd8f864394994aa7f91e4981 -u http://localhost:7076 -r ClaimsAdministrator -x ClaimsAdministrator"
+    }
+  }
+}
