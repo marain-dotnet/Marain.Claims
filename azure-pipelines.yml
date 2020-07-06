@@ -50,3 +50,4 @@ jobs:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
         replaceExistingArchive: true
+    netSdkVersion: '3.x'
