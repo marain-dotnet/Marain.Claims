@@ -1,25 +1,15 @@
-﻿namespace Marain.Claims.Benchmark
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using BenchmarkDotNet.Attributes;
-    using Corvus.Azure.Storage.Tenancy;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
-    using Corvus.Json;
-    using Corvus.Tenancy;
-    using Marain.Claims.Client;
-    using Marain.Claims.Client.Models;
-    using Marain.Tenancy.Client;
-    using Microsoft.Azure.Storage.Blob;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BenchmarkDotNet.Attributes;
+using Marain.Claims.Client;
+using Marain.Claims.Client.Models;
 
+namespace Marain.Claims.Benchmark
+{
     /// <summary>
-    /// Defines all of the benchmarks and global setup/teardown.
+    /// Defines the benchmarks for a simple claims scenario.
     /// </summary>
     /// <remarks>
     /// In order to run the benchmarks, you must have a configured Marain client tenant that has been enrolled
@@ -31,47 +21,10 @@
     /// </remarks>
     [JsonExporterAttribute.Full]
     [MarkdownExporter]
-    public class ClaimsBenchmarks
+    public class SimpleClaimsBenchmarks : ClaimsBenchmarksBase
     {
-        private readonly IClaimsService claimsService;
-        private readonly ITenancyService tenancyService;
-        private readonly ITenantCloudBlobContainerFactory tenantCloudBlobContainerFactory;
-        private readonly IPropertyBagFactory propertyBagFactory;
-        private readonly string clientTenantId;
-
         private string iterationStr = "1";
         private int iteration = 1;
-
-        public ClaimsBenchmarks()
-        {
-            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
-                       .AddEnvironmentVariables()
-                       .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
-
-            IConfiguration root = configurationBuilder.Build();
-
-            this.clientTenantId = root["ClientTenantId"];
-
-            ServiceProvider serviceProvider = new ServiceCollection()
-                .AddClaimsClient(sp => root.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
-                .AddSingleton(sp => new TenancyClientOptions { TenancyServiceBaseUri = new Uri(root["TenancyClient:TenancyServiceBaseUri"]), ResourceIdForMsiAuthentication = root["TenancyClient:ResourceIdForMsiAuthentication"] })
-                .AddTenancyClient()
-                .AddTenantCloudBlobContainerFactory(sp => new TenantCloudBlobContainerFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"]
-                })
-                .AddAzureManagedIdentityBasedTokenSource(
-                    sp => new AzureManagedIdentityTokenSourceOptions
-                    {
-                        AzureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"],
-                    })
-                .BuildServiceProvider();
-
-            this.claimsService = serviceProvider.GetRequiredService<IClaimsService>();
-            this.tenancyService = serviceProvider.GetRequiredService<ITenancyService>();
-            this.tenantCloudBlobContainerFactory = serviceProvider.GetRequiredService<ITenantCloudBlobContainerFactory>();
-            this.propertyBagFactory = serviceProvider.GetRequiredService<IPropertyBagFactory>();
-        }
 
         /// <summary>
         /// Invoked by BenchmarkDotNet before running all benchmarks.
@@ -104,8 +57,8 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task CreateClaimPermissions() => this.claimsService.CreateClaimPermissionsAsync(
-            this.clientTenantId, 
+        public Task CreateClaimPermissions() => this.ClaimsService.CreateClaimPermissionsAsync(
+            this.ClientTenantId, 
             new ClaimPermissions
             {
                 Id = $"benchmark{this.iterationStr}",
@@ -121,8 +74,8 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task CreateResourceAccessRuleSet() => this.claimsService.CreateResourceAccessRuleSetAsync(
-            this.clientTenantId, 
+        public Task CreateResourceAccessRuleSet() => this.ClaimsService.CreateResourceAccessRuleSetAsync(
+            this.ClientTenantId, 
             new ResourceAccessRuleSet
             {
                 DisplayName = $"benchmark{this.iterationStr}",
@@ -139,15 +92,15 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task GetClaimPermissions() => this.claimsService.GetClaimPermissionsAsync(this.iterationStr, this.clientTenantId);
+        public Task GetClaimPermissions() => this.ClaimsService.GetClaimPermissionsAsync(this.iterationStr, this.ClientTenantId);
 
         /// <summary>
         /// Benchmark: GetClaimPermissionsPermissionBatch
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task GetClaimPermissionsPermissionBatch() => this.claimsService.GetClaimPermissionsPermissionBatchAsync(
-            this.clientTenantId, 
+        public Task GetClaimPermissionsPermissionBatch() => this.ClaimsService.GetClaimPermissionsPermissionBatchAsync(
+            this.ClientTenantId, 
             new List<ClaimPermissionsBatchRequestItem> 
             { 
                 new ClaimPermissionsBatchRequestItem("0", "0", "GET"),
@@ -168,22 +121,22 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task GetClaimPermissionsResourceAccessRules() => this.claimsService.GetClaimPermissionsResourceAccessRulesAsync("0", this.clientTenantId);
+        public Task GetClaimPermissionsResourceAccessRules() => this.ClaimsService.GetClaimPermissionsResourceAccessRulesAsync("0", this.ClientTenantId);
 
         /// <summary>
         /// Benchmark: GetResourceAccessRuleSet
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task GetResourceAccessRuleSet() => this.claimsService.GetResourceAccessRuleSetAsync("0", this.clientTenantId);
+        public Task GetResourceAccessRuleSet() => this.ClaimsService.GetResourceAccessRuleSetAsync("0", this.ClientTenantId);
 
         /// <summary>
         /// Benchmark: SetClaimPermissionsResourceAccessRules
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task SetClaimPermissionsResourceAccessRules() => this.claimsService.SetClaimPermissionsResourceAccessRulesAsync(
-            this.clientTenantId,
+        public Task SetClaimPermissionsResourceAccessRules() => this.ClaimsService.SetClaimPermissionsResourceAccessRulesAsync(
+            this.ClientTenantId,
             this.iterationStr, 
             new List<ResourceAccessRule>
             {
@@ -196,8 +149,8 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task SetClaimPermissionsResourceAccessRuleSets() => this.claimsService.SetClaimPermissionsResourceAccessRuleSetsAsync(
-            this.clientTenantId,
+        public Task SetClaimPermissionsResourceAccessRuleSets() => this.ClaimsService.SetClaimPermissionsResourceAccessRuleSetsAsync(
+            this.ClientTenantId,
             this.iterationStr,
             new List<ResourceAccessRuleSet>
             {
@@ -210,8 +163,8 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task SetResourceAccessRuleSetResourceAccessRules() => this.claimsService.SetResourceAccessRuleSetResourceAccessRulesAsync(
-            this.clientTenantId,
+        public Task SetResourceAccessRuleSetResourceAccessRules() => this.ClaimsService.SetResourceAccessRuleSetResourceAccessRulesAsync(
+            this.ClientTenantId,
             this.iterationStr,
             new List<ResourceAccessRule>
             {
@@ -224,8 +177,8 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task UpdateClaimPermissionsResourceAccessRules() => this.claimsService.UpdateClaimPermissionsResourceAccessRulesAsync(
-            this.clientTenantId,
+        public Task UpdateClaimPermissionsResourceAccessRules() => this.ClaimsService.UpdateClaimPermissionsResourceAccessRulesAsync(
+            this.ClientTenantId,
             this.iterationStr,
             "add",
             new List<ResourceAccessRule>
@@ -239,8 +192,8 @@
         /// </summary>
         /// <returns>A task that completes when the benchmark has finished.</returns>
         [Benchmark]
-        public Task UpdateResourceAccessRuleSetResourceAccessRules() => this.claimsService.UpdateResourceAccessRuleSetResourceAccessRulesAsync(
-            this.clientTenantId,
+        public Task UpdateResourceAccessRuleSetResourceAccessRules() => this.ClaimsService.UpdateResourceAccessRuleSetResourceAccessRulesAsync(
+            this.ClientTenantId,
             this.iterationStr,
             "add",
             new List<ResourceAccessRule>
@@ -249,33 +202,9 @@
             }
         );
 
-        private async Task DeleteTestDataAsync()
+        protected override async Task SetupTestDataAsync()
         {
-            var response = (JObject)await this.tenancyService.GetTenantAsync(this.clientTenantId);
-
-            Tenancy.Client.Models.Tenant clientTenant = JsonConvert.DeserializeObject<Tenancy.Client.Models.Tenant>(response.ToString());
-
-            var tenant = new Tenant(clientTenant.Id, clientTenant.Name, this.propertyBagFactory.Create(clientTenant.Properties));
-
-            CloudBlobContainer claimPermissionsContainer = 
-                await this.tenantCloudBlobContainerFactory.GetBlobContainerForTenantAsync(tenant, new BlobStorageContainerDefinition("claimpermissions"));
-            CloudBlobContainer resourceAccessRuleSetsContainer = 
-                await this.tenantCloudBlobContainerFactory.GetBlobContainerForTenantAsync(tenant, new BlobStorageContainerDefinition("resourceaccessrulesets"));
-
-            foreach (CloudBlockBlob blob in claimPermissionsContainer.ListBlobs().OfType<CloudBlockBlob>())
-            {
-                await blob.DeleteAsync();
-            }
-
-            foreach (CloudBlockBlob blob in resourceAccessRuleSetsContainer.ListBlobs().OfType<CloudBlockBlob>())
-            {
-                await blob.DeleteAsync();
-            }
-        }
-
-        private async Task SetupTestDataAsync()
-        {
-            ProblemDetails initializeTenantResponse = await this.claimsService.InitializeTenantAsync(this.clientTenantId, new Body { AdministratorRoleClaimValue = "ClaimsAdministrator" });
+            ProblemDetails initializeTenantResponse = await this.ClaimsService.InitializeTenantAsync(this.ClientTenantId, new Body { AdministratorRoleClaimValue = "ClaimsAdministrator" });
 
             if (initializeTenantResponse != null && 
                 (initializeTenantResponse.Status < 200 || initializeTenantResponse.Status >= 300) && 
@@ -301,7 +230,7 @@
 
             foreach (ResourceAccessRuleSet ruleSet in ruleSets)
             {
-                object response = await this.claimsService.CreateResourceAccessRuleSetAsync(clientTenantId, ruleSet);
+                object response = await this.ClaimsService.CreateResourceAccessRuleSetAsync(ClientTenantId, ruleSet);
             }
 
             var claimPermissionsList =
@@ -324,7 +253,7 @@
 
             foreach (ClaimPermissions claimPermissions in claimPermissionsList)
             {
-                object response = await this.claimsService.CreateClaimPermissionsAsync(clientTenantId, claimPermissions);
+                object response = await this.ClaimsService.CreateClaimPermissionsAsync(ClientTenantId, claimPermissions);
             }
         }
     }

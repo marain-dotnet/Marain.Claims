@@ -50,7 +50,8 @@
                 config = config.With(Job.Default.With(new Argument[] { new MsBuildArgument($"/p:Version={version}") }));
             }
 
-            BenchmarkRunner.Run<ClaimsBenchmarks>(config);
+            BenchmarkRunner.Run<SimpleClaimsBenchmarks>(config);
+            BenchmarkRunner.Run<ComplexClaimsBenchmarks>(config);
         }
     }
 }
