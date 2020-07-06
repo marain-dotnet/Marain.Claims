@@ -67,7 +67,6 @@
                 new ClaimPermissionsBatchRequestItem("Six", "api/foo/123/freds", "POST"),
                 new ClaimPermissionsBatchRequestItem("Seven", "api/foo/123/freds", "POST"),
                 new ClaimPermissionsBatchRequestItem("Eight", "api/foo/123/freds", "POST"),
-                new ClaimPermissionsBatchRequestItem("Nine", "api/foo/123/freds", "POST"),
             }
         );
 
