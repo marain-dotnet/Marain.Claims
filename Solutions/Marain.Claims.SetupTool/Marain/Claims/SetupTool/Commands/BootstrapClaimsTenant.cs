@@ -110,7 +110,7 @@ namespace Marain.Claims.SetupTool.Commands
                 {
                     HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
                             this.MarainTenantId,
-                            new Body { AdministratorRoleClaimValue = this.AdminPrincipalObjectId })
+                            new Body { AdministratorPrincipalObjectId = this.AdminPrincipalObjectId })
                         .ConfigureAwait(false);
 
                     if (result.Response.IsSuccessStatusCode)

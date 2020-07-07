@@ -24,6 +24,8 @@ namespace Marain.Claims.Specs.Steps
     [Binding]
     public class OpenApiAccessControlPolicySteps
     {
+        private readonly FeatureContext featureContext;
+
         private ClaimsPrincipal claimsPrincipal;
         private string tenantId;
         private string resourcePrefix;
@@ -32,7 +34,6 @@ namespace Marain.Claims.Specs.Steps
         private List<(ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource)> evaluateCalls;
         private List<ResourceAccessEvaluation> evaluations;
         private Task<IDictionary<AccessCheckOperationDescriptor, AccessControlPolicyResult>> policyResultTask;
-        private readonly FeatureContext featureContext;
 
         public OpenApiAccessControlPolicySteps(FeatureContext featureContext)
         {
@@ -119,14 +120,14 @@ namespace Marain.Claims.Specs.Steps
             if (this.featureContext.FeatureInfo.Tags.Contains("rolebased"))
             {
                 serviceCollection.AddRoleBasedOpenApiAccessControl(
-                   this.resourcePrefix ?? "",
+                   this.resourcePrefix ?? string.Empty,
                    this.allowOnlyIfAll);
             }
 
             if (this.featureContext.FeatureInfo.Tags.Contains("identitybased"))
             {
                 serviceCollection.AddIdentityBasedOpenApiAccessControl(
-                   this.resourcePrefix ?? "",
+                   this.resourcePrefix ?? string.Empty,
                    this.allowOnlyIfAll);
             }
 
@@ -167,8 +168,8 @@ namespace Marain.Claims.Specs.Steps
                         },
                         Result = new Claims.PermissionResult
                         {
-                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException()
-                        }
+                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException(),
+                        },
                     });
             }
 
@@ -197,8 +198,8 @@ namespace Marain.Claims.Specs.Steps
                 },
                 Result = new Claims.PermissionResult
                 {
-                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException()
-                }
+                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException(),
+                },
             });
 
             taskSource.SetResult(this.evaluations);

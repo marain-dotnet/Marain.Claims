@@ -624,9 +624,20 @@ namespace Marain.Claims.OpenApi
                 ruleSet = await ruleSetStore.PersistAsync(ruleSet).ConfigureAwait(false);
 
                 var rulesetByIdOnlyForClaimPermissionsPersistence = new ResourceAccessRuleSet { Id = ruleSet.Id };
+
+                string administratorPrincipalObjectId;
+                if (body.TryGetValue("administratorPrincipalObjectId", out JToken administratorPrincipalObjectIdJToken))
+                {
+                    administratorPrincipalObjectId = administratorPrincipalObjectIdJToken.Value<string>();
+                }
+                else
+                {
+                    administratorPrincipalObjectId = context.CurrentPrincipal.FindFirst("oid").Value;
+                }
+
                 var permissions = new ClaimPermissions
                 {
-                    Id = body["administratorPrincipalObjectId"].Value<string>(),
+                    Id = administratorPrincipalObjectId,
                     ResourceAccessRuleSets = new[] { rulesetByIdOnlyForClaimPermissionsPersistence },
                 };
                 await permissionsStore.PersistAsync(permissions).ConfigureAwait(false);
