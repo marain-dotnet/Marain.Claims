@@ -406,12 +406,12 @@ paths:
           application/json:
             schema:
               type: object
-              required: [administratorRoleClaimValue]
+              required: [administratorPrincipalObjectId]
               additionalProperties: false
               properties:
-                administratorRoleClaimValue:
+                administratorPrincipalObjectId:
                   type: string
-                  description: "The value which, if present in a roles claim, will grant a principal full access to the Claims service API"
+                  description: "The object of the principal of which to grant full access to the Claims service API"
       responses:
         '200':
           description: Successful operation

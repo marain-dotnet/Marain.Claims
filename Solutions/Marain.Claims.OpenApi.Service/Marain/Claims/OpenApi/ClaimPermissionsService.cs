@@ -626,7 +626,7 @@ namespace Marain.Claims.OpenApi
                 var rulesetByIdOnlyForClaimPermissionsPersistence = new ResourceAccessRuleSet { Id = ruleSet.Id };
                 var permissions = new ClaimPermissions
                 {
-                    Id = body["administratorRoleClaimValue"].Value<string>(),
+                    Id = body["administratorPrincipalObjectId"].Value<string>(),
                     ResourceAccessRuleSets = new[] { rulesetByIdOnlyForClaimPermissionsPersistence },
                 };
                 await permissionsStore.PersistAsync(permissions).ConfigureAwait(false);

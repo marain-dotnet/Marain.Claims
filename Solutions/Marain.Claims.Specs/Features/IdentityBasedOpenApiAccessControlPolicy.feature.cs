@@ -20,26 +20,26 @@ namespace Marain.Claims.Specs.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("RoleBasedOpenApiAccessControlPolicy")]
-    [NUnit.Framework.CategoryAttribute("rolebased")]
-    public partial class RoleBasedOpenApiAccessControlPolicyFeature
+    [NUnit.Framework.DescriptionAttribute("IdentityBasedOpenApiAccessControlPolicy")]
+    [NUnit.Framework.CategoryAttribute("identitybased")]
+    public partial class IdentityBasedOpenApiAccessControlPolicyFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = new string[] {
-                "rolebased"};
+                "identitybased"};
         
-#line 1 "RoleBasedOpenApiAccessControlPolicy.feature"
+#line 1 "IdentityBasedOpenApiAccessControlPolicy.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "RoleBasedOpenApiAccessControlPolicy", "    In order to secure an OpenApi service\r\n    As a developer\r\n    I want to appl" +
-                    "y application role-based security", ProgrammingLanguage.CSharp, new string[] {
-                        "rolebased"});
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "IdentityBasedOpenApiAccessControlPolicy", "    In order to secure an OpenApi service\r\n    As a developer\r\n    I want to appl" +
+                    "y identity-based security", ProgrammingLanguage.CSharp, new string[] {
+                        "identitybased"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -120,11 +120,11 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("The client belongs to no roles")]
-        public virtual void TheClientBelongsToNoRoles()
+        [NUnit.Framework.DescriptionAttribute("The client has no identities")]
+        public virtual void TheClientHasNoIdentities()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client belongs to no roles", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client has no identities", null, ((string[])(null)));
 #line 13
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -146,7 +146,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 14
-    testRunner.Given("I have a ClaimsPrincipal with 0 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 0 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 15
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -162,16 +162,16 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("The client belongs to one role")]
+        [NUnit.Framework.DescriptionAttribute("The client belongs to one identity")]
         [NUnit.Framework.TestCaseAttribute("", "/foo/bar", "GET", "foo/bar", null)]
         [NUnit.Framework.TestCaseAttribute("", "/baz/ick", "GET", "baz/ick", null)]
         [NUnit.Framework.TestCaseAttribute("", "/foo/bar", "PUT", "foo/bar", null)]
         [NUnit.Framework.TestCaseAttribute("testPrefix/", "/foo/bar", "GET", "testPrefix/foo/bar", null)]
         [NUnit.Framework.TestCaseAttribute("testPrefix/", "/foo/bar", "PUT", "testPrefix/foo/bar", null)]
-        public virtual void TheClientBelongsToOneRole(string resourcePrefix, string path, string method, string resourceUri, string[] exampleTags)
+        public virtual void TheClientBelongsToOneIdentity(string resourcePrefix, string path, string method, string resourceUri, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client belongs to one role", null, exampleTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client belongs to one identity", null, exampleTags);
 #line 19
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -193,7 +193,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 20
-    testRunner.Given("I have a ClaimsPrincipal with 1 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 1 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 21
     testRunner.And(string.Format("the policy has a resource prefix of \'{0}\'", resourcePrefix), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -221,11 +221,11 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("The client\'s only role grants it permission")]
-        public virtual void TheClientsOnlyRoleGrantsItPermission()
+        [NUnit.Framework.DescriptionAttribute("The client\'s only identity grants it permission")]
+        public virtual void TheClientsOnlyIdentityGrantsItPermission()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client\'s only role grants it permission", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client\'s only identity grants it permission", null, ((string[])(null)));
 #line 36
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -247,7 +247,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 37
-    testRunner.Given("I have a ClaimsPrincipal with 1 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 1 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 38
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -263,11 +263,11 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("The client\'s only role denies it permission")]
-        public virtual void TheClientsOnlyRoleDeniesItPermission()
+        [NUnit.Framework.DescriptionAttribute("The client\'s only identity denies it permission")]
+        public virtual void TheClientsOnlyIdentityDeniesItPermission()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client\'s only role denies it permission", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client\'s only identity denies it permission", null, ((string[])(null)));
 #line 42
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -289,7 +289,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 43
-    testRunner.Given("I have a ClaimsPrincipal with 1 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 1 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 44
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -305,11 +305,11 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("The claims service doesn\'t recognize the role")]
-        public virtual void TheClaimsServiceDoesntRecognizeTheRole()
+        [NUnit.Framework.DescriptionAttribute("The claims service doesn\'t recognize the identity")]
+        public virtual void TheClaimsServiceDoesntRecognizeTheIdentity()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The claims service doesn\'t recognize the role", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The claims service doesn\'t recognize the identity", null, ((string[])(null)));
 #line 48
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -331,7 +331,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 49
-    testRunner.Given("I have a ClaimsPrincipal with 1 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 1 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 50
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -347,11 +347,11 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("The client belongs to three roles")]
-        public virtual void TheClientBelongsToThreeRoles()
+        [NUnit.Framework.DescriptionAttribute("The client belongs to three identities")]
+        public virtual void TheClientBelongsToThreeIdentities()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client belongs to three roles", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The client belongs to three identities", null, ((string[])(null)));
 #line 54
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -373,7 +373,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 55
-    testRunner.Given("I have a ClaimsPrincipal with 3 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 3 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 56
     testRunner.When("I invoke the policy with a path of \'foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -416,11 +416,11 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("All of the client\'s roles grant it permission")]
-        public virtual void AllOfTheClientsRolesGrantItPermission()
+        [NUnit.Framework.DescriptionAttribute("All of the client\'s identities grant it permission")]
+        public virtual void AllOfTheClientsIdentitiesGrantItPermission()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("All of the client\'s roles grant it permission", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("All of the client\'s identities grant it permission", null, ((string[])(null)));
 #line 67
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -442,25 +442,25 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 68
-    testRunner.Given("I have a ClaimsPrincipal with 3 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 3 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 69
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                             "ClaimPermissionsId",
                             "Result"});
-                table14.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "0",
                             "allow"});
-                table14.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "1",
                             "allow"});
-                table14.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "2",
                             "allow"});
 #line 70
- testRunner.And("the evaluator returns the following results", ((string)(null)), table14, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table8, "And ");
 #line hidden
 #line 75
     testRunner.Then("the result should grant access", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -470,11 +470,11 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("All of the client\'s roles deny it permission")]
-        public virtual void AllOfTheClientsRolesDenyItPermission()
+        [NUnit.Framework.DescriptionAttribute("All of the client\'s identities deny it permission")]
+        public virtual void AllOfTheClientsIdentitiesDenyItPermission()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("All of the client\'s roles deny it permission", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("All of the client\'s identities deny it permission", null, ((string[])(null)));
 #line 77
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -496,25 +496,25 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 78
-    testRunner.Given("I have a ClaimsPrincipal with 3 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 3 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 79
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                             "ClaimPermissionsId",
                             "Result"});
-                table15.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "0",
                             "deny"});
-                table15.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "1",
                             "deny"});
-                table15.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "2",
                             "deny"});
 #line 80
- testRunner.And("the evaluator returns the following results", ((string)(null)), table15, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table9, "And ");
 #line hidden
 #line 85
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -524,11 +524,13 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("One client role grants permission and the other two deny it in Allow If Any mode")]
-        public virtual void OneClientRoleGrantsPermissionAndTheOtherTwoDenyItInAllowIfAnyMode()
+        [NUnit.Framework.DescriptionAttribute("One client identity grants permission and the other two deny it in Allow If Any m" +
+            "ode")]
+        public virtual void OneClientIdentityGrantsPermissionAndTheOtherTwoDenyItInAllowIfAnyMode()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("One client role grants permission and the other two deny it in Allow If Any mode", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("One client identity grants permission and the other two deny it in Allow If Any m" +
+                    "ode", null, ((string[])(null)));
 #line 87
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -550,25 +552,25 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 88
-    testRunner.Given("I have a ClaimsPrincipal with 3 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 3 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 89
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                             "ClaimPermissionsId",
                             "Result"});
-                table16.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "0",
                             "allow"});
-                table16.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "1",
                             "deny"});
-                table16.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "2",
                             "deny"});
 #line 90
- testRunner.And("the evaluator returns the following results", ((string)(null)), table16, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table10, "And ");
 #line hidden
 #line 95
     testRunner.Then("the result should grant access", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -578,11 +580,13 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Two client roles grant permission and the other denies it in Allow If Any mode")]
-        public virtual void TwoClientRolesGrantPermissionAndTheOtherDeniesItInAllowIfAnyMode()
+        [NUnit.Framework.DescriptionAttribute("Two client identities grant permission and the other denies it in Allow If Any mo" +
+            "de")]
+        public virtual void TwoClientIdentitiesGrantPermissionAndTheOtherDeniesItInAllowIfAnyMode()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Two client roles grant permission and the other denies it in Allow If Any mode", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Two client identities grant permission and the other denies it in Allow If Any mo" +
+                    "de", null, ((string[])(null)));
 #line 97
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -604,25 +608,25 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 98
-    testRunner.Given("I have a ClaimsPrincipal with 3 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 3 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 99
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                             "ClaimPermissionsId",
                             "Result"});
-                table17.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "0",
                             "allow"});
-                table17.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "1",
                             "allow"});
-                table17.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "2",
                             "deny"});
 #line 100
- testRunner.And("the evaluator returns the following results", ((string)(null)), table17, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table11, "And ");
 #line hidden
 #line 105
     testRunner.Then("the result should grant access", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -632,13 +636,13 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("One client role grants permission and the other two deny it in All Only If All mo" +
-            "de")]
-        public virtual void OneClientRoleGrantsPermissionAndTheOtherTwoDenyItInAllOnlyIfAllMode()
+        [NUnit.Framework.DescriptionAttribute("One client identity grants permission and the other two deny it in All Only If Al" +
+            "l mode")]
+        public virtual void OneClientIdentityGrantsPermissionAndTheOtherTwoDenyItInAllOnlyIfAllMode()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("One client role grants permission and the other two deny it in All Only If All mo" +
-                    "de", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("One client identity grants permission and the other two deny it in All Only If Al" +
+                    "l mode", null, ((string[])(null)));
 #line 107
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -660,7 +664,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 108
-    testRunner.Given("I have a ClaimsPrincipal with 3 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 3 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 109
     testRunner.And("the policy is configured in allow only if all mode", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -668,20 +672,20 @@ this.ScenarioInitialize(scenarioInfo);
 #line 110
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "ClaimPermissionsId",
                             "Result"});
-                table18.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "0",
                             "allow"});
-                table18.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "1",
                             "deny"});
-                table18.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "2",
                             "deny"});
 #line 111
- testRunner.And("the evaluator returns the following results", ((string)(null)), table18, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table12, "And ");
 #line hidden
 #line 116
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -691,13 +695,13 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Two client roles grant permission and the other denies it in All Only If All mode" +
-            "")]
-        public virtual void TwoClientRolesGrantPermissionAndTheOtherDeniesItInAllOnlyIfAllMode()
+        [NUnit.Framework.DescriptionAttribute("Two client identities grant permission and the other denies it in All Only If All" +
+            " mode")]
+        public virtual void TwoClientIdentitiesGrantPermissionAndTheOtherDeniesItInAllOnlyIfAllMode()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Two client roles grant permission and the other denies it in All Only If All mode" +
-                    "", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Two client identities grant permission and the other denies it in All Only If All" +
+                    " mode", null, ((string[])(null)));
 #line 118
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -719,7 +723,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 119
-    testRunner.Given("I have a ClaimsPrincipal with 3 roles claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("I have a ClaimsPrincipal with 3 oid claims", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 120
     testRunner.And("the policy is configured in allow only if all mode", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -727,20 +731,20 @@ this.ScenarioInitialize(scenarioInfo);
 #line 121
     testRunner.When("I invoke the policy with a path of \'/foo/bar\' and a method of \'GET\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "ClaimPermissionsId",
                             "Result"});
-                table19.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "0",
                             "allow"});
-                table19.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "1",
                             "allow"});
-                table19.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "2",
                             "deny"});
 #line 122
- testRunner.And("the evaluator returns the following results", ((string)(null)), table19, "And ");
+ testRunner.And("the evaluator returns the following results", ((string)(null)), table13, "And ");
 #line hidden
 #line 127
     testRunner.Then("the result type should be \'NotAllowed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

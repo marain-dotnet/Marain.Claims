@@ -34,7 +34,7 @@ namespace Marain.Claims.SetupTool.Commands
         /// <summary>
         /// Gets or sets the claims app ID.
         /// </summary>
-        [Option(Description = "The name of the Application Role in the Claims Service that is to be granted administrative control over the Claims Service", LongName = "claimsAppId", ShortName = "c")]
+        [Option(Description = "The Azure AD app ID for the claims service.", LongName = "claimsAppId", ShortName = "c")]
         public string ClaimsAppId { get; set; }
 
         /// <summary>
@@ -44,10 +44,10 @@ namespace Marain.Claims.SetupTool.Commands
         public string ClaimsServiceUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the admin role name.
+        /// Gets or sets the admin principal object ID.
         /// </summary>
-        [Option(Description = "The name of the Application Role in the Claims Service that is to be granted administrative control over the Claims Service", LongName = "adminRoleName", ShortName = "r")]
-        public string AdminRoleName { get; set; } = "ClaimsAdministrator";
+        [Option(Description = "The object ID of the principal that is to be granted administrative control over the Claims Service. If left blank, will use the object ID of the principal making the initialistion request.", LongName = "adminPrincipalObjectId", ShortName = "a")]
+        public string AdminPrincipalObjectId { get; set; }
 
         /// <summary>
         /// Gets or sets the key vault name.
@@ -110,7 +110,7 @@ namespace Marain.Claims.SetupTool.Commands
                 {
                     HttpOperationResponse<ProblemDetails> result = await claimsClient.InitializeTenantWithHttpMessagesAsync(
                             this.MarainTenantId,
-                            new Body { AdministratorRoleClaimValue = this.AdminRoleName })
+                            new Body { AdministratorRoleClaimValue = this.AdminPrincipalObjectId })
                         .ConfigureAwait(false);
 
                     if (result.Response.IsSuccessStatusCode)

@@ -96,7 +96,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     ClaimPermissionsService.InitializeTenantOperationId,
                     Menes.Internal.SwaggerService.SwaggerOperationId,
             };
-            services.AddRoleBasedOpenApiAccessControlWithPreemptiveExemptions(
+            services.AddIdentityBasedOpenApiAccessControlWithPreemptiveExemptions(
                 new ExemptOperationIdsAccessPolicy(openOperationIds));
 
             services.RegisterCoreClaimsContentTypes();
