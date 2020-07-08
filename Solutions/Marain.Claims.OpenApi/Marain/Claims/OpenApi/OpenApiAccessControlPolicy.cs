@@ -101,7 +101,7 @@ namespace Marain.Claims.OpenApi
         {
             // If current principal isn't authenticated, then build and return a dictionary containing a
             // NotAuthenticated response for each operation descriptor.
-            if (context.CurrentPrincipal.Identity?.IsAuthenticated != true)
+            if (context.CurrentPrincipal?.Identity?.IsAuthenticated != true)
             {
                 return requests.ToDictionary(x => x, _ => new AccessControlPolicyResult(AccessControlPolicyResultType.NotAuthenticated));
             }
