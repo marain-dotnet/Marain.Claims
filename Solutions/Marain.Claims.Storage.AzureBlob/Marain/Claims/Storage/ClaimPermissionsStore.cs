@@ -113,7 +113,7 @@ namespace Marain.Claims.Storage
                 })).ToList();
 
                 ClaimPermissions[] claimPermissions = await Task.WhenAll(taskBatch).ConfigureAwait(false);
-                result.Permissions.AddRange(claimPermissions);
+                result.Permissions.AddRange(claimPermissions.Where(p => p != null));
             }
 
             IEnumerable<ClaimPermissions> updatedPermissions = await this.UpdateRuleSetsAsync(result.Permissions, maxParallelism).ConfigureAwait(false);
@@ -170,7 +170,6 @@ namespace Marain.Claims.Storage
             ResourceAccessRuleSetCollection updatedRuleSets =
                 await this.resourceAccessRuleSetStore.GetBatchAsync(
                     permissionsSets
-                        .Where(p => p != null)
                         .SelectMany(p => p.ResourceAccessRuleSets.Select(r => new IdWithETag(r.Id, r.ETag)))
                         .Distinct()).ConfigureAwait(false);
 
