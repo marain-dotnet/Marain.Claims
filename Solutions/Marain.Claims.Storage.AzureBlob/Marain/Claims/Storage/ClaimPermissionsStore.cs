@@ -106,9 +106,9 @@ namespace Marain.Claims.Storage
                     {
                         return await this.DownloadPermissionsAsync(id).ConfigureAwait(false);
                     }
-                    catch (Exception ex)
+                    catch (StorageException)
                     {
-                        throw new ClaimPermissionsNotFoundException(id, ex);
+                        return null;
                     }
                 })).ToList();
 
