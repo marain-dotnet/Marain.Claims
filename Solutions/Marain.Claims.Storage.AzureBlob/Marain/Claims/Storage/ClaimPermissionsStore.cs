@@ -167,7 +167,13 @@ namespace Marain.Claims.Storage
 
         private async Task<IEnumerable<ClaimPermissions>> UpdateRuleSetsAsync(IEnumerable<ClaimPermissions> permissionsSets, int maxParallelism)
         {
-            ResourceAccessRuleSetCollection updatedRuleSets = await this.resourceAccessRuleSetStore.GetBatchAsync(permissionsSets.SelectMany(p => p.ResourceAccessRuleSets.Select(r => new IdWithETag(r.Id, r.ETag))).Distinct()).ConfigureAwait(false);
+            ResourceAccessRuleSetCollection updatedRuleSets =
+                await this.resourceAccessRuleSetStore.GetBatchAsync(
+                    permissionsSets
+                        .Where(p => p != null)
+                        .SelectMany(p => p.ResourceAccessRuleSets.Select(r => new IdWithETag(r.Id, r.ETag)))
+                        .Distinct()).ConfigureAwait(false);
+
             if (updatedRuleSets.RuleSets.Any())
             {
                 IList<ClaimPermissions> results = new List<ClaimPermissions>();
