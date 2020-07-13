@@ -69,17 +69,4 @@
     <EmbeddedResource Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Features\IdentityBasedOpenApiAccessControlPolicy.feature.cs">
-      <DependentUpon>IdentityBasedOpenApiAccessControlPolicy.feature</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <SpecFlowFeatureFiles Update="Features\IdentityBasedOpenApiAccessControlPolicy.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </SpecFlowFeatureFiles>
-  </ItemGroup>
-
 </Project>
