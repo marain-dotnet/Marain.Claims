@@ -113,14 +113,14 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.Given("the tenant is uninitialised", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 12
-    testRunner.When("I initialise the tenant with the role id \'adminrole\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("I initialise the tenant with the object id \'oid1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 13
     testRunner.Then("the tenant is initialised", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 14
-    testRunner.And("the service creates a claims permission with id \'adminrole\' with empty resourceAc" +
-                        "cessRules and a single resourceAccessRuleSet \'marainClaimsAdministrator\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("the service creates a claims permission with id \'oid1\' with empty resourceAccessR" +
+                        "ules and a single resourceAccessRuleSet \'marainClaimsAdministrator\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 15
     testRunner.And("the service creates an access rule set with id \'marainClaimsAdministrator\' with d" +
@@ -211,98 +211,96 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.Given("the tenant is uninitialised", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 30
-    testRunner.When("I initialise the tenant with the role id \'adminrole\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("I initialise the tenant with the object id \'oid1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 31
     testRunner.Then("the tenant is initialised", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 35
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to create a claim permiss" +
-                        "ions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to create a claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 36
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to create a claim perm" +
-                        "issions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to create a claim permissi" +
+                        "ons", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 40
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to read a claim permissio" +
-                        "ns", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to read a claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 41
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to read a claim permis" +
-                        "sions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to read a claim permission" +
+                        "s", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 45
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to read all effective rul" +
-                        "es for a claims permission", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to read all effective rules for a" +
+                        " claims permission", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 46
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to read all effective " +
-                        "rules for a claims permission", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to read all effective rule" +
+                        "s for a claims permission", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 50
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to add a rule to a claim " +
-                        "permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to add a rule to a claim permissi" +
+                        "ons", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 51
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to add a rule to a cla" +
-                        "im permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to add a rule to a claim p" +
+                        "ermissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 55
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to set all rules in a cla" +
-                        "im permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to set all rules in a claim permi" +
+                        "ssions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 56
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to set all rules in a " +
-                        "claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to set all rules in a clai" +
+                        "m permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 60
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to add a resource access " +
-                        "rule set to the claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to add a resource access rule set" +
+                        " to the claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 61
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to add a resource acce" +
-                        "ss rule set to the claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to add a resource access r" +
+                        "ule set to the claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 65
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to set all resource acces" +
-                        "s rule sets in a claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to set all resource access rule s" +
+                        "ets in a claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 66
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to set all resource ac" +
-                        "cess rule sets in a claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to set all resource access" +
+                        " rule sets in a claim permissions", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 70
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to create a resource acce" +
-                        "ss rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to create a resource access rule " +
+                        "set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 71
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to create a resource a" +
-                        "ccess rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to create a resource acces" +
+                        "s rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 75
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to read a resource access" +
-                        " rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to read a resource access rule se" +
+                        "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 76
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to read a resource acc" +
-                        "ess rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to read a resource access " +
+                        "rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 80
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to add an access rule to " +
-                        "the resource access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to add an access rule to the reso" +
+                        "urce access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 81
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to add an access rule " +
-                        "to the resource access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to add an access rule to t" +
+                        "he resource access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 85
-    testRunner.And("a principal in the \'adminrole\' role gets \'Allow\' trying to set all access rules i" +
-                        "n a resource access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'oid1\' gets \'Allow\' trying to set all access rules in a reso" +
+                        "urce access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 86
-    testRunner.And("a principal in the \'someotherrole\' role gets \'Deny\' trying to set all access rule" +
-                        "s in a resource access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("a principal with oid \'someotheroid\' gets \'Deny\' trying to set all access rules in" +
+                        " a resource access rule set", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -341,7 +339,7 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.Given("the tenant is initialised", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 91
-    testRunner.When("I initialise the tenant with the role id \'somedifferentrole\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("I initialise the tenant with the object id \'somedifferentrole\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 92
     testRunner.Then("I am told that the tenant is already is initialised", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

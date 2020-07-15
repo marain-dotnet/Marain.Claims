@@ -1,8 +1,8 @@
-﻿@rolebased
-Feature: RoleBasedOpenApiAccessControlPolicy
+﻿@identitybased
+Feature: IdentityBasedOpenApiAccessControlPolicy
     In order to secure an OpenApi service
     As a developer
-    I want to apply application role-based security
+    I want to apply identity-based security
 
 Scenario: The client is unauthenticated
     Given I am not authenticated
@@ -10,14 +10,14 @@ Scenario: The client is unauthenticated
     Then the result type should be 'NotAuthenticated'
     And the policy should not have attempted to use the claims service
 
-Scenario: The client belongs to no roles
-    Given I have a ClaimsPrincipal with 0 roles claims
+Scenario: The client has no identities
+    Given I have a ClaimsPrincipal with 0 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
     Then the result type should be 'NotAllowed'
     And the policy should not have attempted to use the claims service
 
-Scenario Outline: The client belongs to one role
-    Given I have a ClaimsPrincipal with 1 roles claims
+Scenario Outline: The client belongs to one identity
+    Given I have a ClaimsPrincipal with 1 oid claims
     And the policy has a resource prefix of '<resourcePrefix>'
     When I invoke the policy with a path of '<path>' and a method of '<method>'
     Then the policy should pass the claim permissions id 0 to the claims service
@@ -33,26 +33,26 @@ Scenario Outline: The client belongs to one role
     | testPrefix/    | /foo/bar | GET    | testPrefix/foo/bar |
     | testPrefix/    | /foo/bar | PUT    | testPrefix/foo/bar |
 
-Scenario: The client's only role grants it permission
-    Given I have a ClaimsPrincipal with 1 roles claims
+Scenario: The client's only identity grants it permission
+    Given I have a ClaimsPrincipal with 1 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
     And the evaluator returns 'Allow' for claim permissions ID 0
     Then the result should grant access
 
-Scenario: The client's only role denies it permission
-    Given I have a ClaimsPrincipal with 1 roles claims
+Scenario: The client's only identity denies it permission
+    Given I have a ClaimsPrincipal with 1 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
     And the evaluator returns 'Deny' for claim permissions ID 0
     Then the result type should be 'NotAllowed'
 
-Scenario: The claims service doesn't recognize the role
-    Given I have a ClaimsPrincipal with 1 roles claims
+Scenario: The claims service doesn't recognize the identity
+    Given I have a ClaimsPrincipal with 1 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
     And the evaluator does not find the claim permissions ID 0
     Then the result type should be 'NotAllowed'
 
-Scenario: The client belongs to three roles
-    Given I have a ClaimsPrincipal with 3 roles claims
+Scenario: The client belongs to three identities
+    Given I have a ClaimsPrincipal with 3 oid claims
     When I invoke the policy with a path of 'foo/bar' and a method of 'GET'
     Then the policy should pass the claim permissions id 0 to the claims service
     And the policy should pass a resource URI of 'foo/bar' to the claims service in call for claims permissions ID 0
@@ -64,8 +64,8 @@ Scenario: The client belongs to three roles
     And the policy should pass a resource URI of 'foo/bar' to the claims service in call for claims permissions ID 2
     And the policy should pass an access type of 'GET' to the claims service in call for claims permissions ID 2
 
-Scenario: All of the client's roles grant it permission
-    Given I have a ClaimsPrincipal with 3 roles claims
+Scenario: All of the client's identities grant it permission
+    Given I have a ClaimsPrincipal with 3 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| ClaimPermissionsId | Result |
@@ -74,8 +74,8 @@ Scenario: All of the client's roles grant it permission
 	| 2                  | allow  |
     Then the result should grant access
 
-Scenario: All of the client's roles deny it permission
-    Given I have a ClaimsPrincipal with 3 roles claims
+Scenario: All of the client's identities deny it permission
+    Given I have a ClaimsPrincipal with 3 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| ClaimPermissionsId | Result |
@@ -84,8 +84,8 @@ Scenario: All of the client's roles deny it permission
 	| 2                  | deny   |
     Then the result type should be 'NotAllowed'
 
-Scenario: One client role grants permission and the other two deny it in Allow If Any mode
-    Given I have a ClaimsPrincipal with 3 roles claims
+Scenario: One client identity grants permission and the other two deny it in Allow If Any mode
+    Given I have a ClaimsPrincipal with 3 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| ClaimPermissionsId | Result |
@@ -94,8 +94,8 @@ Scenario: One client role grants permission and the other two deny it in Allow I
 	| 2                  | deny   |
     Then the result should grant access
 
-Scenario: Two client roles grant permission and the other denies it in Allow If Any mode
-    Given I have a ClaimsPrincipal with 3 roles claims
+Scenario: Two client identities grant permission and the other denies it in Allow If Any mode
+    Given I have a ClaimsPrincipal with 3 oid claims
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
 	| ClaimPermissionsId | Result |
@@ -104,8 +104,8 @@ Scenario: Two client roles grant permission and the other denies it in Allow If 
 	| 2                  | deny   |
     Then the result should grant access
 
-Scenario: One client role grants permission and the other two deny it in All Only If All mode
-    Given I have a ClaimsPrincipal with 3 roles claims
+Scenario: One client identity grants permission and the other two deny it in All Only If All mode
+    Given I have a ClaimsPrincipal with 3 oid claims
     And the policy is configured in allow only if all mode
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results
@@ -115,8 +115,8 @@ Scenario: One client role grants permission and the other two deny it in All Onl
 	| 2                  | deny   |
     Then the result type should be 'NotAllowed'
 
-Scenario: Two client roles grant permission and the other denies it in All Only If All mode
-    Given I have a ClaimsPrincipal with 3 roles claims
+Scenario: Two client identities grant permission and the other denies it in All Only If All mode
+    Given I have a ClaimsPrincipal with 3 oid claims
     And the policy is configured in allow only if all mode
     When I invoke the policy with a path of '/foo/bar' and a method of 'GET'
 	And the evaluator returns the following results

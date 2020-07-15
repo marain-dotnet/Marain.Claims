@@ -106,14 +106,14 @@ namespace Marain.Claims.Storage
                     {
                         return await this.DownloadPermissionsAsync(id).ConfigureAwait(false);
                     }
-                    catch (Exception ex)
+                    catch (StorageException)
                     {
-                        throw new ClaimPermissionsNotFoundException(id, ex);
+                        return null;
                     }
                 })).ToList();
 
                 ClaimPermissions[] claimPermissions = await Task.WhenAll(taskBatch).ConfigureAwait(false);
-                result.Permissions.AddRange(claimPermissions);
+                result.Permissions.AddRange(claimPermissions.Where(p => p != null));
             }
 
             IEnumerable<ClaimPermissions> updatedPermissions = await this.UpdateRuleSetsAsync(result.Permissions, maxParallelism).ConfigureAwait(false);
@@ -167,7 +167,12 @@ namespace Marain.Claims.Storage
 
         private async Task<IEnumerable<ClaimPermissions>> UpdateRuleSetsAsync(IEnumerable<ClaimPermissions> permissionsSets, int maxParallelism)
         {
-            ResourceAccessRuleSetCollection updatedRuleSets = await this.resourceAccessRuleSetStore.GetBatchAsync(permissionsSets.SelectMany(p => p.ResourceAccessRuleSets.Select(r => new IdWithETag(r.Id, r.ETag))).Distinct()).ConfigureAwait(false);
+            ResourceAccessRuleSetCollection updatedRuleSets =
+                await this.resourceAccessRuleSetStore.GetBatchAsync(
+                    permissionsSets
+                        .SelectMany(p => p.ResourceAccessRuleSets.Select(r => new IdWithETag(r.Id, r.ETag)))
+                        .Distinct()).ConfigureAwait(false);
+
             if (updatedRuleSets.RuleSets.Any())
             {
                 IList<ClaimPermissions> results = new List<ClaimPermissions>();
