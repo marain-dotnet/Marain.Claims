@@ -35,7 +35,7 @@ namespace Marain.Claims.Benchmark
 
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddClaimsClient(sp => root.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
-                .AddSingleton(sp => new TenancyClientOptions { TenancyServiceBaseUri = new Uri(root["TenancyClient:TenancyServiceBaseUri"]), ResourceIdForMsiAuthentication = root["TenancyClient:ResourceIdForMsiAuthentication"] })
+                .AddSingleton(sp => root.GetSection("TenancyClient").Get<TenancyClientOptions>())
                 .AddTenancyClient()
                 .AddTenantCloudBlobContainerFactory(sp => new TenantCloudBlobContainerFactoryOptions
                 {
