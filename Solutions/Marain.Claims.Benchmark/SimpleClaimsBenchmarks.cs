@@ -30,19 +30,19 @@ namespace Marain.Claims.Benchmark
         /// Invoked by BenchmarkDotNet before running all benchmarks.
         /// </summary>
         [GlobalSetup]
-        public void GlobalSetup()
+        public async Task GlobalSetup()
         {
-            this.DeleteTestDataAsync().Wait();
-            this.SetupTestDataAsync().Wait();
+            await this.DeleteTestDataAsync();
+            await this.SetupTestDataAsync();
         }
 
         /// <summary>
         /// Invoked by BenchmarkDotNet after running all benchmarks.
         /// </summary>
         [GlobalCleanup]
-        public void GlobalCleanup()
+        public async Task GlobalCleanup()
         {
-            this.DeleteTestDataAsync().Wait();
+            await this.DeleteTestDataAsync();
         }
 
         [IterationCleanup]
