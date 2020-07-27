@@ -11,21 +11,21 @@ namespace Marain.Claims.SpecFlow.Steps
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Marain.Claims.Storage;
-    using Menes;
+    using Corvus.Extensions.Json;
+    using Corvus.SpecFlow.Extensions;
     using Corvus.Tenancy;
+    using Marain.Claims;
+    using Marain.Claims.OpenApi;
+    using Marain.Claims.Storage;
+    using Marain.Services.Tenancy;
+    using Marain.TenantManagement.Testing;
+    using Menes;
+    using Microsoft.Azure.Storage.Blob;
+    using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
-    using Microsoft.Azure.Storage.Blob;
-    using Corvus.SpecFlow.Extensions;
-    using Corvus.Extensions.Json;
-    using Microsoft.Extensions.DependencyInjection;
-    using Marain.Claims.OpenApi;
-    using Marain.Services.Tenancy;
-    using Marain.TenantManagement.Testing;
-    using Marain.Claims;
 
     [Binding]
     public class BootstrappingSteps
@@ -40,10 +40,10 @@ namespace Marain.Claims.SpecFlow.Steps
         private readonly List<ClaimPermissions> claimPermissionsPersistedToStore = new List<ClaimPermissions>();
         private readonly List<ResourceAccessRuleSet> resourceAccessRulesPersistedToStore = new List<ResourceAccessRuleSet>();
         private readonly IOpenApiContext openApiContext;
-        
+
         private ClaimPermissionsService service;
         private OpenApiResult bootstrapTenantResult;
-        
+
         private IClaimPermissionsStore claimPermissionsStore;
         private IResourceAccessRuleSetStore ruleSetStore;
         private Mock<IPermissionsStoreFactory> permissionsStoreFactoryMock;
@@ -74,7 +74,7 @@ namespace Marain.Claims.SpecFlow.Steps
         [Given("the tenant is uninitialised")]
         public async Task GivenTheTenantIsUninitialisedAsync()
         {
-            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
+            this.permissionsStoreFactoryMock = await this.SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
 
             if (this.useRealDb)
             {
@@ -95,7 +95,7 @@ namespace Marain.Claims.SpecFlow.Steps
         [Given("the tenant is initialised")]
         public async Task GivenTheTenantIsInitialisedAsync()
         {
-            this.permissionsStoreFactoryMock = await SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
+            this.permissionsStoreFactoryMock = await this.SetupMockPermissionsStoreFactoryAsync().ConfigureAwait(false);
 
             Assert.IsFalse(this.useRealDb, "Tests using this step can only use @inMemoryStore");
             this.permissionStoreMock
@@ -103,9 +103,9 @@ namespace Marain.Claims.SpecFlow.Steps
                 .ReturnsAsync(true);
         }
 
-        [When("I initialise the tenant with the role id '(.*)'")]
-        public async Task WhenIInitialiseTheTenantWithTheRoleId(
-            string roleId)
+        [When("I initialise the tenant with the object id '(.*)'")]
+        public async Task WhenIInitialiseTheTenantWithTheObjectId(
+            string objectId)
         {
             this.service = new ClaimPermissionsService(
                 this.permissionsStoreFactoryMock.Object,
@@ -119,7 +119,7 @@ namespace Marain.Claims.SpecFlow.Steps
                 .Returns(this.transientTenantManager.PrimaryTransientClient.Id);
             var body = new JObject
             {
-                ["administratorRoleClaimValue"] = roleId
+                ["administratorPrincipalObjectId"] = objectId,
             };
             this.bootstrapTenantResult = await this.service.BootstrapTenantAsync(
                 openApiContext.Object,
@@ -180,92 +180,92 @@ namespace Marain.Claims.SpecFlow.Steps
             Assert.AreEqual(ruleSetId, permissions.ResourceAccessRuleSets.Single().Id, "Ruleset Id");
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to create a claim permissions")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToCreateAClaimsPermissionAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to create a claim permissions")]
+        public async Task ThenAPrincipalWithOidGetsTryingToCreateAClaimsPermissionAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions", "POST", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to read a claim permissions")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToReadAClaimsPermissionAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to read a claim permissions")]
+        public async Task ThenAPrincipalWithOidGetsTryingToReadAClaimsPermissionAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/3223", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/3223", "GET", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to read all effective rules for a claims permission")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToReadAllRulesFromAClaimsPermissionAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to read all effective rules for a claims permission")]
+        public async Task ThenAPrincipalWithOidGetsTryingToReadAllRulesFromAClaimsPermissionAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/3223/allResourceAccessRules", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/3223/allResourceAccessRules", "GET", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to add a rule to a claim permissions")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToAddARuleToAClaimsPermissionAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to add a rule to a claim permissions")]
+        public async Task ThenAPrincipalWithOidGetsTryingToAddARuleToAClaimsPermissionAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/123/resourceAccessRules", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/123/resourceAccessRules", "POST", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to set all rules in a claim permissions")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToSetAllRulesInAClaimsPermissionAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to set all rules in a claim permissions")]
+        public async Task ThenAPrincipalWithOidGetsTryingToSetAllRulesInAClaimsPermissionAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/123/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/123/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to add a resource access rule set to the claim permissions")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToAddAResourceAccessRuleSetToTheClaimsPermissionAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to add a resource access rule set to the claim permissions")]
+        public async Task ThenAPrincipalWithOidGetsTryingToAddAResourceAccessRuleSetToTheClaimsPermissionAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/432/resourceAccessRuleSets", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/432/resourceAccessRuleSets", "POST", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to set all resource access rule sets in a claim permissions")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToSetAllResourceAccessRuleSetToTheClaimsPermissionAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to set all resource access rule sets in a claim permissions")]
+        public async Task ThenAPrincipalWithOidGetsTryingToSetAllResourceAccessRuleSetToTheClaimsPermissionAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/432/resourceAccessRuleSets", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/claimPermissions/432/resourceAccessRuleSets", "PUT", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to create a resource access rule set")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToCreateAResourceAccessRuleSetAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to create a resource access rule set")]
+        public async Task ThenAPrincipalWithOidGetsTryingToCreateAResourceAccessRuleSetAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet", "POST", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to read a resource access rule set")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToReadAResourceAccessRuleSetAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to read a resource access rule set")]
+        public async Task ThenAPrincipalWithOidGetsTryingToReadAResourceAccessRuleSetAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet/3233", "GET", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet/3233", "GET", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to add an access rule to the resource access rule set")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToAddAnAccessRuleToTheResourceAccessRuleSetAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to add an access rule to the resource access rule set")]
+        public async Task ThenAPrincipalWithOidGetsTryingToAddAnAccessRuleToTheResourceAccessRuleSetAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet/abc/resourceAccessRules", "POST", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet/abc/resourceAccessRules", "POST", permission).ConfigureAwait(false);
         }
 
-        [Then("a principal in the '(.*)' role gets '(.*)' trying to set all access rules in a resource access rule set")]
-        public async Task ThenAPrincipalInTheRoleGetsTryingToSetAllAccessRulesInAResourceAccessRuleSetAsync(
-            string roleId,
+        [Then("a principal with oid '(.*)' gets '(.*)' trying to set all access rules in a resource access rule set")]
+        public async Task ThenAPrincipalWithOidGetsTryingToSetAllAccessRulesInAResourceAccessRuleSetAsync(
+            string objectId,
             string permission)
         {
-            await this.CheckPermissions(roleId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet/abc/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
+            await this.CheckPermissions(objectId, $"{this.transientTenantManager.PrimaryTransientClient.Id}/marain/claims/resourceAccessRuleSet/abc/resourceAccessRules", "PUT", permission).ConfigureAwait(false);
         }
 
         [Then("I am told that the tenant is already is initialised")]
@@ -312,11 +312,11 @@ namespace Marain.Claims.SpecFlow.Steps
             }
         }
 
-        private async Task CheckPermissions(string roleId, string uri, string method, string permission)
+        private async Task CheckPermissions(string objectId, string uri, string method, string permission)
         {
             OpenApiResult permissionsResult = await this.service.GetClaimPermissionsPermissionAsync(
                 this.openApiContext,
-                roleId,
+                objectId,
                 uri,
                 method).ConfigureAwait(false);
 

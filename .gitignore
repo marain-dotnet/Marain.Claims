@@ -52,7 +52,8 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
-**/Properties/launchSettings.json
+# The line below is deliberately commented out so that we include launchSettings.json to keep functions host ports consistent
+#**/Properties/launchSettings.json
 
 # StyleCop
 StyleCopReport.xml

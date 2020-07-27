@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Marain.Claims.OpenApi;
-using Menes;
-using Microsoft.Extensions.Logging;
+﻿// <copyright file="LocalResourceAccessEvaluator.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
+// </copyright>
 
 namespace Marain.Claims.Hosting.AspNetCore
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using Marain.Claims.OpenApi;
+    using Menes;
+    using Microsoft.Extensions.Logging;
+
+    /// <summary>
+    /// Evaluates resource access submissions using the <see cref="ClaimPermissionsService"/>.
+    /// </summary>
     public class LocalResourceAccessEvaluator : IResourceAccessEvaluator
     {
         private readonly ILogger<LocalResourceAccessEvaluator> logger;
@@ -18,6 +25,7 @@ namespace Marain.Claims.Hosting.AspNetCore
         /// <summary>
         /// Creates <see cref="LocalResourceAccessEvaluator"/>.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="service">
         /// The Claims Open API service implementation that provides the ablity to evaluate
         /// resource access submissions.
@@ -30,6 +38,7 @@ namespace Marain.Claims.Hosting.AspNetCore
             this.service = service;
         }
 
+        /// <inheritdoc/>
         public async Task<List<ResourceAccessEvaluation>> EvaluateAsync(string tenantId, IEnumerable<ResourceAccessSubmission> submissions)
         {
             var context = new Context
@@ -67,7 +76,7 @@ namespace Marain.Claims.Hosting.AspNetCore
                         ClaimPermissionsId = x.ClaimPermissionsId,
                         ResourceAccessType = x.ResourceAccessType,
                         ResourceUri = x.ResourceUri,
-                    }
+                    },
                 }).ToList();
         }
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="RoleBasedOpenApiAccessControlPolicySteps.cs" company="Endjin">
+﻿// <copyright file="OpenApiAccessControlPolicySteps.cs" company="Endjin">
 // Copyright (c) Endjin. All rights reserved.
 // </copyright>
 
@@ -22,8 +22,10 @@ namespace Marain.Claims.Specs.Steps
     using TechTalk.SpecFlow;
 
     [Binding]
-    public class RoleBasedOpenApiAccessControlPolicySteps
+    public class OpenApiAccessControlPolicySteps
     {
+        private readonly FeatureContext featureContext;
+
         private ClaimsPrincipal claimsPrincipal;
         private string tenantId;
         private string resourcePrefix;
@@ -32,6 +34,11 @@ namespace Marain.Claims.Specs.Steps
         private List<(ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource)> evaluateCalls;
         private List<ResourceAccessEvaluation> evaluations;
         private Task<IDictionary<AccessCheckOperationDescriptor, AccessControlPolicyResult>> policyResultTask;
+
+        public OpenApiAccessControlPolicySteps(FeatureContext featureContext)
+        {
+            this.featureContext = featureContext;
+        }
 
         [Given("I am accepting the default unauthenticated behaviour")]
         public void GivenIAmAcceptingTheDefaultUnauthenticatedBehaviour()
@@ -53,7 +60,20 @@ namespace Marain.Claims.Specs.Steps
             var identity = new ClaimsIdentity("SuperSecureTm");
             for (int i = 0; i < roleCount; ++i)
             {
-                identity.AddClaim(new Claim("roles", GetRoleId(i)));
+                identity.AddClaim(new Claim("roles", GetClaimPermissionsId(i)));
+            }
+
+            this.claimsPrincipal = new ClaimsPrincipal(identity);
+            this.tenantId = Guid.NewGuid().ToString();
+        }
+
+        [Given("I have a ClaimsPrincipal with (.*) oid claims")]
+        public void GivenIHaveAClaimsPrincipalWithOidClaims(int oidCount)
+        {
+            var identity = new ClaimsIdentity("SuperSecureTm");
+            for (int i = 0; i < oidCount; ++i)
+            {
+                identity.AddClaim(new Claim("oid", GetClaimPermissionsId(i)));
             }
 
             this.claimsPrincipal = new ClaimsPrincipal(identity);
@@ -95,10 +115,22 @@ namespace Marain.Claims.Specs.Steps
                 });
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton(new Mock<ILogger<RoleBasedOpenApiAccessControlPolicy>>().Object);
-            serviceCollection.AddRoleBasedOpenApiAccessControl(
-                this.resourcePrefix ?? "",
-                this.allowOnlyIfAll);
+            serviceCollection.AddSingleton(new Mock<ILogger<OpenApiAccessControlPolicy>>().Object);
+
+            if (this.featureContext.FeatureInfo.Tags.Contains("rolebased"))
+            {
+                serviceCollection.AddRoleBasedOpenApiAccessControl(
+                   this.resourcePrefix ?? string.Empty,
+                   this.allowOnlyIfAll);
+            }
+
+            if (this.featureContext.FeatureInfo.Tags.Contains("identitybased"))
+            {
+                serviceCollection.AddIdentityBasedOpenApiAccessControl(
+                   this.resourcePrefix ?? string.Empty,
+                   this.allowOnlyIfAll);
+            }
+
             serviceCollection.AddSingleton(this.resourceAccessEvaluator.Object);
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -114,9 +146,9 @@ namespace Marain.Claims.Specs.Steps
 
             foreach (TableRow current in table.Rows)
             {
-                string roleId = GetRoleId(Convert.ToInt32(current["Role"]));
+                string claimPermissionsId = GetClaimPermissionsId(Convert.ToInt32(current["ClaimPermissionsId"]));
 
-                (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+                (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
                 if (!responses.TryGetValue(taskSource, out List<ResourceAccessEvaluation> taskSourceResults))
                 {
@@ -124,7 +156,7 @@ namespace Marain.Claims.Specs.Steps
                     responses.Add(taskSource, taskSourceResults);
                 }
 
-                ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
+                ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == claimPermissionsId);
                 taskSourceResults.Add(
                     new ResourceAccessEvaluation
                     {
@@ -136,8 +168,8 @@ namespace Marain.Claims.Specs.Steps
                         },
                         Result = new Claims.PermissionResult
                         {
-                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException()
-                        }
+                            Permission = Enum.TryParse(current["Result"], true, out Permission permission) ? permission : throw new FormatException(),
+                        },
                     });
             }
 
@@ -147,14 +179,14 @@ namespace Marain.Claims.Specs.Steps
             }
         }
 
-        [When("the evaluator returns '(.*)' for role (.*)")]
-        public void WhenTheEvaluatorReturnsForRole(string allowOrDeny, int roleIndex)
+        [When("the evaluator returns '(.*)' for claim permissions ID (.*)")]
+        public void WhenTheEvaluatorReturnsForClaimPermissionsId(string allowOrDeny, int index)
         {
-            string roleId = GetRoleId(roleIndex);
+            string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
-            ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
+            ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == claimPermissionsId);
 
             this.evaluations.Add(new ResourceAccessEvaluation
             {
@@ -166,21 +198,21 @@ namespace Marain.Claims.Specs.Steps
                 },
                 Result = new Claims.PermissionResult
                 {
-                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException()
-                }
+                    Permission = Enum.TryParse(allowOrDeny, true, out Permission permission) ? permission : throw new FormatException(),
+                },
             });
 
             taskSource.SetResult(this.evaluations);
         }
 
-        [When("the evaluator does not find the role (.*)")]
-        public void WhenThEvaluatorDoesNotFindTheRole(int roleIndex)
+        [When("the evaluator does not find the claim permissions ID (.*)")]
+        public void WhenThEvaluatorDoesNotFindTheClaimPermissionsId(int index)
         {
-            string roleId = GetRoleId(roleIndex);
+            string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
-            ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == roleId);
+            ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == claimPermissionsId);
 
             taskSource.SetResult(this.evaluations);
         }
@@ -191,46 +223,46 @@ namespace Marain.Claims.Specs.Steps
             Assert.IsEmpty(this.evaluateCalls);
         }
 
-        [Then("the policy should pass the claim permissions id for role (.*) to the claims service")]
-        public void ThenThePolicyShouldPassTheClaimPermissionsIdForRoleToTheClaimsService(int roleIndex)
+        [Then("the policy should pass the claim permissions id (.*) to the claims service")]
+        public void ThenThePolicyShouldPassTheClaimPermissionsIdToTheClaimsService(int index)
         {
-            string roleId = GetRoleId(roleIndex);
+            string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
             Assert.IsNotNull(args);
         }
 
-        [Then("the policy should pass the tenant id to the claims service in call for role (.*)")]
-        public void ThenThePolicyShouldPassTheTenantIdToTheClaimsServiceInCallForRole(int roleIndex)
+        [Then("the policy should pass the tenant id to the claims service in call for claims permissions ID (.*)")]
+        public void ThenThePolicyShouldPassTheTenantIdToTheClaimsServiceInCallForClaimsPermissionsId(int index)
         {
-            string roleId = GetRoleId(roleIndex);
+            string claimPermissionId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionId));
 
             Assert.AreEqual(this.tenantId, args?.TenantId);
         }
 
-        [Then("the policy should pass a resource URI of '(.*)' to the claims service in call for role (.*)")]
-        public void ThenThePolicyShouldPassAResourceURIOfToTheClaimsServiceInCallForRole(
+        [Then("the policy should pass a resource URI of '(.*)' to the claims service in call for claims permissions ID (.*)")]
+        public void ThenThePolicyShouldPassAResourceURIOfToTheClaimsServiceInCallForClaimsPermissionsId(
             string resourceUri,
-            int roleIndex)
+            int index)
         {
-            string roleId = GetRoleId(roleIndex);
+            string claimPermissionId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionId));
 
             Assert.IsTrue(args.Submissions.Any(x => x.ResourceUri == resourceUri));
         }
 
-        [Then("the policy should pass an access type of '(.*)' to the claims service in call for role (.*)")]
-        public void ThenThePolicyShouldPassAnAccessTypeOfToTheClaimsServiceInCallForRole(
+        [Then("the policy should pass an access type of '(.*)' to the claims service in call for claims permissions ID (.*)")]
+        public void ThenThePolicyShouldPassAnAccessTypeOfToTheClaimsServiceInCallForClaimsPermissionsId(
             string accessType,
-            int roleIndex)
+            int index)
         {
-            string roleId = GetRoleId(roleIndex);
+            string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == roleId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
             Assert.IsTrue(args.Submissions.Any(x => x.ResourceAccessType == accessType));
         }
@@ -249,7 +281,7 @@ namespace Marain.Claims.Specs.Steps
             Assert.AreEqual(resultType, result.Values.First().ResultType);
         }
 
-        private static string GetRoleId(int roleNumber) => $"RoleId{roleNumber}";
+        private static string GetClaimPermissionsId(int number) => $"ClaimPermissionsId{number}";
 
         private class ResourceAccessEvaluatorArgs
         {

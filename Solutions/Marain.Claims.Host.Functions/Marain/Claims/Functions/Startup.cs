@@ -2,16 +2,16 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
 [assembly: Microsoft.Azure.WebJobs.Hosting.WebJobsStartup(typeof(Marain.Operations.ControlHost.Startup))]
 
 namespace Marain.Operations.ControlHost
 {
-    using Microsoft.Azure.WebJobs;
-    using Microsoft.Azure.WebJobs.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
     /// <summary>
     /// Startup code for the Function.
     /// </summary>

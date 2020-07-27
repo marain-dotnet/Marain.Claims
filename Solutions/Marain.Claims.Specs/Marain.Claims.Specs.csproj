@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>latest</LangVersion>
@@ -7,30 +7,42 @@
     <RootNamespace>Marain.Claims.Specs</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <SpecFlowObsoleteCodeBehindFiles Remove="Features\RoleBasedOpenApiAccessControlPolicy.feature.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>RCS1029;CS1591; SA1633</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>RCS1029;CS1591; SA1633</NoWarn>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Corvus.SpecFlow.Extensions" Version="0.7.0-preview.27" />
-    <PackageReference Include="Corvus.Testing.SpecFlow" Version="0.7.0" />
-    <PackageReference Include="Idg.AsyncTestTools" Version="1.0.0-beta-1" />
-    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="0.1.0-preview.35" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Moq" Version="4.14.1" />
+    <PackageReference Include="Corvus.Testing.SpecFlow" Version="1.0.0" />
+    <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Idg.AsyncTestTools" Version="1.0.0" />
+    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Moq" Version="4.14.5" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SpecFlow" Version="3.1.97" />
-    <PackageReference Include="SpecFlow.NUnit" Version="3.1.97" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.1.97" />
+    <PackageReference Include="SpecFlow" Version="3.3.30" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.3.30" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.30" />
     <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="coverlet.msbuild" Version="2.7.0">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

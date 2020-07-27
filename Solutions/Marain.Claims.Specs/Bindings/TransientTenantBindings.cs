@@ -63,7 +63,7 @@ namespace Marain.Claims.Specs.Bindings
         /// <summary>
         /// Tear down the tenanted Cloud Blob Container for the feature.
         /// </summary>
-        /// <param name="featureContext">The feature context.</param>
+        /// <param name="context">The feature context.</param>
         /// <returns>A <see cref="Task"/> which completes once the operation has completed.</returns>
         [AfterFeature("@useTransientTenant", Order = 100000)]
         public static async Task TearDownBlobContainers(FeatureContext context)
@@ -107,7 +107,7 @@ namespace Marain.Claims.Specs.Bindings
                 .GetServiceProvider(featureContext)
                 .GetRequiredService<IConfiguration>();
 
-            // Load the config items we need:    
+            // Load the config items we need:
             BlobStorageConfiguration claimPermissionsStoreStorageConfiguration =
                 configuration.GetSection("TestBlobStorageConfiguration").Get<BlobStorageConfiguration>()
                 ?? new BlobStorageConfiguration();

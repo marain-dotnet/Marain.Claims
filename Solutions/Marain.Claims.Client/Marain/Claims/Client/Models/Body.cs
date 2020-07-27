@@ -23,12 +23,12 @@ namespace Marain.Claims.Client.Models
         /// <summary>
         /// Initializes a new instance of the Body class.
         /// </summary>
-        /// <param name="administratorRoleClaimValue">The value which, if
-        /// present in a roles claim, will grant a principal full access to the
-        /// Claims service API</param>
-        public Body(string administratorRoleClaimValue)
+        /// <param name="administratorPrincipalObjectId">The object of the
+        /// principal of which to grant full access to the Claims service
+        /// API</param>
+        public Body(string administratorPrincipalObjectId)
         {
-            AdministratorRoleClaimValue = administratorRoleClaimValue;
+            AdministratorPrincipalObjectId = administratorPrincipalObjectId;
             CustomInit();
         }
 
@@ -38,11 +38,11 @@ namespace Marain.Claims.Client.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the value which, if present in a roles claim, will
-        /// grant a principal full access to the Claims service API
+        /// Gets or sets the object of the principal of which to grant full
+        /// access to the Claims service API
         /// </summary>
-        [JsonProperty(PropertyName = "administratorRoleClaimValue")]
-        public string AdministratorRoleClaimValue { get; set; }
+        [JsonProperty(PropertyName = "administratorPrincipalObjectId")]
+        public string AdministratorPrincipalObjectId { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -52,9 +52,9 @@ namespace Marain.Claims.Client.Models
         /// </exception>
         public virtual void Validate()
         {
-            if (AdministratorRoleClaimValue == null)
+            if (AdministratorPrincipalObjectId == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "AdministratorRoleClaimValue");
+                throw new ValidationException(ValidationRules.CannotBeNull, "AdministratorPrincipalObjectId");
             }
         }
     }

@@ -1,23 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <!--
-  Not using normal netstandard2.0 import, because this contains AutoRest-generated code, which makes
-  the analyzers we normally bring in unhappy.
-  -->
-
-  <Import Project="..\Common.GitHub.proj" />
-  <Import Project="..\Common.NuGet.proj" />
-  
+  <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
     <DocumentationFile>$(OutputPath)$(TargetFramework.ToLowerInvariant())\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
-
+  
   <PropertyGroup>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageDescription></PackageDescription>
-    <PackageTags></PackageTags>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageDescription>API client library for Marain.Claims</PackageDescription>
+    <PackageTags>marain; claims</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
 
@@ -33,10 +25,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Identity.ManagedServiceIdentity.ClientAuthentication" Version="0.2.0-preview.15" />
+    <PackageReference Include="Corvus.Identity.ManagedServiceIdentity.ClientAuthentication" Version="1.0.0" />
+    <PackageReference Include="Endjin.RecommendedPractices" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.20" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.21" />
     <PackageReference Include="Cimpress.Extensions.Http.Caching.InMemory" Version="1.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

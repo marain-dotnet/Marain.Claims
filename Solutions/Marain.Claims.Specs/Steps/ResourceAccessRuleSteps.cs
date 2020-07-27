@@ -7,8 +7,8 @@
 
 namespace Marain.Claims.SpecFlow.Steps
 {
-    using NUnit.Framework;
     using System;
+    using NUnit.Framework;
     using TechTalk.SpecFlow;
 
     [Binding]
@@ -86,8 +86,8 @@ namespace Marain.Claims.SpecFlow.Steps
         }
 
         [Given("I have a resource access rule for a resource with name '(.*)' and display name '(.*)', with an access type '(.*)', and permission '(.*)'")]
-        public void GivenIHaveAResourceAccessRuleForAResourceWithNameAndDisplayNameWithAnAccessTypeAndPermission
-            (string name, string displayName, string accessType, Permission permission)
+        public void GivenIHaveAResourceAccessRuleForAResourceWithNameAndDisplayNameWithAnAccessTypeAndPermission(
+            string name, string displayName, string accessType, Permission permission)
         {
             var resourceAccessRule = new ResourceAccessRule(accessType, new Resource(new Uri(name, UriKind.Relative), displayName), permission);
             this.scenarioContext.Set(resourceAccessRule, ResourceAccessRuleKey);

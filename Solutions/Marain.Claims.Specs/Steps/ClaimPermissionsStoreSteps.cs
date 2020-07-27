@@ -146,14 +146,14 @@ namespace Marain.Claims.SpecFlow.Steps
 
         private Task<IResourceAccessRuleSetStore> GetResourceAccessRuleSetStoreAsync()
         {
-            ITenant transientTenant = TransientTenantManager.GetInstance(featureContext).PrimaryTransientClient;
+            ITenant transientTenant = TransientTenantManager.GetInstance(this.featureContext).PrimaryTransientClient;
             IPermissionsStoreFactory permissionsStoreFactory = this.serviceProvider.GetRequiredService<IPermissionsStoreFactory>();
             return permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(transientTenant);
         }
 
         private Task<IClaimPermissionsStore> GetClaimPermissionsStoreAsync()
         {
-            ITenant transientTenant = TransientTenantManager.GetInstance(featureContext).PrimaryTransientClient;
+            ITenant transientTenant = TransientTenantManager.GetInstance(this.featureContext).PrimaryTransientClient;
             IPermissionsStoreFactory permissionsStoreFactory = this.serviceProvider.GetRequiredService<IPermissionsStoreFactory>();
             return permissionsStoreFactory.GetClaimPermissionsStoreAsync(transientTenant);
         }
