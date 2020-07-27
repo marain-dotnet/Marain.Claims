@@ -204,7 +204,7 @@ namespace Marain.Claims.Benchmark
 
         protected override async Task SetupTestDataAsync()
         {
-            ProblemDetails initializeTenantResponse = await this.ClaimsService.InitializeTenantAsync(this.ClientTenantId, new Body { AdministratorRoleClaimValue = "ClaimsAdministrator" });
+            ProblemDetails initializeTenantResponse = await this.ClaimsService.InitializeTenantAsync(this.ClientTenantId, new Body { AdministratorPrincipalObjectId = this.AdministratorPrincipalObjectId });
 
             if (initializeTenantResponse != null && 
                 (initializeTenantResponse.Status < 200 || initializeTenantResponse.Status >= 300) && 

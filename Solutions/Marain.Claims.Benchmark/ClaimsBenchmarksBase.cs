@@ -22,6 +22,7 @@ namespace Marain.Claims.Benchmark
         protected readonly ITenantCloudBlobContainerFactory TenantCloudBlobContainerFactory;
         protected readonly IPropertyBagFactory PropertyBagFactory;
         protected readonly string ClientTenantId;
+        protected readonly string AdministratorPrincipalObjectId;
 
         public ClaimsBenchmarksBase()
         {
@@ -29,22 +30,23 @@ namespace Marain.Claims.Benchmark
                       .AddEnvironmentVariables()
                       .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
-            IConfiguration root = configurationBuilder.Build();
+            IConfiguration configuration = configurationBuilder.Build();
 
-            this.ClientTenantId = root["ClientTenantId"];
+            this.ClientTenantId = configuration["ClientTenantId"];
+            this.AdministratorPrincipalObjectId = configuration["AdministratorPrincipalObjectId"];
 
             ServiceProvider serviceProvider = new ServiceCollection()
-                .AddClaimsClient(sp => root.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
-                .AddSingleton(sp => root.GetSection("TenancyClient").Get<TenancyClientOptions>())
+                .AddClaimsClient(sp => configuration.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
+                .AddSingleton(sp => configuration.GetSection("TenancyClient").Get<TenancyClientOptions>())
                 .AddTenancyClient()
                 .AddTenantCloudBlobContainerFactory(sp => new TenantCloudBlobContainerFactoryOptions
                 {
-                    AzureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"]
+                    AzureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"]
                 })
                 .AddAzureManagedIdentityBasedTokenSource(
                     sp => new AzureManagedIdentityTokenSourceOptions
                     {
-                        AzureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"],
+                        AzureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"],
                     })
                 .BuildServiceProvider();
 

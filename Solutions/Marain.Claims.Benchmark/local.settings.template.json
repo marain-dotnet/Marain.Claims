@@ -6,5 +6,6 @@
   "TenancyClient:ResourceIdForMsiAuthentication": "",
 
   "AzureServicesAuthConnectionString": "",
+  "AdministratorPrincipalObjectId": "",
   "ClientTenantId": ""
 }

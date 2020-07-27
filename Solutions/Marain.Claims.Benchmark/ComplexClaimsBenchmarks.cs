@@ -103,7 +103,7 @@
             RulesetsAndClaimPermissions input = JsonConvert.DeserializeObject<RulesetsAndClaimPermissions>(
                 File.ReadAllText("BenchmarkClaimPermissions.json"));
 
-            ProblemDetails initializeTenantResponse = await this.ClaimsService.InitializeTenantAsync(this.ClientTenantId, new Body { AdministratorRoleClaimValue = "ClaimsAdministrator" });
+            ProblemDetails initializeTenantResponse = await this.ClaimsService.InitializeTenantAsync(this.ClientTenantId, new Body { AdministratorPrincipalObjectId = this.AdministratorPrincipalObjectId });
 
             if (initializeTenantResponse != null &&
                 (initializeTenantResponse.Status < 200 || initializeTenantResponse.Status >= 300) &&
