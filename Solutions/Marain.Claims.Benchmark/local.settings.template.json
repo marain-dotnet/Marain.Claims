@@ -1,0 +1,11 @@
+{
+  "ClaimsClient:BaseUri": "",
+  "ClaimsClient:ResourceIdForMsiAuthentication": "",
+
+  "TenancyClient:TenancyServiceBaseUri": "",
+  "TenancyClient:ResourceIdForMsiAuthentication": "",
+
+  "AzureServicesAuthConnectionString": "",
+  "AdministratorPrincipalObjectId": "",
+  "ClientTenantId": ""
+}

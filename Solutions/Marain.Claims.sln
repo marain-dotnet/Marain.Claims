@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.SetupTool", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marain.Claims.Client.OpenApi", "Marain.Claims.Client.OpenApi\Marain.Claims.Client.OpenApi.csproj", "{CFD6C579-BCDE-4B83-AC59-1BB01E11C2CD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Benchmark", "Marain.Claims.Benchmark\Marain.Claims.Benchmark.csproj", "{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,10 @@ Global
 		{CFD6C579-BCDE-4B83-AC59-1BB01E11C2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFD6C579-BCDE-4B83-AC59-1BB01E11C2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFD6C579-BCDE-4B83-AC59-1BB01E11C2CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

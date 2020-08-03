@@ -1,0 +1,734 @@
+{
+  "ruleSets": [
+    {
+      "id": "getFoos",
+      "displayName": "Get foo list",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo",
+            "displayName": "GET foo list"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFoo",
+      "displayName": "Get foo summary",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*",
+            "displayName": "GET foo summary"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "createFoo",
+      "displayName": "Create a new foo",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo",
+            "displayName": "POST foo"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooGetBar",
+      "displayName": "Get foo bar",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/bar",
+            "displayName": "GET foo bar information"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooUpdateBar",
+      "displayName": "Update foo bar",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/bar",
+            "displayName": "POST foo bar information"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooGetBaz",
+      "displayName": "List baz for a foo",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/baz",
+            "displayName": "GET foo baz information"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/baz/*",
+            "displayName": "GET a foo baz"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooAddOrUpdateBaz",
+      "displayName": "Add baz to a foo",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/baz",
+            "displayName": "POST new foo baz"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/baz/*",
+            "displayName": "POST foo baz update"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooGetQux",
+      "displayName": "Get foo qux details",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/qux",
+            "displayName": "GET foo qux information"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooUpdateQux",
+      "displayName": "Update foo qux details",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/qux",
+            "displayName": "POST foo qux information"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooGetQuuz",
+      "displayName": "Get the status of the quuz for a foo",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/quuz",
+            "displayName": "GET foo quuz state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooPostQuuzUpload",
+      "displayName": "Qux upload quuz",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/quuz/upload",
+            "displayName": "POST begin quuz upload"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/quuz/complete",
+            "displayName": "POST complete quuz operation"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooPostQuuzReview",
+      "displayName": "Qux review quuz",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/quuz/review",
+            "displayName": "POST begin quuz review"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/quuz/complete",
+            "displayName": "POST complete quuz operation"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooGetWaldoState",
+      "displayName": "Get the status of the waldo for a foo",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/waldo",
+            "displayName": "GET foo waldo state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooPostWaldoUpload",
+      "displayName": "Qux upload waldo",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/waldo/upload",
+            "displayName": "POST begin waldo upload"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/waldo/complete",
+            "displayName": "POST complete waldo operation"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooPostWaldoReview",
+      "displayName": "Qux review waldo",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/waldo/review",
+            "displayName": "POST begin waldo review"
+          },
+          "permission": "allow"
+        },
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/waldo/complete",
+            "displayName": "POST complete waldo operation"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooGetFreds",
+      "displayName": "Get freds for a foo",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*",
+            "displayName": "GET foo fred summary"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "fooStartFred",
+      "displayName": "Start fred for a foo",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds",
+            "displayName": "POST a new fred for a foo"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredDocuments",
+      "displayName": "Generate and download documents for a fred",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/documents/*",
+            "displayName": "GET fred documents"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredXyzzyData",
+      "displayName": "Get current xyzzy answers",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/xyzzy",
+            "displayName": "GET xyzzy answers"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredXyzzyModelResults",
+      "displayName": "Get results of the most recent xyzzy model run",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/xyzzy-results",
+            "displayName": "GET xyzzy results"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredCorgeResults",
+      "displayName": "Get results of the most recent corge run",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/corge",
+            "displayName": "GET corge results"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredGraultSummary",
+      "displayName": "Get fred grault summary",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/grault",
+            "displayName": "GET grault summary"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredPlughSummary",
+      "displayName": "Get fred plugh review summary",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/plugh",
+            "displayName": "GET plugh review summary"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredGarplySummary",
+      "displayName": "Get fred garply review summary",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/garply",
+            "displayName": "GET garply review summary"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "getFredReviewSummary",
+      "displayName": "Get fred review summary",
+      "rules": [
+        {
+          "accessType": "GET",
+          "resource": {
+            "uri": "api/foo/*/freds/*/review",
+            "displayName": "GET review summary"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredPlughReview",
+      "displayName": "Update a fred in the plugh review state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/plugh-review/*",
+            "displayName": "POST a trigger to a fred in the plugh review state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredPricing",
+      "displayName": "Update a fred in the pricing state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/pricing/*",
+            "displayName": "POST a trigger to a fred in the pricing state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredXyzzy",
+      "displayName": "Update a fred in the xyzzy state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/xyzzy/*",
+            "displayName": "POST a trigger to a fred in the xyzzy state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredXyzzyFailed",
+      "displayName": "Update a fred in the xyzzy failed state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/xyzzy-module-failed/*",
+            "displayName": "POST a trigger to a fred in the xyzzy failed state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredPricingFailed",
+      "displayName": "Update a fred in the pricing failed state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/pricing-module-failed/*",
+            "displayName": "POST a trigger to a fred in the pricing module failed state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredGarplyReview",
+      "displayName": "Update a fred in the garply review state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/garply-review/*",
+            "displayName": "POST a trigger to a fred in the garply review state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredReview",
+      "displayName": "Update a fred in the review state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/review/*",
+            "displayName": "POST a trigger to a fred in the review state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredReadyForIssue",
+      "displayName": "Update a fred in the ready for issue state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/ready-for-issue/*",
+            "displayName": "POST a trigger to a fred in the ready for issue state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredIssued",
+      "displayName": "Update a fred in the issued state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/issued/*",
+            "displayName": "POST a trigger to a fred in the issued state"
+          },
+          "permission": "allow"
+        }
+      ]
+    },
+    {
+      "id": "updateFredReadyForRejection",
+      "displayName": "Update a fred in the ready for rejection state",
+      "rules": [
+        {
+          "accessType": "POST",
+          "resource": {
+            "uri": "api/foo/*/freds/*/binding-fred-v*/ready-for-rejection/*",
+            "displayName": "POST a trigger to a fred in the ready for rejection state"
+          },
+          "permission": "allow"
+        }
+      ]
+    }
+  ],
+  "claimPermissions": [
+    {
+      "id": "One",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "getFoos" },
+        { "id": "getFoo" },
+        { "id": "fooGetBar" },
+        { "id": "fooUpdateBar" },
+        { "id": "fooGetBaz" },
+        { "id": "fooGetQux" },
+        { "id": "fooUpdateQux" },
+        { "id": "fooGetQuuz" },
+        { "id": "fooPostQuuzUpload" },
+        { "id": "fooPostQuuzReview" },
+        { "id": "fooGetFreds" },
+        { "id": "getFredXyzzyData" },
+        { "id": "getFredXyzzyModelResults" },
+        { "id": "getFredCorgeResults" },
+        { "id": "getFredGraultSummary" },
+        { "id": "getFredPlughSummary" },
+        { "id": "getFredGarplySummary" },
+        { "id": "getFredReviewSummary" },
+        { "id": "updateFredPricingFailed" },
+        { "id": "updateFredGarplyReview" }
+      ]
+    },
+    {
+      "id": "Two",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "getFoos" },
+        { "id": "getFoo" },
+        { "id": "fooGetBar" },
+        { "id": "fooGetBaz" },
+        { "id": "fooGetQux" },
+        { "id": "fooGetQuuz" },
+        { "id": "fooPostQuuzReview" },
+        { "id": "fooGetFreds" },
+        { "id": "getFredXyzzyData" },
+        { "id": "getFredXyzzyModelResults" },
+        { "id": "getFredCorgeResults" },
+        { "id": "getFredGraultSummary" },
+        { "id": "getFredPlughSummary" },
+        { "id": "getFredGarplySummary" },
+        { "id": "getFredReviewSummary" }
+      ]
+    },
+    {
+      "id": "Three",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "getFoos" },
+        { "id": "createFoo" },
+        { "id": "getFoo" },
+        { "id": "fooGetBar" },
+        { "id": "fooUpdateBar" },
+        { "id": "fooGetBaz" },
+        { "id": "fooAddOrUpdateBaz" },
+        { "id": "fooGetQux" },
+        { "id": "fooUpdateQux" },
+        { "id": "fooGetQuuz" },
+        { "id": "fooPostQuuzUpload" },
+        { "id": "fooPostQuuzReview" },
+        { "id": "fooPostWaldoUpload" },
+        { "id": "fooPostWaldoReview" },
+        { "id": "fooGetFreds" },
+        { "id": "fooStartFred" },
+        { "id": "getFredDocuments" },
+        { "id": "getFredXyzzyData" },
+        { "id": "getFredXyzzyModelResults" },
+        { "id": "getFredCorgeResults" },
+        { "id": "getFredGraultSummary" },
+        { "id": "getFredPlughSummary" },
+        { "id": "getFredGarplySummary" },
+        { "id": "getFredReviewSummary" },
+        { "id": "updateFredPricing" },
+        { "id": "updateFredXyzzyFailed" },
+        { "id": "updateFredPricingFailed" },
+        { "id": "updateFredReview" },
+        { "id": "updateFredReadyForIssue" },
+        { "id": "updateFredIssued" },
+        { "id": "updateFredReadyForRejection" }
+      ]
+    },
+    {
+      "id": "Four",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "getFoos" },
+        { "id": "getFoo" },
+        { "id": "fooGetBar" },
+        { "id": "fooGetBaz" },
+        { "id": "fooGetQux" },
+        { "id": "fooGetQuuz" },
+        { "id": "fooPostQuuzReview" },
+        { "id": "getFredDocuments" },
+        { "id": "fooGetFreds" },
+        { "id": "getFredXyzzyData" },
+        { "id": "getFredXyzzyModelResults" },
+        { "id": "getFredCorgeResults" },
+        { "id": "getFredGraultSummary" },
+        { "id": "getFredPlughSummary" },
+        { "id": "getFredGarplySummary" },
+        { "id": "getFredReviewSummary" },
+        { "id": "updateFredReview" },
+        { "id": "updateFredReadyForIssue" },
+        { "id": "updateFredIssued" },
+        { "id": "updateFredReadyForRejection" }
+      ]
+    },
+    {
+      "id": "Five",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "getFoos" },
+        { "id": "getFoo" },
+        { "id": "fooGetBaz" },
+        { "id": "fooGetQux" },
+        { "id": "fooGetQuuz" },
+        { "id": "fooPostQuuzReview" },
+        { "id": "fooGetFreds" },
+        { "id": "getFredXyzzyData" },
+        { "id": "getFredXyzzyModelResults" },
+        { "id": "getFredCorgeResults" },
+        { "id": "getFredGraultSummary" },
+        { "id": "getFredPlughSummary" },
+        { "id": "getFredGarplySummary" },
+        { "id": "getFredReviewSummary" }
+      ]
+    },
+    {
+      "id": "Six",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "getFoos" },
+        { "id": "getFoo" },
+        { "id": "fooGetBar" },
+        { "id": "fooUpdateBar" },
+        { "id": "fooGetBaz" },
+        { "id": "fooGetQux" },
+        { "id": "fooGetQuuz" },
+        { "id": "fooPostQuuzReview" },
+        { "id": "fooPostWaldoReview" },
+        { "id": "fooGetFreds" },
+        { "id": "getFredXyzzyData" },
+        { "id": "getFredXyzzyModelResults" },
+        { "id": "getFredCorgeResults" },
+        { "id": "getFredGraultSummary" },
+        { "id": "getFredPlughSummary" },
+        { "id": "getFredGarplySummary" },
+        { "id": "getFredReviewSummary" },
+        { "id": "updateFredPlughReview" }
+      ]
+    },
+    {
+      "id": "Seven",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+      ]
+    },
+    {
+      "id": "Eight",
+      "resourceAccessRules": [],
+      "resourceAccessRuleSets": [
+        { "id": "getFoos" },
+        { "id": "getFoo" },
+        { "id": "fooGetBar" },
+        { "id": "fooUpdateBar" },
+        { "id": "fooGetBaz" },
+        { "id": "fooAddOrUpdateBaz" },
+        { "id": "fooGetQux" },
+        { "id": "fooGetQuuz" },
+        { "id": "fooPostQuuzUpload" },
+        { "id": "fooPostQuuzReview" },
+        { "id": "fooPostWaldoUpload" },
+        { "id": "fooPostWaldoReview" },
+        { "id": "getFredDocuments" },
+        { "id": "fooGetFreds" },
+        { "id": "fooStartFred" },
+        { "id": "getFredXyzzyData" },
+        { "id": "getFredXyzzyModelResults" },
+        { "id": "getFredCorgeResults" },
+        { "id": "getFredGraultSummary" },
+        { "id": "getFredPlughSummary" },
+        { "id": "getFredGarplySummary" },
+        { "id": "getFredReviewSummary" },
+        { "id": "updateFredXyzzy" },
+        { "id": "updateFredXyzzyFailed" }
+      ]
+    }
+  ]
+}
