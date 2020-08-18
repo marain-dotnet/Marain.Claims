@@ -31,7 +31,7 @@ namespace Marain.Claims.OpenApi.Internal
             // Get the list of oids for the user.
             IList<string> oids = context.CurrentPrincipal
                 .Claims
-                .Where(c => c.Type == "oid")
+                .Where(c => c.Type == "oid" || c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
                 .Select(c => c.Value)
                 .ToList();
 
