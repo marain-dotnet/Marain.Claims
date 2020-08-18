@@ -73,7 +73,7 @@ namespace Marain.Claims.Specs.Steps
             var identity = new ClaimsIdentity("SuperSecureTm");
             for (int i = 0; i < oidCount; ++i)
             {
-                identity.AddClaim(new Claim("oid", GetClaimPermissionsId(i)));
+                identity.AddClaim(new Claim(Claims.ClaimTypes.ObjectIdentifier, GetClaimPermissionsId(i)));
             }
 
             this.claimsPrincipal = new ClaimsPrincipal(identity);
