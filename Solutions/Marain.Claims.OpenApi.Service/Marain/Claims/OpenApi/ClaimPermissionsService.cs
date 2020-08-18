@@ -632,7 +632,8 @@ namespace Marain.Claims.OpenApi
                 }
                 else
                 {
-                    administratorPrincipalObjectId = context.CurrentPrincipal.FindFirst("oid").Value;
+                    administratorPrincipalObjectId =
+                        (context.CurrentPrincipal.FindFirst(ClaimTypes.Oid) ?? context.CurrentPrincipal.FindFirst(ClaimTypes.ObjectIdentifier)).Value;
                 }
 
                 var permissions = new ClaimPermissions
