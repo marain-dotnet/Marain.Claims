@@ -21,7 +21,7 @@ namespace Marain.Claims.SetupTool.Commands
     /// <summary>
     /// Command to define a set of rulesets and claims in the Claims service.
     /// </summary>
-    [Command(Name = "define-claims", Description = "Define the rules and claims for a tenant.", ThrowOnUnexpectedArgument = false, ShowInHelpText = true)]
+    [Command(Name = "define-claims", Description = "Define the rules and claims for a tenant.", ShowInHelpText = true)]
     [HelpOption]
     public class DefineRulesetsAndClaimPermissions
     {

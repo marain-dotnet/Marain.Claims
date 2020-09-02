@@ -23,7 +23,7 @@ namespace Marain.Claims.SetupTool.Commands
     /// managed service identities seems still to be in pre-release.
     /// </para>
     /// </remarks>
-    [Command(Name = "show-app-identity", Description = "Display an app identity.", ThrowOnUnexpectedArgument = false, ShowInHelpText = true)]
+    [Command(Name = "show-app-identity", Description = "Display an app identity.", ShowInHelpText = true)]
     [HelpOption]
     public class ShowAppIdentityInformation
     {

@@ -32,13 +32,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{19CB7678-3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenApi", "OpenApi", "{17BE0C76-FFF1-4DA8-B077-FBC90DC1D9FA}"
 EndProject
-Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Marain.Claims.Deployment", "Marain.Claims.Deployment\Marain.Claims.Deployment.deployproj", "{26CB64DE-C80A-455A-BFB0-31F31F6390C5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.SetupTool", "Marain.Claims.SetupTool\Marain.Claims.SetupTool.csproj", "{B5914684-AC2B-4234-9FA9-05C693860D5C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Client.OpenApi", "Marain.Claims.Client.OpenApi\Marain.Claims.Client.OpenApi.csproj", "{CFD6C579-BCDE-4B83-AC59-1BB01E11C2CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Benchmark", "Marain.Claims.Benchmark\Marain.Claims.Benchmark.csproj", "{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Deployment", "Marain.Claims.Deployment\Marain.Claims.Deployment.csproj", "{ED0B5B20-B4A1-434B-84BB-419B87F92F80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,10 +86,6 @@ Global
 		{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D79853D-4E7A-4A94-A7C4-B32A7CE89E95}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26CB64DE-C80A-455A-BFB0-31F31F6390C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B5914684-AC2B-4234-9FA9-05C693860D5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B5914684-AC2B-4234-9FA9-05C693860D5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5914684-AC2B-4234-9FA9-05C693860D5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -102,6 +98,10 @@ Global
 		{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4439DE9-66E5-4A43-BAA5-1609E0B0DCA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED0B5B20-B4A1-434B-84BB-419B87F92F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED0B5B20-B4A1-434B-84BB-419B87F92F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED0B5B20-B4A1-434B-84BB-419B87F92F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED0B5B20-B4A1-434B-84BB-419B87F92F80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

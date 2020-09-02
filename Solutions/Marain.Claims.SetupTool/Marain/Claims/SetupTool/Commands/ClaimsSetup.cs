@@ -10,7 +10,7 @@ namespace Marain.Claims.SetupTool.Commands
     /// <summary>
     /// The claims setup application.
     /// </summary>
-    [Command(FullName = "ClaimsSetup", Description = "Setup claims for a tenant.", ThrowOnUnexpectedArgument = false, ShowInHelpText = true)]
+    [Command(FullName = "ClaimsSetup", Description = "Setup claims for a tenant.", ShowInHelpText = true)]
     [HelpOption]
     [Subcommand(typeof(BootstrapClaimsTenant))]
     [Subcommand(typeof(DefineRulesetsAndClaimPermissions))]
