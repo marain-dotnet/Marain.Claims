@@ -104,6 +104,7 @@ namespace Marain.Claims.SpecFlow.Steps
         }
 
         [When("I initialise the tenant with the object id '(.*)'")]
+        [Obsolete]
         public async Task WhenIInitialiseTheTenantWithTheObjectId(
             string objectId)
         {
