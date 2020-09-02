@@ -11,8 +11,8 @@ namespace Marain.Claims.SpecFlow.Steps
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Corvus.SpecFlow.Extensions;
     using Corvus.Tenancy;
+    using Corvus.Testing.SpecFlow;
     using Marain.TenantManagement.Testing;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;

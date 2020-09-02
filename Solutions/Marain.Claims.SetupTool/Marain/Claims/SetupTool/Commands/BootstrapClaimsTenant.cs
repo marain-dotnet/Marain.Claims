@@ -20,7 +20,7 @@ namespace Marain.Claims.SetupTool.Commands
     /// Command to invoke the bootstrapping endpoint of the Claims service in order to set up the
     /// initial administrative permissions for modifying claims.
     /// </summary>
-    [Command(Name = "bootstrap-claims-tenant", Description = "Bootstraps the claims for a new tenant.", ThrowOnUnexpectedArgument = false)]
+    [Command(Name = "bootstrap-claims-tenant", Description = "Bootstraps the claims for a new tenant.")]
     [HelpOption]
     public class BootstrapClaimsTenant
     {

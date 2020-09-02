@@ -12,8 +12,8 @@ namespace Marain.Claims.SpecFlow.Steps
     using System.Linq;
     using System.Threading.Tasks;
     using Corvus.Extensions.Json;
-    using Corvus.SpecFlow.Extensions;
     using Corvus.Tenancy;
+    using Corvus.Testing.SpecFlow;
     using Marain.Claims;
     using Marain.Claims.OpenApi;
     using Marain.Claims.Storage;
@@ -104,6 +104,7 @@ namespace Marain.Claims.SpecFlow.Steps
         }
 
         [When("I initialise the tenant with the object id '(.*)'")]
+        [Obsolete]
         public async Task WhenIInitialiseTheTenantWithTheObjectId(
             string objectId)
         {
