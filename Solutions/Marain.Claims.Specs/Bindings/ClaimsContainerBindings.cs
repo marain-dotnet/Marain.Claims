@@ -6,7 +6,7 @@ namespace Marain.Claims.SpecFlow.Bindings
 {
     using System.Collections.Generic;
     using Corvus.Azure.Storage.Tenancy;
-    using Corvus.SpecFlow.Extensions;
+    using Corvus.Testing.SpecFlow;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using TechTalk.SpecFlow;
