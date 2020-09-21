@@ -24,25 +24,8 @@ namespace Marain.Operations.ControlHost
 
             IConfigurationRoot root = Configure(services);
 
-            services.AddLogging(logging =>
-            {
-#if DEBUG
-                // Ensure you enable the required logging level in host.json
-                // e.g:
-                //
-                // "logging": {
-                //    "fileLoggingMode": "debugOnly",
-                //    "logLevel": {
-                //
-                //    // For all functions
-                //    "Function": "Debug",
-                //
-                //    // Default settings, e.g. for host
-                //    "default": "Debug"
-                // }
-                logging.AddConsole();
-#endif
-            });
+            services.AddApplicationInsightsInstrumentationTelemetry();
+            services.AddLogging();
 
             services.AddTenantedClaimsApi(root, config => config.Documents.AddSwaggerEndpoint());
         }

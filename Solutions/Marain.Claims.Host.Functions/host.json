@@ -2,7 +2,14 @@
   "version": "2.0",
   "extensions": {
     "http": {
-    "routePrefix": ""
-    }  
+      "routePrefix": ""
+    }
+  },
+  "logging": {
+    "logLevel": {
+      "default": "Warning",
+      "Host.Results": "Information",
+      "Host.Aggregator": "Information"
+    }
   }
 }
