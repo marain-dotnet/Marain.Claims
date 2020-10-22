@@ -8,6 +8,7 @@ namespace Marain.Claims
     using System.Collections.Generic;
     using System.Linq;
     using Corvus.Extensions;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Class defining the resource access permissions granted for identities holding a particular claim.
@@ -87,6 +88,7 @@ namespace Marain.Claims
         /// Gets all distinct resource access rules, based on both the claim's direct resource access rules and rules
         /// that are part of the claim's resource access rule sets.
         /// </summary>
+        [JsonIgnore]
         public IList<ResourceAccessRule> AllResourceAccessRules
         {
             get
