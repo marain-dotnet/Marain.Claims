@@ -35,6 +35,8 @@ jobs:
           ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME: $(Endjin_BlobStorageAccountKeySecretName)
           ENDJIN_BLOBSTORAGEKEYVAULTNAME: $(Endjin_BlobStorageKeyVaultName)
           ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING: $(Endjin_AzureServicesAuthConnectionString)
+          ENDJIN_MARAINTENANCYBASEURL: $(Endjin_MarainTenancyBaseUrl)
+          ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION: $(Endjin_MarainTenancyResourceIdForMsiAuthentication)
     postSpecs:
     - task: ArchiveFiles@2
       displayName: 'Archive Function App'
