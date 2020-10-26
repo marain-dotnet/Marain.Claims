@@ -62,7 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
+    <EmbeddedResource Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
   </ItemGroup>
 
 </Project>
