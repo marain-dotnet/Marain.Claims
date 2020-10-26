@@ -16,6 +16,8 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
     [Binding]
     public static class FunctionBindings
     {
+        public const int ClaimsHostPort = 7076;
+
         /// <summary>
         /// Sets up and runs the function using the functions runtime.
         /// </summary>
@@ -26,7 +28,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
         {
             await FunctionsBindings.GetFunctionsController(context).StartFunctionsInstance(
                     "Marain.Claims.Host.Functions",
-                    7076,
+                    ClaimsHostPort,
                     "netcoreapp3.1",
                     "csharp",
                     FunctionsBindings.GetFunctionConfiguration(context));

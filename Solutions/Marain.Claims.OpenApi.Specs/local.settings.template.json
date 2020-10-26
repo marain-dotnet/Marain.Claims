@@ -6,8 +6,6 @@
   "TenancyClient:TenancyServiceBaseUri": "https://mardevtenancy.azurewebsites.net/",
   "TenancyClient:ResourceIdForMsiAuthentication": "e7281b1b-6540-4c1b-ac18-eb0c2d42bfbf",
 
-  "ClaimsClient:BaseUri": "http://localhost:7076",
-
   // Blob storage configuration for Claims during testing.
   // Remove this to use local storage emulator.
   "TestBlobStorageConfiguration:AccountName": "endteststorage",

@@ -8,6 +8,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
     using Marain.Claims.Client;
+    using Marain.Claims.OpenApi.Specs.Bindings;
     using Marain.Services;
     using Marain.Tenancy.Client;
     using Microsoft.Extensions.Configuration;
@@ -58,13 +59,11 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddMarainServicesTenancy();
                     services.AddTenantProviderServiceClient();
 
-                    services.AddClaimsClient(sp =>
+                    services.AddClaimsClient(_ =>
                     {
-                        IConfiguration config = sp.GetRequiredService<IConfiguration>();
                         return new ClaimsClientOptions
                         {
-                            BaseUri = new Uri(config["ClaimsClient:BaseUri"]),
-                            ResourceIdForMsiAuthentication = config["ClaimsClient:ResourceIdForMsiAuthentication"],
+                            BaseUri = new Uri($"http://localhost:{FunctionBindings.ClaimsHostPort}"),
                         };
                     });
                 });
