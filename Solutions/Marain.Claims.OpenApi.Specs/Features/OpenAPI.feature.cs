@@ -22,7 +22,6 @@ namespace Marain.Claims.OpenApi.Specs.Features
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("OpenAPI")]
     [NUnit.Framework.CategoryAttribute("perFeatureContainer")]
-    [NUnit.Framework.CategoryAttribute("useTransientTenant")]
     [NUnit.Framework.CategoryAttribute("useClaimsApi")]
     public partial class OpenAPIFeature
     {
@@ -31,7 +30,6 @@ namespace Marain.Claims.OpenApi.Specs.Features
         
         private string[] _featureTags = new string[] {
                 "perFeatureContainer",
-                "useTransientTenant",
                 "useClaimsApi"};
         
 #line 1 "OpenAPI.feature"
@@ -43,7 +41,6 @@ namespace Marain.Claims.OpenApi.Specs.Features
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "OpenAPI", null, ProgrammingLanguage.CSharp, new string[] {
                         "perFeatureContainer",
-                        "useTransientTenant",
                         "useClaimsApi"});
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -89,7 +86,7 @@ namespace Marain.Claims.OpenApi.Specs.Features
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get OpenAPI definition", null, tagsOfScenario, argumentsOfScenario);
-#line 6
+#line 5
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -109,10 +106,10 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 7
+#line 6
  testRunner.When("I make a request to get the OpenAPI definition", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 8
+#line 7
  testRunner.Then("the request should succeed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
