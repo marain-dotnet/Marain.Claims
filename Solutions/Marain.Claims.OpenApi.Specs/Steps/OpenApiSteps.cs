@@ -45,7 +45,7 @@ namespace Marain.Claims.OpenApi.Specs.Steps
         {
             bool hasException = this.scenarioContext.TryGetValue("Exception", out Exception exception);
 
-            Assert.IsFalse(hasException, exception.ToString());
+            Assert.IsFalse(hasException, exception?.ToString());
         }
     }
 }
