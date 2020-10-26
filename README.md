@@ -70,3 +70,11 @@ The IMM is endjin's IP quality framework.
 [![Packaging](https://endimmfuncdev.azurewebsites.net/api/imm/github/marain-dotnet/Marain.Claims/rule/547fd9f5-9caf-449f-82d9-4fba9e7ce13a?cache=false)](https://endimmfuncdev.azurewebsites.net/api/imm/github/marain-dotnet/Marain.Claims/rule/547fd9f5-9caf-449f-82d9-4fba9e7ce13a?cache=false)
 
 [![Deployment](https://endimmfuncdev.azurewebsites.net/api/imm/github/marain-dotnet/Marain.Claims/rule/edea4593-d2dd-485b-bc1b-aaaf18f098f9?cache=false)](https://endimmfuncdev.azurewebsites.net/api/imm/github/marain-dotnet/Marain.Claims/rule/edea4593-d2dd-485b-bc1b-aaaf18f098f9?cache=false)
+
+# Revoked releases
+
+The following releases have been revoked:
+
+| Version(s) | Reason |
+| --- | --- |
+| `1.2.1`<br>`1.2.2` | Dependency mismatch in version of `System.IdentityModel.Tokens.Jwt` causing all requests to the service to fail |
