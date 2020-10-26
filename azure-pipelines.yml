@@ -29,6 +29,8 @@ jobs:
           Write-Host "##vso[task.setvariable variable=AzureServicesAuthConnectionString]$Env:ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING"
           Write-Host "##vso[task.setvariable variable=TenancyClient__TenancyServiceBaseUri]$Env:ENDJIN_MARAINTENANCYBASEURL"
           Write-Host "##vso[task.setvariable variable=TenancyClient__ResourceIdForMsiAuthentication]$Env:ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION"
+          Write-Host "##vso[task.setvariable variable=MarainServiceConfiguration__ServiceDisplayName]$Env:ENDJIN_MARAINCLAIMSSERVICEDISPLAYNAME"
+          Write-Host "##vso[task.setvariable variable=MarainServiceConfiguration__ServiceTenantId]$Env:ENDJIN_MARAINCLAIMSSERVICETENANTID"
         displayName: 'Set Azure Connection String Environment Variable'
         env:
           ENDJIN_BLOBSTORAGEACCOUNTNAME: $(Endjin_BlobStorageAccountName)
@@ -37,6 +39,8 @@ jobs:
           ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING: $(Endjin_AzureServicesAuthConnectionString)
           ENDJIN_MARAINTENANCYBASEURL: $(Endjin_MarainTenancyBaseUrl)
           ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION: $(Endjin_MarainTenancyResourceIdForMsiAuthentication)
+          ENDJIN_MARAINCLAIMSSERVICEDISPLAYNAME: $(Endjin_MarainClaimsServiceDisplayName)
+          ENDJIN_MARAINCLAIMSSERVICETENANTID: $(Endjin_MarainClaimsServiceTenantId)
       - task: Npm@1
         displayName: 'Install Latest Azure Functions V3 Runtime'
         inputs:
