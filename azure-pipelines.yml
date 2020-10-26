@@ -37,6 +37,12 @@ jobs:
           ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING: $(Endjin_AzureServicesAuthConnectionString)
           ENDJIN_MARAINTENANCYBASEURL: $(Endjin_MarainTenancyBaseUrl)
           ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION: $(Endjin_MarainTenancyResourceIdForMsiAuthentication)
+      - task: Npm@1
+        displayName: 'Install Latest Azure Functions V3 Runtime'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'install -g azure-functions-core-tools@3 --unsafe-perm true'
     postSpecs:
     - task: ArchiveFiles@2
       displayName: 'Archive Function App'
