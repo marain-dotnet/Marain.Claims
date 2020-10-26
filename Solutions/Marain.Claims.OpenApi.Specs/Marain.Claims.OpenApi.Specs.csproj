@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
+
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
-    <RootNamespace>Marain.Claims.Specs</RootNamespace>
+    <RootNamespace>Marain.Claims.OpenApi.Specs</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -16,34 +16,45 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.0.2" />
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow" Version="1.0.2" />
+    <PackageReference Include="Corvus.Testing.SpecFlow" Version="1.0.2" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Idg.AsyncTestTools" Version="1.0.0" />
+    <PackageReference Include="Marain.Services.Tenancy" Version="1.1.2" />
     <PackageReference Include="Marain.Services.Tenancy.Testing" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SpecFlow.NUnit" Version="3.4.31" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.4.31" />
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Marain.Claims.Client.OpenApi\Marain.Claims.Client.OpenApi.csproj" />
     <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
-    <ProjectReference Include="..\Marain.Claims.OpenApi.Service\Marain.Claims.OpenApi.Service.csproj" />
-    <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
-    <ProjectReference Include="..\Marain.Claims.Tenancy.AzureBlob\Marain.Claims.Tenancy.AzureBlob.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="specflow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

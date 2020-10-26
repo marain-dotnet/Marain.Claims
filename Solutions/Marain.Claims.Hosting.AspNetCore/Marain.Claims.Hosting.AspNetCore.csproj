@@ -20,16 +20,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Services.Tenancy" Version="1.1.0" />
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.0.0" />
-    <PackageReference Include="Menes.Abstractions" Version="1.1.0" />
-    <PackageReference Include="Menes.Hosting.AspNetCore" Version="1.1.0" />
+    <PackageReference Include="Marain.Services.Tenancy" Version="1.1.2" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.0.2" />
+    <PackageReference Include="Menes.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Menes.Hosting.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@ resources:
 jobs:
 - template: templates/build.and.release.yml@recommended_practices
   parameters:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'windows-latest'
     service_connection_nuget_org: $(Endjin_Service_Connection_NuGet_Org)
     service_connection_github: $(Endjin_Service_Connection_GitHub)
     solution_to_build: $(Endjin_Solution_To_Build)
@@ -27,12 +27,26 @@ jobs:
           Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccountKeySecretName]$Env:ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME"
           Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__KeyVaultName]$Env:ENDJIN_BLOBSTORAGEKEYVAULTNAME"
           Write-Host "##vso[task.setvariable variable=AzureServicesAuthConnectionString]$Env:ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING"
+          Write-Host "##vso[task.setvariable variable=TenancyClient__TenancyServiceBaseUri]$Env:ENDJIN_MARAINTENANCYBASEURL"
+          Write-Host "##vso[task.setvariable variable=TenancyClient__ResourceIdForMsiAuthentication]$Env:ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION"
+          Write-Host "##vso[task.setvariable variable=MarainServiceConfiguration__ServiceDisplayName]$Env:ENDJIN_MARAINCLAIMSSERVICEDISPLAYNAME"
+          Write-Host "##vso[task.setvariable variable=MarainServiceConfiguration__ServiceTenantId]$Env:ENDJIN_MARAINCLAIMSSERVICETENANTID"
         displayName: 'Set Azure Connection String Environment Variable'
         env:
           ENDJIN_BLOBSTORAGEACCOUNTNAME: $(Endjin_BlobStorageAccountName)
           ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME: $(Endjin_BlobStorageAccountKeySecretName)
           ENDJIN_BLOBSTORAGEKEYVAULTNAME: $(Endjin_BlobStorageKeyVaultName)
           ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING: $(Endjin_AzureServicesAuthConnectionString)
+          ENDJIN_MARAINTENANCYBASEURL: $(Endjin_MarainTenancyBaseUrl)
+          ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION: $(Endjin_MarainTenancyResourceIdForMsiAuthentication)
+          ENDJIN_MARAINCLAIMSSERVICEDISPLAYNAME: $(Endjin_MarainClaimsServiceDisplayName)
+          ENDJIN_MARAINCLAIMSSERVICETENANTID: $(Endjin_MarainClaimsServiceTenantId)
+      - task: Npm@1
+        displayName: 'Install Latest Azure Functions V3 Runtime'
+        inputs:
+          command: custom
+          verbose: false
+          customCommand: 'install -g azure-functions-core-tools@3 --unsafe-perm true'
     postSpecs:
     - task: ArchiveFiles@2
       displayName: 'Archive Function App'

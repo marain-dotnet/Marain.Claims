@@ -23,16 +23,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Azure.Storage.Tenancy" Version="1.0.0" />
+    <PackageReference Include="Corvus.Azure.Storage.Tenancy" Version="1.0.2" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Services.Tenancy" Version="1.1.0" />
-    <PackageReference Include="Menes.Abstractions" Version="1.1.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.14.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.7" />
+    <PackageReference Include="Marain.Services.Tenancy" Version="1.1.2" />
+    <PackageReference Include="Menes.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.15.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.9" />
     <PackageReference Include="Corvus.Tenancy.Abstractions" Version="1.0.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
