@@ -43,9 +43,9 @@ namespace Marain.Claims.OpenApi.Specs.Steps
         [Then(@"the request should succeed")]
         public void ThenTheRequestShouldSucceed()
         {
-            bool hasException = this.scenarioContext.TryGetValue("Exception", out Exception value);
+            bool hasException = this.scenarioContext.TryGetValue("Exception", out Exception exception);
 
-            Assert.IsFalse(hasException);
+            Assert.IsFalse(hasException, exception.ToString());
         }
     }
 }
