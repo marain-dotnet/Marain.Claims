@@ -1,0 +1,24 @@
+{
+  "LeasingStorageAccountConnectionString": "UseDevelopmentStorage=true",
+
+  // If running with a local tenancy service, point TenancyClient:TenancyServiceBaseUri at the localhost address for that
+  // and set the ResourceIdForMsiAuthentication to an empty string.
+  "TenancyClient:TenancyServiceBaseUri": "https://mardevtenancy.azurewebsites.net/",
+  "TenancyClient:ResourceIdForMsiAuthentication": "e7281b1b-6540-4c1b-ac18-eb0c2d42bfbf",
+
+  "ClaimsClient:BaseUri": "http://localhost:7076",
+
+  // Blob storage configuration for Claims during testing.
+  // Remove this to use local storage emulator.
+  "TestBlobStorageConfiguration:AccountName": "endteststorage",
+  "TestBlobStorageConfiguration:AccountKeySecretName": "endteststorage",
+  "TestBlobStorageConfiguration:KeyVaultName": "endjintest"
+
+  // If any of the TenancyClient or TestBlobStorageConfiguration are set to point at
+  // resources in Azure, this local service will need to authenticate. And for that to work, you won't be able to use the
+  // normal az cli-based AzureServicesAuthConnectionString (because az cli is only able to obtain tokens for a fixed set of
+  // known Microsoft resource; it can't be used to obtain tokens for arbitrary applications that we've defined). Instead,
+  // you'll need to create a suitable service principle in AAD, grant that service principle access to the tenancy service, and
+  // set up the credentials like this instead of the setting above:
+  //  "AzureServicesAuthConnectionString": "RunAs=App;AppId=AppIdForYourServicePrinciple;TenantId=0f621c67-98a0-4ed5-b5bd-31a35be41e29;AppKey=YourAppSecretHere"
+}
