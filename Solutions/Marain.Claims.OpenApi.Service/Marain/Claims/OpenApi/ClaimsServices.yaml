@@ -430,14 +430,14 @@ components:
     Resource:
       type: object
       properties:
+        displayName:
+          type: string
         uri:
           type: string
           format: url
-        displayName:
-          type: string
       required:
-        - name
         - displayName
+        - uri
         
     ResourceAccessRule:
       type: object
