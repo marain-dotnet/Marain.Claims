@@ -23,10 +23,10 @@ namespace Marain.Claims.Client.Models
         /// <summary>
         /// Initializes a new instance of the Resource class.
         /// </summary>
-        public Resource(string displayName, string uri = default(string))
+        public Resource(string displayName, string uri)
         {
-            Uri = uri;
             DisplayName = displayName;
+            Uri = uri;
             CustomInit();
         }
 
@@ -37,13 +37,13 @@ namespace Marain.Claims.Client.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "uri")]
-        public string Uri { get; set; }
+        [JsonProperty(PropertyName = "displayName")]
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "displayName")]
-        public string DisplayName { get; set; }
+        [JsonProperty(PropertyName = "uri")]
+        public string Uri { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -56,6 +56,10 @@ namespace Marain.Claims.Client.Models
             if (DisplayName == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "DisplayName");
+            }
+            if (Uri == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Uri");
             }
         }
     }
