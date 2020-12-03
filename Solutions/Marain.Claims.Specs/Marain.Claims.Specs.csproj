@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,17 +7,14 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>Marain.Claims.Specs</RootNamespace>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>RCS1029;CS1591; SA1633</NoWarn>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>RCS1029;CS1591; SA1633</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.0.2" />
+    <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="1.1.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,26 +30,21 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi.Service\Marain.Claims.OpenApi.Service.csproj" />
     <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
     <ProjectReference Include="..\Marain.Claims.Tenancy.AzureBlob\Marain.Claims.Tenancy.AzureBlob.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="specflow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="ServiceManifests\" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
   </ItemGroup>
-
 </Project>
