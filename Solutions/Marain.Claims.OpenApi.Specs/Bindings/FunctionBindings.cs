@@ -8,6 +8,8 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.SpecFlow;
     using Corvus.Testing.SpecFlow;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using TechTalk.SpecFlow;
 
     /// <summary>
@@ -37,8 +39,9 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
         [AfterScenario("useClaimsApi")]
         public static void WriteFunctionsOutput(FeatureContext featureContext)
         {
+            ILogger logger = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ILogger>();
             FunctionsController functionsController = FunctionsBindings.GetFunctionsController(featureContext);
-            functionsController.GetFunctionsOutput().WriteAllToConsoleAndClear();
+            logger.LogAllAndClear(functionsController.GetFunctionsOutput());
         }
 
         /// <summary>
