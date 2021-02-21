@@ -39,7 +39,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
         [AfterScenario("useClaimsApi")]
         public static void WriteFunctionsOutput(FeatureContext featureContext)
         {
-            ILogger logger = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ILogger>();
+            ILogger<FunctionsController> logger = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ILogger<FunctionsController>>();
             FunctionsController functionsController = FunctionsBindings.GetFunctionsController(featureContext);
             logger.LogAllAndClear(functionsController.GetFunctionsOutput());
         }
