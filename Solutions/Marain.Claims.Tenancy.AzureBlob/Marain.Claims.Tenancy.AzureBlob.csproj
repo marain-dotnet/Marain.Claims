@@ -25,7 +25,7 @@
     </PackageReference>
     <PackageReference Include="Menes.Hosting.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.12" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.12" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
