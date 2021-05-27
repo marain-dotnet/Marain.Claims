@@ -14,6 +14,9 @@ namespace Microsoft.Extensions.DependencyInjection
     using Menes;
     using Menes.AccessControlPolicies;
     using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
 
     /// <summary>
     /// Extension methods for configuring DI for the Operations Open API services.
@@ -41,10 +44,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddLogging();
 
-            // Work around the fact that the tenancy client currently tries to fetch the root tenant on startup.
             services.AddMarainServiceConfiguration();
-
-            services.AddRootTenant();
             services.AddMarainServicesTenancy();
             services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
             services.AddTenantProviderServiceClient();
@@ -63,7 +63,11 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTenantedBlobContainerClaimsStore();
 
-            services.AddJsonSerializerSettings();
+            services.AddJsonNetSerializerSettingsProvider();
+            services.AddJsonNetPropertyBag();
+            services.AddJsonNetCultureInfoConverter();
+            services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
+            services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy(), true));
 
             services.AddSingleton<ClaimPermissionsService>();
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());

@@ -9,6 +9,9 @@ namespace Marain.Claims.SpecFlow.Bindings
     using Corvus.Testing.SpecFlow;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
     using TechTalk.SpecFlow;
 
     /// <summary>
@@ -40,10 +43,13 @@ namespace Marain.Claims.SpecFlow.Bindings
 
                     serviceCollection.AddLogging();
 
-                    serviceCollection.AddRootTenant();
                     serviceCollection.AddInMemoryTenantProvider();
 
-                    serviceCollection.AddJsonSerializerSettings();
+                    serviceCollection.AddJsonNetSerializerSettingsProvider();
+                    serviceCollection.AddJsonNetPropertyBag();
+                    serviceCollection.AddJsonNetCultureInfoConverter();
+                    serviceCollection.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
+                    serviceCollection.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy(), true));
 
                     var tenantCloudBlobContainerFactoryOptions = new TenantCloudBlobContainerFactoryOptions
                     {
