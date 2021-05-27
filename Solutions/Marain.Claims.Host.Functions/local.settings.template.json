@@ -7,7 +7,7 @@
     "APPINSIGHTS_INSTRUMENTATIONKEY": "",
     "AI:DeveloperMode": "true",
 
-    "MarainServiceConfiguration:ServiceTenantId": "",
+    "MarainServiceConfiguration:ServiceTenantId": "3633754ac4c9be44b55bfe791b1780f1ca7153e8fbe1b54b9f44002217f1c51c",
     "MarainServiceConfiguration:ServiceDisplayName": "Claims v1",
 
     // If running with a local tenancy service, point TenancyClient:TenancyServiceBaseUri at the localhost address for that
