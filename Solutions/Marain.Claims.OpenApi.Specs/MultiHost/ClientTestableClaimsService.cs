@@ -5,6 +5,8 @@
 namespace Marain.Claims.OpenApi.Specs.MultiHost
 {
     using System;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Marain.Claims.Client;
@@ -26,8 +28,13 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         {
             this.testTenants = testTenants;
             var claimsClient = new UnauthenticatedClaimsService(new Uri(serviceUrl));
-            claimsClient.HttpClient.DefaultRequestHeaders.Add("X-MARAIN-CLAIMS", $"{{ \"oid\": [ \"{this.clientOid}\" ] }}");
+            ////claimsClient.HttpClient.DefaultRequestHeaders.Add("X-MARAIN-CLAIMS", $"{{ \"oid\": [ \"{this.clientOid}\" ] }}");
 
+            var jwt = new JwtSecurityToken(claims: new[] { new Claim("oid", this.clientOid) });
+            ////string token = $"{jwt.EncodedHeader}.{jwt.EncodedPayload}.{jwt.En}";
+            string token = new JwtSecurityTokenHandler().WriteToken(jwt);
+            claimsClient.HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
+                "Bearer", token);
             this.claimsServiceClient = claimsClient;
         }
 
