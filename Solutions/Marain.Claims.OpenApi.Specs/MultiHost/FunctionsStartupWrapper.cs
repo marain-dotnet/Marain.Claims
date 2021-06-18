@@ -4,7 +4,6 @@
 
 namespace Marain.Claims.OpenApi.Specs.MultiHost
 {
-
     using Marain.Claims.Functions;
 
     using Microsoft.ApplicationInsights;

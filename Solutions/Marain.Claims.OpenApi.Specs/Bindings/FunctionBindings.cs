@@ -143,14 +143,22 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
         /// Tear down the running functions instances for the scenario.
         /// </summary>
         /// <param name="context">The current <see cref="FeatureContext"/>.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [AfterFeature]
-        public static void TeardownFunctionsAfterScenario(FeatureContext context)
+        public static async Task TeardownFunctionsAfterScenarioAsync(FeatureContext context)
         {
             if (TestHostMode == TestHostModes.UseFunctionHost)
             {
                 if (context.TryGetValue(out FunctionsController controller))
                 {
                     context.RunAndStoreExceptions(controller.TeardownFunctions);
+                }
+            }
+            else if (TestHostMode == TestHostModes.InProcessEmulateFunctionWithActionResult)
+            {
+                if (context.TryGetValue(out OpenApiWebHostManager hostManager))
+                {
+                    await hostManager.StopAllHostsAsync();
                 }
             }
         }

@@ -31,9 +31,18 @@
                 new JObject(new JProperty("administratorPrincipalObjectId", this.clientOid)));
         }
 
+        /// <inheritdoc/>
         public async Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimIdAsync(string claimPermissionsId)
         {
             OpenApiResult result = await this.service.GetClaimPermissionAsync(this.MakeOpenApiContext(), claimPermissionsId);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as ClaimPermissions);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimAsync(ClaimPermissions newClaimPermissions)
+        {
+            OpenApiResult result = await this.service.CreateClaimPermissionsAsync(this.MakeOpenApiContext(), newClaimPermissions);
             result.Results.TryGetValue("application/json", out object claimPermissions);
             return (result.StatusCode, claimPermissions as ClaimPermissions);
         }

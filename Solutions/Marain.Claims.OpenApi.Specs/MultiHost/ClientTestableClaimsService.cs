@@ -46,12 +46,33 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 claimId,
                 this.testTenants.TransientClientTenantId);
 
-            // We get the result back as the ClaimPermissions type defined in the client library, but we want
+            return await GetStatusAndConvertedBody(result);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimAsync(ClaimPermissions newClaimPermissions)
+        {
+            ToClientLibraryType(newClaimPermissions, out Client.Models.ClaimPermissions input);
+            HttpOperationResponse<Client.Models.ClaimPermissions> result = await this.claimsServiceClient.CreateClaimPermissionsWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                input);
+
+            return await GetStatusAndConvertedBody(result);
+        }
+
+        private static async Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(HttpOperationResponse<Client.Models.ClaimPermissions> result)
+        {
+            // We get the result back in some  type defined in the client library, but we want
             // to convert that to the internal type for test purposes (because for in-process direct testing,
-            // we don't involve the client library).
+            // we don't involve the client library, so ITestableClaimsService is all in terms of internal types).
             string resultBody = await result.Response.Content.ReadAsStringAsync();
             ClaimPermissions claimPermissions = JsonConvert.DeserializeObject<ClaimPermissions>(resultBody);
             return ((int)result.Response.StatusCode, claimPermissions);
+        }
+
+        private static void ToClientLibraryType<TInternal, TClient>(TInternal input, out TClient output)
+        {
+            output = JsonConvert.DeserializeObject<TClient>(JsonConvert.SerializeObject(input));
         }
     }
 }

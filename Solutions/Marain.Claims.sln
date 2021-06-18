@@ -43,6 +43,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.Deployment", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marain.Claims.OpenApi.Specs", "Marain.Claims.OpenApi.Specs\Marain.Claims.OpenApi.Specs.csproj", "{80C31873-7276-4A6C-ACBC-6952AECB6535}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D18746D-0E92-4A24-822B-B382F6BF1FE5}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		FastTests.playlist = FastTests.playlist
+		ParallelizableTests.playlist = ParallelizableTests.playlist
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

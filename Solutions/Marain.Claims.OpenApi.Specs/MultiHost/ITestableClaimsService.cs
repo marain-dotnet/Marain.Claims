@@ -15,5 +15,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         Task BootstrapTenantClaimsPermissions();
 
         Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimIdAsync(string claimPermissionsId);
+
+        Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimAsync(ClaimPermissions newClaimPermissions);
     }
 }

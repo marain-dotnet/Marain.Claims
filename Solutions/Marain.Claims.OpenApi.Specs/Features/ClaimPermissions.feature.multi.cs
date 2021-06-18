@@ -6,12 +6,10 @@ namespace Marain.Claims.OpenApi.Specs.Features
 {
     using Marain.Claims.OpenApi.Specs.MultiHost;
 
-    using NUnit.Framework;
-
     /// <summary>
-    /// Adds in multi-form execution.
+    /// Adds in multi-host-mode execution.
     /// </summary>
-    [TestFixtureSource(nameof(FixtureArgs))]
+    [MultiHostTest]
     public partial class ClaimPermissionsFeature : MultiTestHostBase
     {
         /// <summary>
