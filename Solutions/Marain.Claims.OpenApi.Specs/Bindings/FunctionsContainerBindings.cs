@@ -5,18 +5,18 @@
 namespace Marain.Workflows.Api.Specs.Bindings
 {
     using System;
+
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
+
     using Marain.Claims.Client;
     using Marain.Claims.OpenApi.Specs.Bindings;
-    using Marain.Claims.OpenApi.Specs.MultiHost;
-    using Marain.Services;
     using Marain.Tenancy.Client;
 
     using Microsoft.ApplicationInsights;
-    using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+
     using TechTalk.SpecFlow;
 
     /// <summary>

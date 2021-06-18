@@ -133,9 +133,14 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
         {
             if (TestHostMode == TestHostModes.UseFunctionHost)
             {
-                ILogger<FunctionsController> logger = ContainerBindings.GetServiceProvider(featureContext).GetRequiredService<ILogger<FunctionsController>>();
                 FunctionsController functionsController = FunctionsBindings.GetFunctionsController(featureContext);
-                logger.LogAllAndClear(functionsController.GetFunctionsOutput());
+                foreach (IProcessOutput po in functionsController.GetFunctionsOutput())
+                {
+                    Console.WriteLine(po.StandardOutputText);
+                    Console.WriteLine(po.StandardErrorText);
+
+                    po.ClearAllOutput();
+                }
             }
         }
 
