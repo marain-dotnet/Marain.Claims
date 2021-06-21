@@ -7,14 +7,17 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
     using System;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
+    using System.Text;
     using System.Threading.Tasks;
 
     using Marain.Claims.Client;
     using Marain.Claims.OpenApi.Specs.Bindings;
 
+    using Microsoft.OpenApi;
     using Microsoft.Rest;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     internal class ClientTestableClaimsService : ITestableClaimsService
     {
@@ -27,14 +30,24 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
             string serviceUrl)
         {
             this.testTenants = testTenants;
-            var claimsClient = new UnauthenticatedClaimsService(new Uri(serviceUrl));
-            ////claimsClient.HttpClient.DefaultRequestHeaders.Add("X-MARAIN-CLAIMS", $"{{ \"oid\": [ \"{this.clientOid}\" ] }}");
 
-            var jwt = new JwtSecurityToken(claims: new[] { new Claim("oid", this.clientOid) });
-            ////string token = $"{jwt.EncodedHeader}.{jwt.EncodedPayload}.{jwt.En}";
-            string token = new JwtSecurityTokenHandler().WriteToken(jwt);
-            claimsClient.HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
-                "Bearer", token);
+            // When testing the Functions Host locally (and also when doing in-process testing that
+            // emulates functions hosting) we can simulate authentication by passing an
+            // X-MS-CLIENT-PRINCIPAL header in the same form that Azure Functions would supply.
+            // (To test against a deployed instance, we would need to provide a real token, because
+            // Azure will block any requests that don't. Also, it won't pass through any
+            // X-MS-CLIENT-PRINCIPAL header from the outside.)
+            var claimsClient = new UnauthenticatedClaimsService(new Uri(serviceUrl));
+            var appServiceClientPrincipal = new JObject(
+                new JProperty(
+                    "claims",
+                    new JArray(
+                        new JObject(
+                            new JProperty("typ", "http://schemas.microsoft.com/identity/claims/objectidentifier"),
+                            new JProperty("val", this.clientOid)))));
+            claimsClient.HttpClient.DefaultRequestHeaders.Add(
+                "X-MS-CLIENT-PRINCIPAL",
+                Convert.ToBase64String(Encoding.UTF8.GetBytes(appServiceClientPrincipal.ToString(Formatting.None))));
             this.claimsServiceClient = claimsClient;
         }
 
