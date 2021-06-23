@@ -4,7 +4,10 @@
 
 namespace Marain.Claims.OpenApi.Specs.MultiHost
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Enables a single set of tests to work against a service hosted directly without Menes,
@@ -14,8 +17,12 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
     {
         Task BootstrapTenantClaimsPermissions();
 
-        Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimIdAsync(string claimPermissionsId);
+        Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimPermissionsAsync(string claimPermissionsId);
 
-        Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimAsync(ClaimPermissions newClaimPermissions);
+        Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimPermissionsAsync(ClaimPermissions newClaimPermissions);
+
+        Task<(int HttpStatusCode, ResourceAccessRuleSet Result)> CreateResourceAccessRuleSetAsync(ResourceAccessRuleSet newClaimPermissions);
+
+        Task<(int HttpStatusCode, JObject Result)> AddRulesForClaimPermissionsAsync(string claimId, List<ResourceAccessRule> resourceAccessRules);
     }
 }

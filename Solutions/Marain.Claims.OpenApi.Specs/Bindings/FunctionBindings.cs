@@ -10,6 +10,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
 
     using BoDi;
 
+    using Corvus.Extensions.Json;
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.SpecFlow;
     using Corvus.Testing.SpecFlow;
@@ -20,7 +21,6 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
     using Menes.Testing.AspNetCoreSelfHosting;
 
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
     using NUnit.Framework.Internal;
 
@@ -89,9 +89,16 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     break;
             }
 
+            IServiceProvider serviceProvider = ContainerBindings.GetServiceProvider(context);
             ITestableClaimsService serviceWrapper = TestHostMode == TestHostModes.DirectInvocation
-                ? new DirectTestableClaimsService(testTenants, ContainerBindings.GetServiceProvider(context).GetRequiredService<ClaimPermissionsService>())
-                : new ClientTestableClaimsService(testTenants, ServiceUrl);
+                ? new DirectTestableClaimsService(
+                    testTenants,
+                    serviceProvider.GetRequiredService<ClaimPermissionsService>(),
+                    serviceProvider.GetRequiredService<ResourceAccessRuleSetService>())
+                : new ClientTestableClaimsService(
+                    testTenants,
+                    ServiceUrl,
+                    serviceProvider.GetRequiredService<IJsonSerializerSettingsProvider>().Instance);
 
             specFlowDiContainer.RegisterInstanceAs(serviceWrapper);
         }

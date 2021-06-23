@@ -5,15 +5,13 @@
 namespace Marain.Claims.OpenApi.Specs.MultiHost
 {
     using System;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Security.Claims;
+    using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
 
     using Marain.Claims.Client;
     using Marain.Claims.OpenApi.Specs.Bindings;
 
-    using Microsoft.OpenApi;
     using Microsoft.Rest;
 
     using Newtonsoft.Json;
@@ -24,12 +22,15 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         private readonly ClaimsServiceTestTenants testTenants;
         private readonly IClaimsService claimsServiceClient;
         private readonly string clientOid = Guid.NewGuid().ToString();
+        private readonly JsonSerializerSettings serializerSettings;
 
         public ClientTestableClaimsService(
             ClaimsServiceTestTenants testTenants,
-            string serviceUrl)
+            string serviceUrl,
+            JsonSerializerSettings serializerSettings)
         {
             this.testTenants = testTenants;
+            this.serializerSettings = serializerSettings;
 
             // When testing the Functions Host locally (and also when doing in-process testing that
             // emulates functions hosting) we can simulate authentication by passing an
@@ -60,7 +61,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         }
 
         /// <inheritdoc/>
-        public async Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimIdAsync(string claimId)
+        public async Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimPermissionsAsync(string claimId)
         {
             HttpOperationResponse<Client.Models.ClaimPermissions> result = await this.claimsServiceClient.GetClaimPermissionsWithHttpMessagesAsync(
                 claimId,
@@ -70,9 +71,9 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         }
 
         /// <inheritdoc/>
-        public async Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimAsync(ClaimPermissions newClaimPermissions)
+        public async Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimPermissionsAsync(ClaimPermissions newClaimPermissions)
         {
-            ToClientLibraryType(newClaimPermissions, out Client.Models.ClaimPermissions input);
+            this.ToClientLibraryType(newClaimPermissions, out Client.Models.ClaimPermissions input);
             HttpOperationResponse<Client.Models.ClaimPermissions> result = await this.claimsServiceClient.CreateClaimPermissionsWithHttpMessagesAsync(
                 this.testTenants.TransientClientTenantId,
                 input);
@@ -80,19 +81,56 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
             return await GetStatusAndConvertedBody(result);
         }
 
-        private static async Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(HttpOperationResponse<Client.Models.ClaimPermissions> result)
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, Claims.ResourceAccessRuleSet Result)> CreateResourceAccessRuleSetAsync(
+            Claims.ResourceAccessRuleSet ruleSet)
+        {
+            this.ToClientLibraryType(ruleSet, out Client.Models.ResourceAccessRuleSet input);
+            HttpOperationResponse<object> result = await this.claimsServiceClient.CreateResourceAccessRuleSetWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                input);
+
+            return await GetStatusAndConvertedResourceAccessRuleSetBody(result);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> AddRulesForClaimPermissionsAsync(
+            string claimId,
+            List<Claims.ResourceAccessRule> resourceAccessRules)
+        {
+            this.ToClientLibraryType(resourceAccessRules, out Client.Models.ResourceAccessRule[] input);
+            HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                claimId,
+                "add",
+                input);
+
+            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+        }
+
+        private static Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(
+            HttpOperationResponse<Client.Models.ClaimPermissions> result)
+            => GetStatusAndConvertedBody<Client.Models.ClaimPermissions, ClaimPermissions>(result, result.Body);
+
+        private static Task<(int HttpStatusCode, ResourceAccessRuleSet Result)> GetStatusAndConvertedResourceAccessRuleSetBody(
+            HttpOperationResponse<object> result)
+            => GetStatusAndConvertedBody<Client.Models.ResourceAccessRuleSet, ResourceAccessRuleSet>(
+                    result, (Client.Models.ResourceAccessRuleSet)result.Body);
+
+        private static async Task<(int HttpStatusCode, TResult Result)> GetStatusAndConvertedBody<TInput, TResult>(
+            HttpOperationResponse response, TInput clientTypeResult)
         {
             // We get the result back in some  type defined in the client library, but we want
             // to convert that to the internal type for test purposes (because for in-process direct testing,
             // we don't involve the client library, so ITestableClaimsService is all in terms of internal types).
-            string resultBody = await result.Response.Content.ReadAsStringAsync();
-            ClaimPermissions claimPermissions = JsonConvert.DeserializeObject<ClaimPermissions>(resultBody);
-            return ((int)result.Response.StatusCode, claimPermissions);
+            string resultBody = await response.Response.Content.ReadAsStringAsync();
+            TResult internalTypeResult = JsonConvert.DeserializeObject<TResult>(resultBody);
+            return ((int)response.Response.StatusCode, internalTypeResult);
         }
 
-        private static void ToClientLibraryType<TInternal, TClient>(TInternal input, out TClient output)
+        private void ToClientLibraryType<TInternal, TClient>(TInternal input, out TClient output)
         {
-            output = JsonConvert.DeserializeObject<TClient>(JsonConvert.SerializeObject(input));
+            output = JsonConvert.DeserializeObject<TClient>(JsonConvert.SerializeObject(input, this.serializerSettings));
         }
     }
 }

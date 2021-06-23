@@ -1,6 +1,7 @@
 ﻿namespace Marain.Claims.OpenApi.Specs.MultiHost
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Marain.Claims;
@@ -13,38 +14,64 @@
     internal class DirectTestableClaimsService : ITestableClaimsService
     {
         private readonly ClaimsServiceTestTenants testTenants;
-        private readonly ClaimPermissionsService service;
+        private readonly ClaimPermissionsService claimsService;
+        private readonly ResourceAccessRuleSetService ruleSetService;
         private readonly string clientOid = Guid.NewGuid().ToString();
 
         public DirectTestableClaimsService(
             ClaimsServiceTestTenants testTenants,
-            ClaimPermissionsService service)
+            ClaimPermissionsService claimsService,
+            ResourceAccessRuleSetService ruleSetService)
         {
             this.testTenants = testTenants;
-            this.service = service;
+            this.claimsService = claimsService;
+            this.ruleSetService = ruleSetService;
         }
 
         public async Task BootstrapTenantClaimsPermissions()
         {
-            await this.service.BootstrapTenantAsync(
+            await this.claimsService.BootstrapTenantAsync(
                 this.MakeOpenApiContext(),
                 new JObject(new JProperty("administratorPrincipalObjectId", this.clientOid)));
         }
 
         /// <inheritdoc/>
-        public async Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimIdAsync(string claimPermissionsId)
+        public async Task<(int HttpStatusCode, ClaimPermissions Result)> GetClaimPermissionsAsync(string claimPermissionsId)
         {
-            OpenApiResult result = await this.service.GetClaimPermissionAsync(this.MakeOpenApiContext(), claimPermissionsId);
+            OpenApiResult result = await this.claimsService.GetClaimPermissionAsync(this.MakeOpenApiContext(), claimPermissionsId);
             result.Results.TryGetValue("application/json", out object claimPermissions);
             return (result.StatusCode, claimPermissions as ClaimPermissions);
         }
 
         /// <inheritdoc/>
-        public async Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimAsync(ClaimPermissions newClaimPermissions)
+        public async Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimPermissionsAsync(ClaimPermissions newClaimPermissions)
         {
-            OpenApiResult result = await this.service.CreateClaimPermissionsAsync(this.MakeOpenApiContext(), newClaimPermissions);
+            OpenApiResult result = await this.claimsService.CreateClaimPermissionsAsync(this.MakeOpenApiContext(), newClaimPermissions);
             result.Results.TryGetValue("application/json", out object claimPermissions);
             return (result.StatusCode, claimPermissions as ClaimPermissions);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, ResourceAccessRuleSet Result)> CreateResourceAccessRuleSetAsync(ResourceAccessRuleSet newClaimPermissions)
+        {
+            OpenApiResult result = await this.ruleSetService.CreateResourceAccessRuleSetAsync(
+                this.testTenants.TransientClientTenantId, newClaimPermissions);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as ResourceAccessRuleSet);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> AddRulesForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRule> resourceAccessRules)
+        {
+            OpenApiResult result = await this.claimsService.UpdateClaimPermissionsResourceAccessRulesAsync(
+                this.MakeOpenApiContext(),
+                claimId,
+                UpdateOperation.Add,
+                resourceAccessRules);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as JObject);
         }
 
         private SimpleOpenApiContext MakeOpenApiContext()

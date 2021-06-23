@@ -19,7 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClaimPermissions'
+              $ref: '#/components/schemas/CreateClaimPermissions'
       responses:
         '200':
           description: Successful operation
@@ -514,6 +514,25 @@ components:
       items:
         $ref: '#/components/schemas/ResourceAccessRuleSet'
 
+    ResourceAccessRuleSetIdOnly:
+      type: object
+      properties:
+        id:
+          type: string
+        contentType:
+          type: string
+          enum:
+            - "application/vnd.marain.claims.resourceaccessruleset"
+          example: "application/vnd.marain.claims.resourceaccessruleset"
+      required:
+        - id
+        - contentType
+        
+    ResourceAccessRuleSetsIdOnly:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceAccessRuleSetIdOnly'
+
         
     ClaimPermissions:
       type: object
@@ -524,6 +543,26 @@ components:
           $ref: '#/components/schemas/ResourceAccessRules'
         ResourceAccessRuleSets:
           $ref: '#/components/schemas/ResourceAccessRuleSets'
+        contentType:
+          type: string
+          enum:
+            - "application/vnd.marain.claims.claimpermissions"
+          example: "application/vnd.marain.claims.claimpermissions"
+      required:
+        - id
+        - contentType
+
+    # When creating a ClaimPermissions, ResourceAccessRuleSets only contain the Id, and must
+    # refer to existing rulesets.
+    CreateClaimPermissions:
+      type: object
+      properties:
+        id:
+          type: string
+        ResourceAccessRules:
+          $ref: '#/components/schemas/ResourceAccessRules'
+        ResourceAccessRuleSets:
+          $ref: '#/components/schemas/ResourceAccessRuleSetsIdOnly'
         contentType:
           type: string
           enum:
