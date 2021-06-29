@@ -59,7 +59,7 @@ namespace Marain.Claims.Benchmark
         [Benchmark]
         public Task CreateClaimPermissions() => this.ClaimsService.CreateClaimPermissionsAsync(
             this.ClientTenantId, 
-            new ClaimPermissions
+            new CreateClaimPermissionsRequest
             {
                 Id = $"benchmark{this.iterationStr}",
                 ResourceAccessRules = new List<ResourceAccessRule>
@@ -152,9 +152,9 @@ namespace Marain.Claims.Benchmark
         public Task SetClaimPermissionsResourceAccessRuleSets() => this.ClaimsService.SetClaimPermissionsResourceAccessRuleSetsAsync(
             this.ClientTenantId,
             this.iterationStr,
-            new List<ResourceAccessRuleSet>
+            new List<ResourceAccessRuleSetIdOnly>
             {
-                new ResourceAccessRuleSet(this.iterationStr)
+                new ResourceAccessRuleSetIdOnly(this.iterationStr)
             }
         );
 
@@ -237,21 +237,21 @@ namespace Marain.Claims.Benchmark
                 Enumerable
                     .Range(0, 50)
                     .Select(i => i.ToString())
-                    .Select(i => new ClaimPermissions
+                    .Select(i => new CreateClaimPermissionsRequest
                     {
                         Id = i.ToString(),
                         ResourceAccessRules = new List<ResourceAccessRule>
                         {
                             new ResourceAccessRule(i, new Resource(i, i), "allow")
                         },
-                        ResourceAccessRuleSets = new List<ResourceAccessRuleSet>
+                        ResourceAccessRuleSets = new List<ResourceAccessRuleSetIdOnly>
                         {
-                            new ResourceAccessRuleSet(i)
+                            new ResourceAccessRuleSetIdOnly(i)
                         }
                     })
                     .ToList();
 
-            foreach (ClaimPermissions claimPermissions in claimPermissionsList)
+            foreach (CreateClaimPermissionsRequest claimPermissions in claimPermissionsList)
             {
                 object response = await this.ClaimsService.CreateClaimPermissionsAsync(ClientTenantId, claimPermissions);
             }

@@ -66,6 +66,56 @@ namespace Marain.Claims.OpenApi.Specs.Steps
                 .ToList();
         }
 
+        [Given(@"the ClaimsPermission with id '(.*)' is updated via the updateClaimPermissionsResourceAccessRuleSets endpoint to add rulesets with these ids")]
+        [When(@"the ClaimsPermission with id '(.*)' is updated via the updateClaimPermissionsResourceAccessRuleSets endpoint to add rulesets with these ids")]
+        public async Task GivenTheClaimsPermissionWithIdIsUpdatedToAddRulesetsWithTheseIdsAsync(
+            string claimIdName, Table table)
+        {
+            string claimId = this.claimIds[claimIdName];
+            var ruleSetsToAdd = table
+                .Rows
+                .Select(r => new ResourceAccessRuleSet { Id = r["ID"] })
+                .ToList();
+            (this.statusCodeFromClaimsService, _) = await this.serviceWrapper.AddRuleSetsForClaimPermissionsAsync(claimId, ruleSetsToAdd);
+        }
+
+        [When(@"the ClaimsPermission with id '(.*)' is updated via the updateClaimPermissionsResourceAccessRuleSets endpoint to remove rulesets with these ids")]
+        public async Task WhenTheClaimsPermissionWithIdIsUpdatedViaTheUpdateClaimPermissionsResourceAccessRuleSetsEndpointToRemoveRulesetsWithTheseIdsAsync(
+            string claimIdName, Table table)
+        {
+            string claimId = this.claimIds[claimIdName];
+            var ruleSetsToRemove = table
+                .Rows
+                .Select(r => new ResourceAccessRuleSet { Id = r["ID"] })
+                .ToList();
+            (this.statusCodeFromClaimsService, _) = await this.serviceWrapper.RemoveRuleSetsForClaimPermissionsAsync(claimId, ruleSetsToRemove);
+        }
+
+        [Given(@"the ClaimsPermission with id '(.*)' is updated via the updateClaimPermissionsResourceAccessRuleSets endpoint to remove rulesets with these ids")]
+        public async Task GivenTheClaimsPermissionWithIdIsUpdatedViaTheUpdateClaimPermissionsResourceAccessRuleSetsEndpointToRemoveRulesetsWithTheseIdsAsync(
+            string claimIdName, Table table)
+        {
+            string claimId = this.claimIds[claimIdName];
+            var ruleSetToAdd = table
+                .Rows
+                .Select(r => new ResourceAccessRuleSet { Id = r["ID"] })
+                .ToList();
+            (this.statusCodeFromClaimsService, _) = await this.serviceWrapper.RemoveRuleSetsForClaimPermissionsAsync(claimId, ruleSetToAdd);
+        }
+
+        [Given(@"these ruleset IDs are POSTed to the setClaimPermissionsResourceAccessRuleSets endpoint for the ClaimsPermission with id named '(.*)'")]
+        [When(@"these ruleset IDs are POSTed to the setClaimPermissionsResourceAccessRuleSets endpoint for the ClaimsPermission with id named '(.*)'")]
+        public async Task GivenTheseRulesetIDsArePOSTedToTheSetClaimPermissionsResourceAccessRuleSetsEndpointForTheClaimsPermissionWithIdNamedAsync(
+            string claimIdName, Table table)
+        {
+            string claimId = this.claimIds[claimIdName];
+            var ruleSets = table
+                .Rows
+                .Select(r => new ResourceAccessRuleSet { Id = r["ID"] })
+                .ToList();
+            (this.statusCodeFromClaimsService, _) = await this.serviceWrapper.SetRuleSetsForClaimPermissionsAsync(claimId, ruleSets);
+        }
+
         [Given(@"an existing ruleset with id '(.*)' named '(.*)' and these rules")]
         public async Task GivenAnExistingRuleSetWithIdAndTheseRulesAsync(string ruleSetId, string ruleSetName, Table table)
         {
@@ -78,12 +128,37 @@ namespace Marain.Claims.OpenApi.Specs.Steps
             await this.serviceWrapper.CreateResourceAccessRuleSetAsync(ruleSet);
         }
 
-        [Given(@"these rules are POSTed to the updateClaimPermissionsResourceAccessRules endpoint for the ClaimsPermission with id named '(.*)'")]
+        [Given(@"these rules are added to the existing ruleset with id '(.*)'")]
+        public async Task GivenTheseRulesAreAddedToTheExistingRulesetWithIdAsync(string ruleSetId, Table table)
+        {
+            await this.serviceWrapper.AddRulesToResourceAccessRuleSetAsync(
+                ruleSetId,
+                ParseRulesTable(table));
+        }
+
+        [Given(@"these rules are added via the updateClaimPermissionsResourceAccessRules endpoint for the ClaimsPermission with id named '(.*)'")]
+        [When(@"these rules are added via the updateClaimPermissionsResourceAccessRules endpoint for the ClaimsPermission with id named '(.*)'")]
         public async Task GivenTheseRulesArePOSTedToTheUpdateClaimPermissionsResourceAccessRulesEndpointForTheClaimsPermissionWithIdNamedAsync(
             string claimIdName, Table table)
         {
             string claimId = this.claimIds[claimIdName];
-            await this.serviceWrapper.AddRulesForClaimPermissionsAsync(claimId, ParseRulesTable(table));
+            (this.statusCodeFromClaimsService, _) = await this.serviceWrapper.AddRulesForClaimPermissionsAsync(claimId, ParseRulesTable(table));
+        }
+
+        [Given(@"these rules are removed via the updateClaimPermissionsResourceAccessRules endpoint for the ClaimsPermission with id named '(.*)'")]
+        [When(@"these rules are removed via the updateClaimPermissionsResourceAccessRules endpoint for the ClaimsPermission with id named '(.*)'")]
+        public async Task GivenTheseRulesAreRemovedViaTheUpdateClaimPermissionsResourceAccessRulesEndpointForTheClaimsPermissionWithIdNamedAsync(
+            string claimIdName, Table table)
+        {
+            string claimId = this.claimIds[claimIdName];
+            (this.statusCodeFromClaimsService, _) = await this.serviceWrapper.RemoveRulesForClaimPermissionsAsync(claimId, ParseRulesTable(table));
+        }
+
+        [Given(@"these rules are POSTed to the setClaimPermissionsResourceAccessRules endpoint for the ClaimsPermission with id named '(.*)'")]
+        public async Task GivenTheseRulesArePOSTedToTheSetClaimPermissionsResourceAccessRulesEndpointForTheClaimsPermissionWithIdNamedAsync(string claimIdName, Table table)
+        {
+            string claimId = this.claimIds[claimIdName];
+            await this.serviceWrapper.SetRulesForClaimPermissionsAsync(claimId, ParseRulesTable(table));
         }
 
         [Given(@"the new ClaimsPermission is POSTed to the createClaimPermissions endpoint")]
@@ -104,6 +179,12 @@ namespace Marain.Claims.OpenApi.Specs.Steps
         public void ThenTheClaimPermissionsReturnedByTheClaimsServiceHasNoRulesets()
         {
             Assert.IsEmpty(this.claimPermissionsFromClaimsService.ResourceAccessRuleSets, "ResourceAccessRuleSets");
+        }
+
+        [Then(@"the ClaimPermissions returned by the Claims service has (.*) rulesets?")]
+        public void ThenTheClaimPermissionsReturnedByTheClaimsServiceHasRuleset(int expectedRuleSetCount)
+        {
+            Assert.AreEqual(expectedRuleSetCount, this.claimPermissionsFromClaimsService.ResourceAccessRuleSets.Count);
         }
 
         [Then(@"the ClaimPermissions returned by the Claims service has a ruleset with id '(.*)' named '(.*)' with these rules")]
@@ -173,7 +254,10 @@ namespace Marain.Claims.OpenApi.Specs.Steps
             {
                 Assert.IsTrue(
                     rulesToCheck.Any(r =>
-                        r.AccessType == expectedRule.AccessType),
+                        r.AccessType == expectedRule.AccessType &&
+                        r.Permission == expectedRule.Permission &&
+                        r.Resource.Uri == expectedRule.Resource.Uri &&
+                        r.Resource.DisplayName == expectedRule.Resource.DisplayName),
                     $"Did not find rule with AccessType {expectedRule.AccessType}, resource '{expectedRule.Resource.Uri}' ('{expectedRule.Resource.DisplayName}'), Permission '{expectedRule.Permission}'");
             }
         }

@@ -558,15 +558,13 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get existing ClaimPermissions that was empty when first fetched but has since had" +
-            " rules added")]
-        public virtual void GetExistingClaimPermissionsThatWasEmptyWhenFirstFetchedButHasSinceHadRulesAdded()
+        [NUnit.Framework.DescriptionAttribute("POST ClaimPermissions with ruleset IDs for non-existent rulesets")]
+        public virtual void POSTClaimPermissionsWithRulesetIDsForNon_ExistentRulesets()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get existing ClaimPermissions that was empty when first fetched but has since had" +
-                    " rules added", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 98
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("POST ClaimPermissions with ruleset IDs for non-existent rulesets", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 99
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -586,19 +584,6 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 99
-    testRunner.Given("a unique ClaimsPermission id named \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 100
-    testRunner.And("a new ClaimsPermission with id named \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 101
-    testRunner.And("the new ClaimsPermission is POSTed to the createClaimPermissions endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 102
-    testRunner.And("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
-                        "oint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
                 TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
@@ -619,137 +604,32 @@ this.ScenarioInitialize(scenarioInfo);
                             "r1b",
                             "R1b",
                             "Allow"});
-#line 103
-    testRunner.And("these rules are POSTed to the updateClaimPermissionsResourceAccessRules endpoint " +
-                        "for the ClaimsPermission with id named \'id1\'", ((string)(null)), table13, "And ");
+#line 100
+    testRunner.Given("an existing ruleset with id \'rs11\' named \'Ruleset 11\' and these rules", ((string)(null)), table13, "Given ");
 #line hidden
-#line 108
-    testRunner.When("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
-                        "oint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 105
+    testRunner.And("a unique ClaimsPermission id named \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 109
-    testRunner.Then("the HTTP status returned by the Claims service is 200", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 110
-    testRunner.And("the ClaimPermissions returned by the Claims service\'s id matches \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 106
+    testRunner.And("a new ClaimsPermission with id named \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
-                            "AccessType",
-                            "ResourceUri",
-                            "ResourceName",
-                            "Permission"});
+                            "ID"});
                 table14.AddRow(new string[] {
-                            "GET",
-                            "foo",
-                            "Foo",
-                            "Allow"});
+                            "rs11"});
                 table14.AddRow(new string[] {
-                            "POST",
-                            "foo",
-                            "Foo",
-                            "Deny"});
+                            "rs12"});
                 table14.AddRow(new string[] {
-                            "GET",
-                            "bar",
-                            "Bar",
-                            "Allow"});
-#line 111
-    testRunner.And("the ClaimPermissions returned by the Claims service has exactly these defined rul" +
-                        "es", ((string)(null)), table14, "And ");
+                            "rs13"});
+#line 107
+    testRunner.And("the new ClaimsPermission has these ruleset IDs", ((string)(null)), table14, "And ");
 #line hidden
-#line 116
-    testRunner.And("the ClaimPermissions returned by the Claims service has no rulesets", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 112
+    testRunner.When("the new ClaimsPermission is POSTed to the createClaimPermissions endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
-                            "AccessType",
-                            "ResourceUri",
-                            "ResourceName",
-                            "Permission"});
-                table15.AddRow(new string[] {
-                            "GET",
-                            "foo",
-                            "Foo",
-                            "Allow"});
-                table15.AddRow(new string[] {
-                            "POST",
-                            "foo",
-                            "Foo",
-                            "Deny"});
-                table15.AddRow(new string[] {
-                            "GET",
-                            "bar",
-                            "Bar",
-                            "Allow"});
-#line 117
-    testRunner.And("the ClaimPermissions returned by the Claims service has exactly these effective r" +
-                        "ules", ((string)(null)), table15, "And ");
+#line 113
+    testRunner.Then("the HTTP status returned by the Claims service is 400", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get existing ClaimPermissions that was empty when first fetched but has since had" +
-            " rulesets added")]
-        public virtual void GetExistingClaimPermissionsThatWasEmptyWhenFirstFetchedButHasSinceHadRulesetsAdded()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get existing ClaimPermissions that was empty when first fetched but has since had" +
-                    " rulesets added", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 132
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get existing ClaimPermissions that was created with rulesets and since the first " +
-            "fetch, the ClaimPermissions has not changed but the rulesets have")]
-        public virtual void GetExistingClaimPermissionsThatWasCreatedWithRulesetsAndSinceTheFirstFetchTheClaimPermissionsHasNotChangedButTheRulesetsHave()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get existing ClaimPermissions that was created with rulesets and since the first " +
-                    "fetch, the ClaimPermissions has not changed but the rulesets have", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 134
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
             }
             this.ScenarioCleanup();
         }
@@ -761,7 +641,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("POST ClaimPermissions with existing ID", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 136
+#line 117
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);

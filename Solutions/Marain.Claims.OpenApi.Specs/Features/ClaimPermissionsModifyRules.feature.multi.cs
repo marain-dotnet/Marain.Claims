@@ -10,15 +10,15 @@ namespace Marain.Claims.OpenApi.Specs.Features
     /// Adds in multi-host-mode execution.
     /// </summary>
     [MultiHostTest]
-    public partial class ClaimPermissionsFeature : MultiTestHostBase
+    public partial class ClaimPermissionsModifyRulesFeature : MultiTestHostBase
     {
         /// <summary>
-        /// Creates a <see cref="ClaimPermissionsFeature"/>.
+        /// Creates a <see cref="ClaimPermissionsModifyRulesFeature "/>.
         /// </summary>
         /// <param name="hostMode">
         /// Hosting style to test for.
         /// </param>
-        public ClaimPermissionsFeature(TestHostModes hostMode)
+        public ClaimPermissionsModifyRulesFeature(TestHostModes hostMode)
             : base(hostMode)
         {
         }

@@ -74,6 +74,88 @@
             return (result.StatusCode, claimPermissions as JObject);
         }
 
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> RemoveRulesForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRule> resourceAccessRules)
+        {
+            OpenApiResult result = await this.claimsService.UpdateClaimPermissionsResourceAccessRulesAsync(
+                this.MakeOpenApiContext(),
+                claimId,
+                UpdateOperation.Remove,
+                resourceAccessRules);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as JObject);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> SetRulesForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRule> resourceAccessRules)
+        {
+            OpenApiResult result = await this.claimsService.SetClaimPermissionsResourceAccessRulesAsync(
+                this.MakeOpenApiContext(),
+                claimId,
+                resourceAccessRules);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as JObject);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> AddRuleSetsForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRuleSet> resourceAccessRuleSets)
+        {
+            OpenApiResult result = await this.claimsService.UpdateClaimPermissionsResourceAccessRuleSetsAsync(
+                this.MakeOpenApiContext(),
+                claimId,
+                UpdateOperation.Add,
+                resourceAccessRuleSets);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as JObject);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> RemoveRuleSetsForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRuleSet> resourceAccessRuleSets)
+        {
+            OpenApiResult result = await this.claimsService.UpdateClaimPermissionsResourceAccessRuleSetsAsync(
+                this.MakeOpenApiContext(),
+                claimId,
+                UpdateOperation.Remove,
+                resourceAccessRuleSets);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as JObject);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> SetRuleSetsForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRuleSet> resourceAccessRuleSets)
+        {
+            OpenApiResult result = await this.claimsService.SetClaimPermissionsResourceAccessRuleSetsAsync(
+                this.MakeOpenApiContext(),
+                claimId,
+                resourceAccessRuleSets);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as JObject);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> AddRulesToResourceAccessRuleSetAsync(
+            string ruleSetId,
+            IList<ResourceAccessRule> newRules)
+        {
+            OpenApiResult result = await this.ruleSetService.UpdateResourceAccessRuleSetResourceAccessRulesAsync(
+                this.testTenants.TransientClientTenantId,
+                ruleSetId,
+                UpdateOperation.Add,
+                newRules);
+            result.Results.TryGetValue("application/json", out object claimPermissions);
+            return (result.StatusCode, claimPermissions as JObject);
+        }
+
         private SimpleOpenApiContext MakeOpenApiContext()
         {
             return new SimpleOpenApiContext { CurrentTenantId = this.testTenants.TransientClientTenantId };

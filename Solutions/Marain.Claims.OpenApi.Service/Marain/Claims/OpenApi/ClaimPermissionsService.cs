@@ -102,8 +102,14 @@ namespace Marain.Claims.OpenApi
             {
                 ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
 
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-                ClaimPermissions result = await store.PersistAsync(body).ConfigureAwait(false);
+                (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body.ResourceAccessRuleSets);
+                if (!allRulesExist)
+                {
+                    return failureResult;
+                }
+
+                IClaimPermissionsStore claimPermissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+                ClaimPermissions result = await claimPermissionsStore.PersistAsync(body).ConfigureAwait(false);
                 return this.OkResult(result, "application/json");
             }
         }
@@ -232,13 +238,64 @@ namespace Marain.Claims.OpenApi
                     return this.NotFoundResult();
                 }
 
+                var inputRules = body.ToList();
+                if (inputRules.Distinct().Count() != inputRules.Count)
+                {
+                    var response = new JObject
+                    {
+                        ["status"] = 400,
+                        ["detail"] = "Request contains duplicate rules",
+                    };
+                    return new OpenApiResult
+                    {
+                        StatusCode = 400,
+                        Results = { { "application/json", response } },
+                    };
+                }
+
+                var existingRules = new HashSet<ResourceAccessRule>(claimPermissions.ResourceAccessRules);
+                var incomingRulesMatchingExistingRules = inputRules.Where(inputRule => existingRules.Contains(inputRule)).ToList();
                 switch (operation)
                 {
                     case UpdateOperation.Add:
+                        if (incomingRulesMatchingExistingRules.Count != 0)
+                        {
+                            string existingRulesText = string.Join(
+                                ", ",
+                                incomingRulesMatchingExistingRules.Select(FormatRuleForError));
+                            var response = new JObject
+                            {
+                                ["status"] = 400,
+                                ["detail"] = $"Request contains rules that are already present: {existingRulesText}",
+                            };
+                            return new OpenApiResult
+                            {
+                                StatusCode = 400,
+                                Results = { { "application/json", response } },
+                            };
+                        }
+
                         claimPermissions.ResourceAccessRules.AddRange(body);
                         break;
                     case UpdateOperation.Remove:
-                        body.ForEach(rc => claimPermissions.ResourceAccessRules.Remove(rc));
+                        if (incomingRulesMatchingExistingRules.Count != inputRules.Count)
+                        {
+                            string wrongRulesText = string.Join(
+                                ", ",
+                                inputRules.Where(r => !existingRules.Contains(r)).Select(FormatRuleForError));
+                            var response = new JObject
+                            {
+                                ["status"] = 400,
+                                ["detail"] = $"Request contains rules that are not present: {wrongRulesText}",
+                            };
+                            return new OpenApiResult
+                            {
+                                StatusCode = 400,
+                                Results = { { "application/json", response } },
+                            };
+                        }
+
+                        body.ForEach(rc => claimPermissions.ResourceAccessRules.RemoveAll(r => r == rc));
                         break;
                 }
 
@@ -246,6 +303,8 @@ namespace Marain.Claims.OpenApi
 
                 return this.CreatedResult();
             }
+
+            static string FormatRuleForError(ResourceAccessRule rule) => $"'{rule.AccessType} {rule.Resource.Uri} ({rule.Resource.DisplayName}): {rule.Permission}'";
         }
 
         /// <summary>
@@ -335,6 +394,12 @@ namespace Marain.Claims.OpenApi
             {
                 ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
 
+                (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body);
+                if (!allRulesExist)
+                {
+                    return failureResult;
+                }
+
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
                 ClaimPermissions claimPermissions;
@@ -348,13 +413,64 @@ namespace Marain.Claims.OpenApi
                     return this.NotFoundResult();
                 }
 
+                var inputRuleSets = body.ToList();
+                if (inputRuleSets.Select(rs => rs.Id).Distinct().Count() != inputRuleSets.Count)
+                {
+                    var response = new JObject
+                    {
+                        ["status"] = 400,
+                        ["detail"] = "Request contains duplicate ruleset ids",
+                    };
+                    return new OpenApiResult
+                    {
+                        StatusCode = 400,
+                        Results = { { "application/json", response } },
+                    };
+                }
+
+                var existingRuleIds = new HashSet<string>(claimPermissions.ResourceAccessRuleSets.Select(rs => rs.Id));
+                var incomingRuleSetsMatchingExistingRuleSets = inputRuleSets.Where(inputRuleSet => existingRuleIds.Contains(inputRuleSet.Id)).ToList();
                 switch (operation)
                 {
                     case UpdateOperation.Add:
+                        if (incomingRuleSetsMatchingExistingRuleSets.Count != 0)
+                        {
+                            string existingRuleSetsText = string.Join(
+                                ", ",
+                                incomingRuleSetsMatchingExistingRuleSets.Select(rs => rs.Id));
+                            var response = new JObject
+                            {
+                                ["status"] = 400,
+                                ["detail"] = $"Request contains rulesets that are already present: {existingRuleSetsText}",
+                            };
+                            return new OpenApiResult
+                            {
+                                StatusCode = 400,
+                                Results = { { "application/json", response } },
+                            };
+                        }
+
                         claimPermissions.ResourceAccessRuleSets.AddRange(body);
                         break;
                     case UpdateOperation.Remove:
-                        body.ForEach(rc => claimPermissions.ResourceAccessRuleSets.Remove(rc));
+                        if (incomingRuleSetsMatchingExistingRuleSets.Count != inputRuleSets.Count)
+                        {
+                            string wrongRuleSetsText = string.Join(
+                                ", ",
+                                inputRuleSets.Where(rs => !existingRuleIds.Contains(rs.Id)).Select(rs => rs.Id));
+                            var response = new JObject
+                            {
+                                ["status"] = 400,
+                                ["detail"] = $"Request contains rulesets that are not present: {wrongRuleSetsText}",
+                            };
+                            return new OpenApiResult
+                            {
+                                StatusCode = 400,
+                                Results = { { "application/json", response } },
+                            };
+                        }
+
+                        body.ForEach(rc => claimPermissions.ResourceAccessRuleSets.RemoveAll(r => r.Id == rc.Id));
                         break;
                 }
 
@@ -395,6 +511,12 @@ namespace Marain.Claims.OpenApi
             using (this.telemetryClient.StartOperation<RequestTelemetry>(SetClaimPermissionsResourceAccessRuleSetsOperationId))
             {
                 ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+                (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body);
+                if (!allRulesExist)
+                {
+                    return failureResult;
+                }
 
                 IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
@@ -644,6 +766,42 @@ namespace Marain.Claims.OpenApi
                 await permissionsStore.PersistAsync(permissions).ConfigureAwait(false);
                 return this.OkResult();
             }
+        }
+
+        private async Task<(bool, OpenApiResult)> CheckRuleSetsExist(
+            ITenant tenant,
+            IEnumerable<ResourceAccessRuleSet> ruleSets)
+        {
+            IResourceAccessRuleSetStore ruleSetStore = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
+            IEnumerable<Task<(string Id, bool Exists)>> checkRuleSetsExistTasks = ruleSets.Select(async rs =>
+            {
+                try
+                {
+                    await ruleSetStore.GetAsync(rs.Id);
+                    return (rs.Id, true);
+                }
+                catch (ResourceAccessRuleSetNotFoundException)
+                {
+                    return (rs.Id, false);
+                }
+            });
+            (string Id, bool Exists)[] checkRuleSetsExistResults = await Task.WhenAll(checkRuleSetsExistTasks).ConfigureAwait(false);
+            var missingRuleSets = checkRuleSetsExistResults.Where(r => !r.Exists).Select(r => r.Id).ToList();
+            if (!missingRuleSets.IsEmpty())
+            {
+                var response = new JObject
+                {
+                    ["status"] = 400,
+                    ["detail"] = $"These rule set ids do not exist: {string.Join(", ", missingRuleSets)}",
+                };
+                return (false, new OpenApiResult
+                {
+                    StatusCode = 400,
+                    Results = { { "application/json", response } },
+                });
+            }
+
+            return (true, null);
         }
     }
 }

@@ -19,7 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateClaimPermissions'
+              $ref: '#/components/schemas/CreateClaimPermissionsRequest'
       responses:
         '200':
           description: Successful operation
@@ -27,6 +27,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClaimPermissions'
+        '400':
+          description: Invalid request
+          content:
+            # This should really be
+            #   application/problem+json
+            # but AutoRest chokes on that, so we have to do this instead
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
         '401':
           description: Unauthorized
         '403':
@@ -54,6 +63,8 @@ paths:
           description: Forbidden
         '404':
           description: Invalid claimPermissionsId
+
+  # IDG: we might want to deprecate this? Offers no obvious value above previous endpoint
   /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/allResourceAccessRules:
     get:
       tags:
@@ -161,7 +172,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResourceAccessRuleSets'
+              $ref: '#/components/schemas/ResourceAccessRuleSetsIdOnly'
       responses:
         '201':
           description: Successful operation
@@ -190,7 +201,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResourceAccessRuleSets'
+              $ref: '#/components/schemas/ResourceAccessRuleSetsIdOnly'
       responses:
         '200':
           description: Successful operation
@@ -554,7 +565,7 @@ components:
 
     # When creating a ClaimPermissions, ResourceAccessRuleSets only contain the Id, and must
     # refer to existing rulesets.
-    CreateClaimPermissions:
+    CreateClaimPermissionsRequest:
       type: object
       properties:
         id:

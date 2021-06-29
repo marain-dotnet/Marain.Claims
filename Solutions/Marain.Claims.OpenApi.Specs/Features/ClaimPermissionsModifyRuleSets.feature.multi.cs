@@ -1,4 +1,4 @@
-﻿// <copyright file="ClaimPermissionsModifyRules.feature.multi.cs" company="Endjin Limited">
+﻿// <copyright file="ClaimPermissionsModifyRuleSets.feature.multi.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -10,15 +10,15 @@ namespace Marain.Claims.OpenApi.Specs.Features
     /// Adds in multi-host-mode execution.
     /// </summary>
     [MultiHostTest]
-    public partial class ClaimPermissionsFeature : MultiTestHostBase
+    public partial class ClaimPermissionsModifyRuleSetsFeature : MultiTestHostBase
     {
         /// <summary>
-        /// Creates a <see cref="ClaimPermissionsFeature"/>.
+        /// Creates a <see cref="ClaimPermissionsModifyRuleSetsFeature"/>.
         /// </summary>
         /// <param name="hostMode">
         /// Hosting style to test for.
         /// </param>
-        public ClaimPermissionsFeature(TestHostModes hostMode)
+        public ClaimPermissionsModifyRuleSetsFeature(TestHostModes hostMode)
             : base(hostMode)
         {
         }

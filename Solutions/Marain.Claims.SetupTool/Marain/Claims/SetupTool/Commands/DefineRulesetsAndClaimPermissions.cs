@@ -154,7 +154,7 @@ namespace Marain.Claims.SetupTool.Commands
                     }
                 }
 
-                foreach (ClaimPermissions claimPermissions in input.ClaimPermissions)
+                foreach (CreateClaimPermissionsRequest claimPermissions in input.ClaimPermissions)
                 {
                     try
                     {
@@ -165,7 +165,7 @@ namespace Marain.Claims.SetupTool.Commands
                         if (result.Response.StatusCode == HttpStatusCode.NotFound)
                         {
                             app.Out.WriteLine("Does not yet exist. Creating.");
-                            var request = new ClaimPermissions
+                            var request = new CreateClaimPermissionsRequest
                             {
                                 Id = claimPermissions.Id,
                                 ResourceAccessRules = claimPermissions.ResourceAccessRules,
@@ -182,7 +182,7 @@ namespace Marain.Claims.SetupTool.Commands
                             app.Out.WriteLine("Updating resource access rule sets");
                             var ruleSetIds = claimPermissions
                                 .ResourceAccessRuleSets
-                                .Select(rs => new ResourceAccessRuleSet(rs.Id))
+                                .Select(rs => new ResourceAccessRuleSetIdOnly(rs.Id))
                                 .ToList();
                             await claimsClient.SetClaimPermissionsResourceAccessRuleSetsAsync(
                                 this.MarainTenantId, claimPermissions.Id, ruleSetIds).ConfigureAwait(false);
@@ -212,7 +212,7 @@ namespace Marain.Claims.SetupTool.Commands
         {
             public IList<ResourceAccessRuleSet> RuleSets { get; set; }
 
-            public IList<ClaimPermissions> ClaimPermissions { get; set; }
+            public IList<CreateClaimPermissionsRequest> ClaimPermissions { get; set; }
         }
     }
 }

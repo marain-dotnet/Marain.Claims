@@ -65,11 +65,11 @@
   hosting type.
   We put our custom additions to these partial classes in files named FeatureName.feature.multi.cs.
   The following ItemGroup arranges for these to appear nested inside FeatureName.feature (just like
-  the FeatureName.cs files that SpecFlow generates).
+  the FeatureName.feature.cs files that SpecFlow generates).
   -->
   <ItemGroup>
     <Compile Update="**\*.feature.multi.cs">
-      <DependentUpon>%(RelativeDir)$([System.String]::Copy('%(Filename)').Replace(".multi", ""))</DependentUpon>
+      <DependentUpon>%(RelativeDir)$([System.String]::Copy('%(Filename)').Replace(".multi.cs", ""))</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

@@ -21,8 +21,20 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
 
         Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimPermissionsAsync(ClaimPermissions newClaimPermissions);
 
-        Task<(int HttpStatusCode, ResourceAccessRuleSet Result)> CreateResourceAccessRuleSetAsync(ResourceAccessRuleSet newClaimPermissions);
+        Task<(int HttpStatusCode, ResourceAccessRuleSet Result)> CreateResourceAccessRuleSetAsync(ResourceAccessRuleSet newRuleSet);
+
+        Task<(int HttpStatusCode, JObject Result)> AddRulesToResourceAccessRuleSetAsync(string ruleSetId, IList<ResourceAccessRule> newRules);
 
         Task<(int HttpStatusCode, JObject Result)> AddRulesForClaimPermissionsAsync(string claimId, List<ResourceAccessRule> resourceAccessRules);
+
+        Task<(int HttpStatusCode, JObject Result)> RemoveRulesForClaimPermissionsAsync(string claimId, List<ResourceAccessRule> resourceAccessRules);
+
+        Task<(int HttpStatusCode, JObject Result)> SetRulesForClaimPermissionsAsync(string claimId, List<ResourceAccessRule> resourceAccessRules);
+
+        Task<(int HttpStatusCode, JObject Result)> AddRuleSetsForClaimPermissionsAsync(string claimId, List<ResourceAccessRuleSet> resourceAccessRuleSets);
+
+        Task<(int HttpStatusCode, JObject Result)> RemoveRuleSetsForClaimPermissionsAsync(string claimId, List<ResourceAccessRuleSet> resourceAccessRuleSets);
+
+        Task<(int HttpStatusCode, JObject Result)> SetRuleSetsForClaimPermissionsAsync(string claimId, List<ResourceAccessRuleSet> resourceAccessRuleSets);
     }
 }

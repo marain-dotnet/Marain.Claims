@@ -78,7 +78,7 @@ namespace Marain.Claims
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            return (this.Uri.ToString().ToLowerInvariant(), this.DisplayName).GetHashCode();
+            return this.Uri.ToString().ToLowerInvariant().GetHashCode();
         }
 
         /// <summary>

@@ -73,8 +73,8 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         /// <inheritdoc/>
         public async Task<(int HttpStatusCode, ClaimPermissions Result)> CreateClaimPermissionsAsync(ClaimPermissions newClaimPermissions)
         {
-            this.ToClientLibraryType(newClaimPermissions, out Client.Models.ClaimPermissions input);
-            HttpOperationResponse<Client.Models.ClaimPermissions> result = await this.claimsServiceClient.CreateClaimPermissionsWithHttpMessagesAsync(
+            this.ToClientLibraryType(newClaimPermissions, out Client.Models.CreateClaimPermissionsRequest input);
+            HttpOperationResponse<object> result = await this.claimsServiceClient.CreateClaimPermissionsWithHttpMessagesAsync(
                 this.testTenants.TransientClientTenantId,
                 input);
 
@@ -96,7 +96,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         /// <inheritdoc/>
         public async Task<(int HttpStatusCode, JObject Result)> AddRulesForClaimPermissionsAsync(
             string claimId,
-            List<Claims.ResourceAccessRule> resourceAccessRules)
+            List<ResourceAccessRule> resourceAccessRules)
         {
             this.ToClientLibraryType(resourceAccessRules, out Client.Models.ResourceAccessRule[] input);
             HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(
@@ -107,6 +107,98 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
 
             return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
         }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> RemoveRulesForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRule> resourceAccessRules)
+        {
+            this.ToClientLibraryType(resourceAccessRules, out Client.Models.ResourceAccessRule[] input);
+            HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.UpdateClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                claimId,
+                "remove",
+                input);
+
+            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> SetRulesForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRule> resourceAccessRules)
+        {
+            this.ToClientLibraryType(resourceAccessRules, out Client.Models.ResourceAccessRule[] input);
+            HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.SetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                claimId,
+                input);
+
+            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> AddRuleSetsForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRuleSet> resourceAccessRuleSets)
+        {
+            this.ToClientLibraryType(resourceAccessRuleSets, out Client.Models.ResourceAccessRuleSetIdOnly[] input);
+            HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                claimId,
+                "add",
+                input);
+
+            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> RemoveRuleSetsForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRuleSet> resourceAccessRuleSets)
+        {
+            this.ToClientLibraryType(resourceAccessRuleSets, out Client.Models.ResourceAccessRuleSetIdOnly[] input);
+            HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                claimId,
+                "remove",
+                input);
+
+            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> SetRuleSetsForClaimPermissionsAsync(
+            string claimId,
+            List<ResourceAccessRuleSet> resourceAccessRuleSets)
+        {
+            this.ToClientLibraryType(resourceAccessRuleSets, out Client.Models.ResourceAccessRuleSetIdOnly[] input);
+            HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                claimId,
+                input);
+
+            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, JObject Result)> AddRulesToResourceAccessRuleSetAsync(
+            string ruleSetId,
+            IList<ResourceAccessRule> newRules)
+        {
+            this.ToClientLibraryType(newRules, out Client.Models.ResourceAccessRule[] input);
+            HttpOperationResponse<Client.Models.ProblemDetails> result = await this.claimsServiceClient.UpdateResourceAccessRuleSetResourceAccessRulesWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                ruleSetId,
+                "add",
+                input);
+
+            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+        }
+
+        private static Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(
+            HttpOperationResponse<object> result)
+            => GetStatusAndConvertedBody<Client.Models.ClaimPermissions, ClaimPermissions>(result, result.Body as Client.Models.ClaimPermissions);
 
         private static Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(
             HttpOperationResponse<Client.Models.ClaimPermissions> result)
