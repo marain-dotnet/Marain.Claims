@@ -109,6 +109,27 @@ namespace Marain.Claims.OpenApi
                 }
 
                 IClaimPermissionsStore claimPermissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+                // Verify that the ID isn't already in use.
+                try
+                {
+                    ClaimPermissions claimPermissions = await claimPermissionsStore.GetAsync(body.Id).ConfigureAwait(false);
+                    var response = new JObject
+                    {
+                        ["status"] = 400,
+                        ["detail"] = "A ClaimPermissions with this ID has already been created",
+                    };
+                    return new OpenApiResult
+                    {
+                        StatusCode = 400,
+                        Results = { { "application/json", response } },
+                    };
+                }
+                catch (ClaimPermissionsNotFoundException)
+                {
+                    // This is what we hope will happen.
+                }
+
                 ClaimPermissions result = await claimPermissionsStore.PersistAsync(body).ConfigureAwait(false);
                 return this.OkResult(result, "application/json");
             }

@@ -112,9 +112,10 @@ Scenario: POST ClaimPermissions with ruleset IDs for non-existent rulesets
     When the new ClaimsPermission is POSTed to the createClaimPermissions endpoint
     Then the HTTP status returned by the Claims service is 400
 
-
-
 Scenario: POST ClaimPermissions with existing ID
-
-# TODO: what's the expected behaviour if we pass in a fully-formed ruleset inline in the ClaimPermissions
-# instead of one with just an ID?
+    Given a unique ClaimsPermission id named 'id1'
+    And a new ClaimsPermission with id named 'id1'
+    And the new ClaimsPermission is POSTed to the createClaimPermissions endpoint
+    And a new ClaimsPermission with id named 'id1'
+    When the new ClaimsPermission is POSTed to the createClaimPermissions endpoint
+    Then the HTTP status returned by the Claims service is 400
