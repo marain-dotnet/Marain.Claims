@@ -130,29 +130,29 @@ this.FeatureBackground();
     testRunner.And("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
                         "oint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table15.AddRow(new string[] {
+                table22.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table15.AddRow(new string[] {
+                table22.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table15.AddRow(new string[] {
+                table22.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 14
     testRunner.And("these rules are added via the updateClaimPermissionsResourceAccessRules endpoint " +
-                        "for the ClaimsPermission with id named \'id1\'", ((string)(null)), table15, "And ");
+                        "for the ClaimsPermission with id named \'id1\'", ((string)(null)), table22, "And ");
 #line hidden
 #line 19
     testRunner.When("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
@@ -164,56 +164,56 @@ this.FeatureBackground();
 #line 21
     testRunner.And("the ClaimPermissions returned by the Claims service\'s id matches \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table16.AddRow(new string[] {
+                table23.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table16.AddRow(new string[] {
+                table23.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table16.AddRow(new string[] {
+                table23.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 22
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these defined rul" +
-                        "es", ((string)(null)), table16, "And ");
+                        "es", ((string)(null)), table23, "And ");
 #line hidden
 #line 27
     testRunner.And("the ClaimPermissions returned by the Claims service has no rulesets", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table17.AddRow(new string[] {
+                table24.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table17.AddRow(new string[] {
+                table24.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table17.AddRow(new string[] {
+                table24.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 28
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these effective r" +
-                        "ules", ((string)(null)), table17, "And ");
+                        "ules", ((string)(null)), table24, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -251,28 +251,28 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
 this.FeatureBackground();
 #line hidden
-                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table18.AddRow(new string[] {
+                table25.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table18.AddRow(new string[] {
+                table25.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table18.AddRow(new string[] {
+                table25.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 35
-    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table18, "Given ");
+    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table25, "Given ");
 #line hidden
 #line 40
     testRunner.And("the new ClaimsPermission is POSTed to the createClaimPermissions endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -281,24 +281,24 @@ this.FeatureBackground();
     testRunner.And("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
                         "oint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table19.AddRow(new string[] {
+                table26.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table19.AddRow(new string[] {
+                table26.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "Same resource different name",
                             "Deny"});
 #line 42
     testRunner.And("these rules are removed via the updateClaimPermissionsResourceAccessRules endpoin" +
-                        "t for the ClaimsPermission with id named \'id1\'", ((string)(null)), table19, "And ");
+                        "t for the ClaimsPermission with id named \'id1\'", ((string)(null)), table26, "And ");
 #line hidden
 #line 46
     testRunner.When("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
@@ -310,36 +310,36 @@ this.FeatureBackground();
 #line 48
     testRunner.And("the ClaimPermissions returned by the Claims service\'s id matches \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table20.AddRow(new string[] {
+                table27.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 49
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these defined rul" +
-                        "es", ((string)(null)), table20, "And ");
+                        "es", ((string)(null)), table27, "And ");
 #line hidden
 #line 52
     testRunner.And("the ClaimPermissions returned by the Claims service has no rulesets", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table21.AddRow(new string[] {
+                table28.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 53
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these effective r" +
-                        "ules", ((string)(null)), table21, "And ");
+                        "ules", ((string)(null)), table28, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -377,23 +377,23 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
 this.FeatureBackground();
 #line hidden
-                TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table22.AddRow(new string[] {
+                table29.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table22.AddRow(new string[] {
+                table29.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
 #line 58
-    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table22, "Given ");
+    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table29, "Given ");
 #line hidden
 #line 62
     testRunner.And("the new ClaimsPermission is POSTed to the createClaimPermissions endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -402,24 +402,24 @@ this.FeatureBackground();
     testRunner.And("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
                         "oint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table30 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table23.AddRow(new string[] {
+                table30.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
-                table23.AddRow(new string[] {
+                table30.AddRow(new string[] {
                             "DELETE",
                             "r1b",
                             "R1b",
                             "Deny"});
 #line 64
     testRunner.And("these rules are added via the updateClaimPermissionsResourceAccessRules endpoint " +
-                        "for the ClaimsPermission with id named \'id1\'", ((string)(null)), table23, "And ");
+                        "for the ClaimsPermission with id named \'id1\'", ((string)(null)), table30, "And ");
 #line hidden
 #line 68
     testRunner.When("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
@@ -431,66 +431,66 @@ this.FeatureBackground();
 #line 70
     testRunner.And("the ClaimPermissions returned by the Claims service\'s id matches \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table31 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table24.AddRow(new string[] {
+                table31.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
-                table24.AddRow(new string[] {
+                table31.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table24.AddRow(new string[] {
+                table31.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
-                table24.AddRow(new string[] {
+                table31.AddRow(new string[] {
                             "DELETE",
                             "r1b",
                             "R1b",
                             "Deny"});
 #line 71
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these defined rul" +
-                        "es", ((string)(null)), table24, "And ");
+                        "es", ((string)(null)), table31, "And ");
 #line hidden
 #line 77
     testRunner.And("the ClaimPermissions returned by the Claims service has no rulesets", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table25.AddRow(new string[] {
+                table32.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
-                table25.AddRow(new string[] {
+                table32.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table25.AddRow(new string[] {
+                table32.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
-                table25.AddRow(new string[] {
+                table32.AddRow(new string[] {
                             "DELETE",
                             "r1b",
                             "R1b",
                             "Deny"});
 #line 78
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these effective r" +
-                        "ules", ((string)(null)), table25, "And ");
+                        "ules", ((string)(null)), table32, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -528,28 +528,28 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
 this.FeatureBackground();
 #line hidden
-                TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table33 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table26.AddRow(new string[] {
+                table33.AddRow(new string[] {
                             "GET",
                             "foo",
                             "Foo",
                             "Allow"});
-                table26.AddRow(new string[] {
+                table33.AddRow(new string[] {
                             "POST",
                             "foo",
                             "Foo",
                             "Deny"});
-                table26.AddRow(new string[] {
+                table33.AddRow(new string[] {
                             "GET",
                             "bar",
                             "Bar",
                             "Allow"});
 #line 86
-    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table26, "Given ");
+    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table33, "Given ");
 #line hidden
 #line 91
     testRunner.And("the new ClaimsPermission is POSTed to the createClaimPermissions endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -558,29 +558,29 @@ this.FeatureBackground();
     testRunner.And("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
                         "oint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table34 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table27.AddRow(new string[] {
+                table34.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table27.AddRow(new string[] {
+                table34.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table27.AddRow(new string[] {
+                table34.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 93
     testRunner.And("these rules are POSTed to the setClaimPermissionsResourceAccessRules endpoint for" +
-                        " the ClaimsPermission with id named \'id1\'", ((string)(null)), table27, "And ");
+                        " the ClaimsPermission with id named \'id1\'", ((string)(null)), table34, "And ");
 #line hidden
 #line 98
     testRunner.When("ClaimsPermission with id named \'id1\' is fetched from the getClaimPermissions endp" +
@@ -592,56 +592,56 @@ this.FeatureBackground();
 #line 100
     testRunner.And("the ClaimPermissions returned by the Claims service\'s id matches \'id1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table35 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table28.AddRow(new string[] {
+                table35.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table28.AddRow(new string[] {
+                table35.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table28.AddRow(new string[] {
+                table35.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 101
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these defined rul" +
-                        "es", ((string)(null)), table28, "And ");
+                        "es", ((string)(null)), table35, "And ");
 #line hidden
 #line 106
     testRunner.And("the ClaimPermissions returned by the Claims service has no rulesets", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table36 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table29.AddRow(new string[] {
+                table36.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table29.AddRow(new string[] {
+                table36.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table29.AddRow(new string[] {
+                table36.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 107
     testRunner.And("the ClaimPermissions returned by the Claims service has exactly these effective r" +
-                        "ules", ((string)(null)), table29, "And ");
+                        "ules", ((string)(null)), table36, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -685,45 +685,45 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
 this.FeatureBackground();
 #line hidden
-                TechTalk.SpecFlow.Table table30 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table37 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table30.AddRow(new string[] {
+                table37.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table30.AddRow(new string[] {
+                table37.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table30.AddRow(new string[] {
+                table37.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 114
-    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table30, "Given ");
+    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table37, "Given ");
 #line hidden
 #line 119
     testRunner.And("the new ClaimsPermission is POSTed to the createClaimPermissions endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table31 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table38 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table31.AddRow(new string[] {
+                table38.AddRow(new string[] {
                             string.Format("{0}", accessType),
                             string.Format("{0}", resourceUri),
                             string.Format("{0}", resourceName),
                             string.Format("{0}", permission)});
 #line 120
     testRunner.When("these rules are added via the updateClaimPermissionsResourceAccessRules endpoint " +
-                        "for the ClaimsPermission with id named \'id1\'", ((string)(null)), table31, "When ");
+                        "for the ClaimsPermission with id named \'id1\'", ((string)(null)), table38, "When ");
 #line hidden
 #line 123
     testRunner.Then("the HTTP status returned by the Claims service is 400", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -769,45 +769,45 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
 this.FeatureBackground();
 #line hidden
-                TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table39 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table32.AddRow(new string[] {
+                table39.AddRow(new string[] {
                             "GET",
                             "r1a",
                             "R1a",
                             "Allow"});
-                table32.AddRow(new string[] {
+                table39.AddRow(new string[] {
                             "POST",
                             "r1a",
                             "R1a",
                             "Deny"});
-                table32.AddRow(new string[] {
+                table39.AddRow(new string[] {
                             "GET",
                             "r1b",
                             "R1b",
                             "Allow"});
 #line 133
-    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table32, "Given ");
+    testRunner.Given("the new ClaimsPermission has these rules", ((string)(null)), table39, "Given ");
 #line hidden
 #line 138
     testRunner.And("the new ClaimsPermission is POSTed to the createClaimPermissions endpoint", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table33 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table40 = new TechTalk.SpecFlow.Table(new string[] {
                             "AccessType",
                             "ResourceUri",
                             "ResourceName",
                             "Permission"});
-                table33.AddRow(new string[] {
+                table40.AddRow(new string[] {
                             string.Format("{0}", accessType),
                             string.Format("{0}", resourceUri),
                             string.Format("{0}", resourceName),
                             string.Format("{0}", permission)});
 #line 139
     testRunner.When("these rules are removed via the updateClaimPermissionsResourceAccessRules endpoin" +
-                        "t for the ClaimsPermission with id named \'id1\'", ((string)(null)), table33, "When ");
+                        "t for the ClaimsPermission with id named \'id1\'", ((string)(null)), table40, "When ");
 #line hidden
 #line 142
     testRunner.Then("the HTTP status returned by the Claims service is 400", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Marain.Claims;
@@ -154,6 +155,41 @@
                 newRules);
             result.Results.TryGetValue("application/json", out object claimPermissions);
             return (result.StatusCode, claimPermissions as JObject);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, IList<ResourceAccessRule> Result)> GetEffectiveRulesForClaimPermissionsAsync(
+            string claimPermissionsId)
+        {
+            OpenApiResult result = await this.claimsService.GetClaimPermissionResourceAccessRulesAsync(
+                this.MakeOpenApiContext(),
+                claimPermissionsId);
+            result.Results.TryGetValue("application/json", out object rules);
+            return (result.StatusCode, rules as IList<ResourceAccessRule>);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, PermissionResult Result)> EvaluateSinglePermissionForClaimPermissionsAsync(
+            string claimPermissionsId, string resourceUri, string accessType)
+        {
+            OpenApiResult result = await this.claimsService.GetClaimPermissionsPermissionAsync(
+                this.MakeOpenApiContext(),
+                claimPermissionsId,
+                resourceUri,
+                accessType);
+            result.Results.TryGetValue("application/json", out object rules);
+            return (result.StatusCode, rules as PermissionResult);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, IList<ClaimPermissionsBatchResponseItem> Result)> BatchEvaluatePermissionsForClaimPermissionsAsync(
+            IEnumerable<ClaimPermissionsBatchRequestItem> items)
+        {
+            OpenApiResult result = await this.claimsService.GetClaimPermissionsPermissionBatchAsync(
+                this.MakeOpenApiContext(),
+                items.ToArray());
+            result.Results.TryGetValue("application/json", out object rules);
+            return (result.StatusCode, rules as IList<ClaimPermissionsBatchResponseItem>);
         }
 
         private SimpleOpenApiContext MakeOpenApiContext()

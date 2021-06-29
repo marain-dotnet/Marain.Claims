@@ -36,5 +36,13 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         Task<(int HttpStatusCode, JObject Result)> RemoveRuleSetsForClaimPermissionsAsync(string claimId, List<ResourceAccessRuleSet> resourceAccessRuleSets);
 
         Task<(int HttpStatusCode, JObject Result)> SetRuleSetsForClaimPermissionsAsync(string claimId, List<ResourceAccessRuleSet> resourceAccessRuleSets);
+
+        Task<(int HttpStatusCode, IList<ResourceAccessRule> Result)> GetEffectiveRulesForClaimPermissionsAsync(string claimPermissionsId);
+
+        Task<(int HttpStatusCode, PermissionResult Result)> EvaluateSinglePermissionForClaimPermissionsAsync(
+            string claimPermissionsId, string resourceUri, string accessType);
+
+        Task<(int HttpStatusCode, IList<ClaimPermissionsBatchResponseItem> Result)> BatchEvaluatePermissionsForClaimPermissionsAsync(
+            IEnumerable<ClaimPermissionsBatchRequestItem> items);
     }
 }

@@ -27,6 +27,9 @@ namespace Marain.Claims.OpenApi.Specs.Steps
 
         private int statusCodeFromClaimsService;
         private ClaimPermissions claimPermissionsFromClaimsService;
+        private IList<ResourceAccessRule> effectiveRulesFromClaimsService;
+        private PermissionResult individualPermissionFromClaimsService;
+        private IList<ClaimPermissionsBatchResponseItem> permissionsBatchFromClaimsService;
 
         public ClaimPermissionsSteps(
             ITestableClaimsService serviceWrapper)
@@ -212,6 +215,82 @@ namespace Marain.Claims.OpenApi.Specs.Steps
         {
             string claimId = this.claimIds[claimIdName];
             (this.statusCodeFromClaimsService, this.claimPermissionsFromClaimsService) = await this.serviceWrapper.GetClaimPermissionsAsync(claimId);
+        }
+
+        [When(@"the effective rules for ClaimsPermission with id named '(.*)' are fetched via the getClaimPermissionsResourceAccessRules endpoint")]
+        public async Task WhenTheEffectiveRulesForClaimsPermissionWithIdNamedAreFetchedViaTheGetClaimPermissionsResourceAccessRulesEndpointAsync(
+            string claimIdName)
+        {
+            string claimId = this.claimIds[claimIdName];
+            (this.statusCodeFromClaimsService, this.effectiveRulesFromClaimsService) =
+                await this.serviceWrapper.GetEffectiveRulesForClaimPermissionsAsync(claimId);
+        }
+
+        [When(@"permissions are evaluated via the getClaimPermissionsPermission endpoint ClaimsPermission id '(.*)', resource '(.*)' and access type '(.*)'")]
+        public async Task WhenPermissionsAreEvaluatedViaTheGetClaimPermissionsPermissionEndpointClaimsPermissionIdResourceAndAccessTypeAsync(
+            string claimIdName, string resourceUri, string accessType)
+        {
+            string claimId = this.claimIds[claimIdName];
+            (this.statusCodeFromClaimsService, this.individualPermissionFromClaimsService) =
+                await this.serviceWrapper.EvaluateSinglePermissionForClaimPermissionsAsync(claimId, resourceUri, accessType);
+        }
+
+        [When(@"these permissions are evaluated via the getClaimPermissionsPermissionBatch endpoint")]
+        public async Task WhenThesePermissionsAreEvaluatedViaTheGetClaimPermissionsPermissionBatchEndpointAsync(Table table)
+        {
+            var requestItems = new List<ClaimPermissionsBatchRequestItem>();
+            foreach (TableRow row in table.Rows)
+            {
+                string claimsPermissionsIdName = row["ClaimsPermissionsId"];
+                string claimPermissionsId = this.claimIds[claimsPermissionsIdName];
+                string resourceUri = row["ResourceUri"];
+                string accessType = row["AccessType"];
+
+                requestItems.Add(new ClaimPermissionsBatchRequestItem(
+                    claimPermissionsId,
+                    resourceUri,
+                    accessType));
+            }
+
+            (this.statusCodeFromClaimsService, this.permissionsBatchFromClaimsService) =
+                await this.serviceWrapper.BatchEvaluatePermissionsForClaimPermissionsAsync(requestItems);
+        }
+
+        [Then(@"the effective rules returns by the Claims service are")]
+        public void ThenTheEffectiveRulesReturnsByTheClaimsServiceAre(Table table)
+        {
+            CheckRulesMatch(table, this.effectiveRulesFromClaimsService);
+        }
+
+        [Then(@"the permission returned by the Claims service is '(.*)'")]
+        public void ThenThePermissionReturnedByTheClaimsServiceIs(Permission permission)
+        {
+            Assert.AreEqual(permission, this.individualPermissionFromClaimsService?.Permission);
+        }
+
+        [Then(@"the permissions batch response items are")]
+        public void ThenThePermissionsBatchResponseItemsAre(Table table)
+        {
+            Assert.AreEqual(table.RowCount, this.permissionsBatchFromClaimsService.Count);
+
+            for (int i = 0; i < table.RowCount; ++i)
+            {
+                TableRow row = table.Rows[i];
+                ClaimPermissionsBatchResponseItem responseItem = this.permissionsBatchFromClaimsService[i];
+
+                string claimsPermissionIdName = row["ClaimsPermissionId"];
+                string claimPermissionsId = this.claimIds[claimsPermissionIdName];
+                string resourceUri = row["ResourceUri"];
+                string accessType = row["AccessType"];
+                int responseCode = int.Parse(row["ResponseCode"]);
+                string permission = row["Permission"];
+
+                Assert.AreEqual(claimPermissionsId, responseItem.ClaimPermissionsId, $"ClaimPermissionsId[{i}]");
+                Assert.AreEqual(resourceUri, responseItem.ResourceUri, $"ResourceUri[{i}]");
+                Assert.AreEqual(accessType, responseItem.ResourceAccessType, $"ResourceAccessType[{i}]");
+                Assert.AreEqual(responseCode, responseItem.ResponseCode, $"ResponseCode[{i}]");
+                Assert.AreEqual(permission, responseItem.Permission, $"Permission[{i}]");
+            }
         }
 
         [Then(@"the HTTP status returned by the Claims service is (.*)")]

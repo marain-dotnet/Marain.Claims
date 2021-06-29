@@ -10,6 +10,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
     using System.Threading.Tasks;
 
     using Marain.Claims.Client;
+    using Marain.Claims.OpenApi;
     using Marain.Claims.OpenApi.Specs.Bindings;
 
     using Microsoft.Rest;
@@ -90,7 +91,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 this.testTenants.TransientClientTenantId,
                 input);
 
-            return await GetStatusAndConvertedResourceAccessRuleSetBody(result);
+            return await GetStatusAndConvertedResourceAccessRuleSetBody<Client.Models.ResourceAccessRuleSet, ResourceAccessRuleSet>(result);
         }
 
         /// <inheritdoc/>
@@ -196,6 +197,42 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
             return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
         }
 
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, IList<ResourceAccessRule> Result)> GetEffectiveRulesForClaimPermissionsAsync(
+            string claimPermissionsId)
+        {
+            HttpOperationResponse<IList<Client.Models.ResourceAccessRule>> result = await this.claimsServiceClient.GetClaimPermissionsResourceAccessRulesWithHttpMessagesAsync(
+                claimPermissionsId,
+                this.testTenants.TransientClientTenantId);
+
+            return await GetStatusAndConvertedBody<IList<Client.Models.ResourceAccessRule>, IList<ResourceAccessRule>>(
+                result, result.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, PermissionResult Result)> EvaluateSinglePermissionForClaimPermissionsAsync(
+            string claimPermissionsId, string resourceUri, string accessType)
+        {
+            HttpOperationResponse<object> result = await this.claimsServiceClient.GetClaimPermissionsPermissionWithHttpMessagesAsync(
+                claimPermissionsId,
+                this.testTenants.TransientClientTenantId,
+                resourceUri,
+                accessType);
+
+            return await GetStatusAndConvertedResourceAccessRuleSetBody<Client.Models.PermissionResult, PermissionResult>(result);
+        }
+
+        /// <inheritdoc/>
+        public async Task<(int HttpStatusCode, IList<ClaimPermissionsBatchResponseItem> Result)> BatchEvaluatePermissionsForClaimPermissionsAsync(IEnumerable<ClaimPermissionsBatchRequestItem> items)
+        {
+            this.ToClientLibraryType(items, out Client.Models.ClaimPermissionsBatchRequestItem[] input);
+            HttpOperationResponse<object> result = await this.claimsServiceClient.GetClaimPermissionsPermissionBatchWithHttpMessagesAsync(
+                this.testTenants.TransientClientTenantId,
+                input);
+
+            return await GetStatusAndConvertedResourceAccessRuleSetBody<IList<Client.Models.ClaimPermissionsBatchResponseItem>, IList<ClaimPermissionsBatchResponseItem>>(result);
+        }
+
         private static Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(
             HttpOperationResponse<object> result)
             => GetStatusAndConvertedBody<Client.Models.ClaimPermissions, ClaimPermissions>(result, result.Body as Client.Models.ClaimPermissions);
@@ -204,10 +241,10 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
             HttpOperationResponse<Client.Models.ClaimPermissions> result)
             => GetStatusAndConvertedBody<Client.Models.ClaimPermissions, ClaimPermissions>(result, result.Body);
 
-        private static Task<(int HttpStatusCode, ResourceAccessRuleSet Result)> GetStatusAndConvertedResourceAccessRuleSetBody(
+        private static Task<(int HttpStatusCode, TResult Result)> GetStatusAndConvertedResourceAccessRuleSetBody<TInput, TResult>(
             HttpOperationResponse<object> result)
-            => GetStatusAndConvertedBody<Client.Models.ResourceAccessRuleSet, ResourceAccessRuleSet>(
-                    result, (Client.Models.ResourceAccessRuleSet)result.Body);
+            => GetStatusAndConvertedBody<TInput, TResult>(
+                    result, (TInput)result.Body);
 
         private static async Task<(int HttpStatusCode, TResult Result)> GetStatusAndConvertedBody<TInput, TResult>(
             HttpOperationResponse response, TInput clientTypeResult)
