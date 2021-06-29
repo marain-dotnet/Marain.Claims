@@ -64,7 +64,6 @@ paths:
         '404':
           description: Invalid claimPermissionsId
 
-  # IDG: we might want to deprecate this? Offers no obvious value above previous endpoint
   /{tenantId}/marain/claims/claimPermissions/{claimPermissionsId}/allResourceAccessRules:
     get:
       tags:
