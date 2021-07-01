@@ -14,8 +14,6 @@ namespace Marain.Claims.OpenApi
     using Marain.Claims.Storage;
     using Marain.Services.Tenancy;
     using Menes;
-    using Microsoft.ApplicationInsights;
-    using Microsoft.ApplicationInsights.DataContracts;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -56,7 +54,6 @@ namespace Marain.Claims.OpenApi
         private readonly IPermissionsStoreFactory permissionsStoreFactory;
         private readonly IMarainServicesTenancy marainServicesTenancy;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
-        private readonly TelemetryClient telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClaimPermissionsService"/> class.
@@ -64,17 +61,14 @@ namespace Marain.Claims.OpenApi
         /// <param name="permissionsStoreFactory">Provides access to the permissions store.</param>
         /// <param name="marainServicesTenancy">The Marain services tenancy provider.</param>
         /// <param name="serializerSettingsProvider">The serializer settings provider.</param>
-        /// <param name="telemetryClient">A <see cref="TelemetryClient"/> to log telemetry.</param>
         public ClaimPermissionsService(
             IPermissionsStoreFactory permissionsStoreFactory,
             IMarainServicesTenancy marainServicesTenancy,
-            IJsonSerializerSettingsProvider serializerSettingsProvider,
-            TelemetryClient telemetryClient)
+            IJsonSerializerSettingsProvider serializerSettingsProvider)
         {
             this.permissionsStoreFactory = permissionsStoreFactory ?? throw new ArgumentNullException(nameof(permissionsStoreFactory));
             this.marainServicesTenancy = marainServicesTenancy ?? throw new ArgumentNullException(nameof(marainServicesTenancy));
             this.serializerSettingsProvider = serializerSettingsProvider ?? throw new ArgumentNullException(nameof(serializerSettingsProvider));
-            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
         }
 
         /// <summary>
@@ -98,37 +92,34 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(body));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(CreateClaimPermissionsOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body.ResourceAccessRuleSets);
+            if (!allRulesExist)
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+                return failureResult;
+            }
 
-                (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body.ResourceAccessRuleSets);
-                if (!allRulesExist)
+            IClaimPermissionsStore claimPermissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            try
+            {
+                ClaimPermissions result = await claimPermissionsStore.CreateAsync(body).ConfigureAwait(false);
+
+                return this.OkResult(result, "application/json");
+            }
+            catch (InvalidOperationException)
+            {
+                var response = new JObject
                 {
-                    return failureResult;
-                }
-
-                IClaimPermissionsStore claimPermissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                try
+                    ["status"] = 400,
+                    ["detail"] = "A ClaimPermissions with this ID has already been created",
+                };
+                return new OpenApiResult
                 {
-                    ClaimPermissions result = await claimPermissionsStore.CreateAsync(body).ConfigureAwait(false);
-
-                    return this.OkResult(result, "application/json");
-                }
-                catch (InvalidOperationException)
-                {
-                    var response = new JObject
-                    {
-                        ["status"] = 400,
-                        ["detail"] = "A ClaimPermissions with this ID has already been created",
-                    };
-                    return new OpenApiResult
-                    {
-                        StatusCode = 400,
-                        Results = { { "application/json", response } },
-                    };
-                }
+                    StatusCode = 400,
+                    Results = { { "application/json", response } },
+                };
             }
         }
 
@@ -153,20 +144,17 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(claimPermissionsId));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsOperationId))
-            {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
 
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-                try
-                {
-                    ClaimPermissions claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                    return this.OkResult(claimPermissions, "application/json");
-                }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+            try
+            {
+                ClaimPermissions claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
+                return this.OkResult(claimPermissions, "application/json");
+            }
+            catch (ClaimPermissionsNotFoundException)
+            {
+                return this.NotFoundResult();
             }
         }
 
@@ -191,21 +179,18 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(claimPermissionsId));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsResourceAccessRulesOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            try
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                try
-                {
-                    ClaimPermissions claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                    return this.OkResult(claimPermissions.AllResourceAccessRules, "application/json");
-                }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
+                ClaimPermissions claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
+                return this.OkResult(claimPermissions.AllResourceAccessRules, "application/json");
+            }
+            catch (ClaimPermissionsNotFoundException)
+            {
+                return this.NotFoundResult();
             }
         }
 
@@ -239,88 +224,85 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(body));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(UpdateClaimPermissionsResourceAccessRulesOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            ClaimPermissions claimPermissions;
+
+            try
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                ClaimPermissions claimPermissions;
-
-                try
-                {
-                    claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
-
-                var inputRules = body.ToList();
-                if (inputRules.Distinct().Count() != inputRules.Count)
-                {
-                    var response = new JObject
-                    {
-                        ["status"] = 400,
-                        ["detail"] = "Request contains duplicate rules",
-                    };
-                    return new OpenApiResult
-                    {
-                        StatusCode = 400,
-                        Results = { { "application/json", response } },
-                    };
-                }
-
-                var existingRules = new HashSet<ResourceAccessRule>(claimPermissions.ResourceAccessRules);
-                var incomingRulesMatchingExistingRules = inputRules.Where(inputRule => existingRules.Contains(inputRule)).ToList();
-                switch (operation)
-                {
-                    case UpdateOperation.Add:
-                        if (incomingRulesMatchingExistingRules.Count != 0)
-                        {
-                            string existingRulesText = string.Join(
-                                ", ",
-                                incomingRulesMatchingExistingRules.Select(FormatRuleForError));
-                            var response = new JObject
-                            {
-                                ["status"] = 400,
-                                ["detail"] = $"Request contains rules that are already present: {existingRulesText}",
-                            };
-                            return new OpenApiResult
-                            {
-                                StatusCode = 400,
-                                Results = { { "application/json", response } },
-                            };
-                        }
-
-                        claimPermissions.ResourceAccessRules.AddRange(body);
-                        break;
-                    case UpdateOperation.Remove:
-                        if (incomingRulesMatchingExistingRules.Count != inputRules.Count)
-                        {
-                            string wrongRulesText = string.Join(
-                                ", ",
-                                inputRules.Where(r => !existingRules.Contains(r)).Select(FormatRuleForError));
-                            var response = new JObject
-                            {
-                                ["status"] = 400,
-                                ["detail"] = $"Request contains rules that are not present: {wrongRulesText}",
-                            };
-                            return new OpenApiResult
-                            {
-                                StatusCode = 400,
-                                Results = { { "application/json", response } },
-                            };
-                        }
-
-                        body.ForEach(rc => claimPermissions.ResourceAccessRules.RemoveAll(r => r == rc));
-                        break;
-                }
-
-                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
-
-                return this.CreatedResult();
+                claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
             }
+            catch (ClaimPermissionsNotFoundException)
+            {
+                return this.NotFoundResult();
+            }
+
+            var inputRules = body.ToList();
+            if (inputRules.Distinct().Count() != inputRules.Count)
+            {
+                var response = new JObject
+                {
+                    ["status"] = 400,
+                    ["detail"] = "Request contains duplicate rules",
+                };
+                return new OpenApiResult
+                {
+                    StatusCode = 400,
+                    Results = { { "application/json", response } },
+                };
+            }
+
+            var existingRules = new HashSet<ResourceAccessRule>(claimPermissions.ResourceAccessRules);
+            var incomingRulesMatchingExistingRules = inputRules.Where(inputRule => existingRules.Contains(inputRule)).ToList();
+            switch (operation)
+            {
+                case UpdateOperation.Add:
+                    if (incomingRulesMatchingExistingRules.Count != 0)
+                    {
+                        string existingRulesText = string.Join(
+                            ", ",
+                            incomingRulesMatchingExistingRules.Select(FormatRuleForError));
+                        var response = new JObject
+                        {
+                            ["status"] = 400,
+                            ["detail"] = $"Request contains rules that are already present: {existingRulesText}",
+                        };
+                        return new OpenApiResult
+                        {
+                            StatusCode = 400,
+                            Results = { { "application/json", response } },
+                        };
+                    }
+
+                    claimPermissions.ResourceAccessRules.AddRange(body);
+                    break;
+                case UpdateOperation.Remove:
+                    if (incomingRulesMatchingExistingRules.Count != inputRules.Count)
+                    {
+                        string wrongRulesText = string.Join(
+                            ", ",
+                            inputRules.Where(r => !existingRules.Contains(r)).Select(FormatRuleForError));
+                        var response = new JObject
+                        {
+                            ["status"] = 400,
+                            ["detail"] = $"Request contains rules that are not present: {wrongRulesText}",
+                        };
+                        return new OpenApiResult
+                        {
+                            StatusCode = 400,
+                            Results = { { "application/json", response } },
+                        };
+                    }
+
+                    body.ForEach(rc => claimPermissions.ResourceAccessRules.RemoveAll(r => r == rc));
+                    break;
+            }
+
+            await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
+
+            return this.CreatedResult();
 
             static string FormatRuleForError(ResourceAccessRule rule) => $"'{rule.AccessType} {rule.Resource.Uri} ({rule.Resource.DisplayName}): {rule.Permission}'";
         }
@@ -353,29 +335,26 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(body));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(SetClaimPermissionsResourceAccessRulesOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            ClaimPermissions claimPermissions;
+
+            try
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                ClaimPermissions claimPermissions;
-
-                try
-                {
-                    claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
-
-                claimPermissions.ResourceAccessRules = body.ToList();
-
-                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
-
-                return this.OkResult();
+                claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
             }
+            catch (ClaimPermissionsNotFoundException)
+            {
+                return this.NotFoundResult();
+            }
+
+            claimPermissions.ResourceAccessRules = body.ToList();
+
+            await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
+
+            return this.OkResult();
         }
 
         /// <summary>
@@ -408,94 +387,91 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(body));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(UpdateClaimPermissionsResourceAccessRuleSetsOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body);
+            if (!allRulesExist)
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body);
-                if (!allRulesExist)
-                {
-                    return failureResult;
-                }
-
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                ClaimPermissions claimPermissions;
-
-                try
-                {
-                    claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
-
-                var inputRuleSets = body.ToList();
-                if (inputRuleSets.Select(rs => rs.Id).Distinct().Count() != inputRuleSets.Count)
-                {
-                    var response = new JObject
-                    {
-                        ["status"] = 400,
-                        ["detail"] = "Request contains duplicate ruleset ids",
-                    };
-                    return new OpenApiResult
-                    {
-                        StatusCode = 400,
-                        Results = { { "application/json", response } },
-                    };
-                }
-
-                var existingRuleIds = new HashSet<string>(claimPermissions.ResourceAccessRuleSets.Select(rs => rs.Id));
-                var incomingRuleSetsMatchingExistingRuleSets = inputRuleSets.Where(inputRuleSet => existingRuleIds.Contains(inputRuleSet.Id)).ToList();
-                switch (operation)
-                {
-                    case UpdateOperation.Add:
-                        if (incomingRuleSetsMatchingExistingRuleSets.Count != 0)
-                        {
-                            string existingRuleSetsText = string.Join(
-                                ", ",
-                                incomingRuleSetsMatchingExistingRuleSets.Select(rs => rs.Id));
-                            var response = new JObject
-                            {
-                                ["status"] = 400,
-                                ["detail"] = $"Request contains rulesets that are already present: {existingRuleSetsText}",
-                            };
-                            return new OpenApiResult
-                            {
-                                StatusCode = 400,
-                                Results = { { "application/json", response } },
-                            };
-                        }
-
-                        claimPermissions.ResourceAccessRuleSets.AddRange(body);
-                        break;
-                    case UpdateOperation.Remove:
-                        if (incomingRuleSetsMatchingExistingRuleSets.Count != inputRuleSets.Count)
-                        {
-                            string wrongRuleSetsText = string.Join(
-                                ", ",
-                                inputRuleSets.Where(rs => !existingRuleIds.Contains(rs.Id)).Select(rs => rs.Id));
-                            var response = new JObject
-                            {
-                                ["status"] = 400,
-                                ["detail"] = $"Request contains rulesets that are not present: {wrongRuleSetsText}",
-                            };
-                            return new OpenApiResult
-                            {
-                                StatusCode = 400,
-                                Results = { { "application/json", response } },
-                            };
-                        }
-
-                        body.ForEach(rc => claimPermissions.ResourceAccessRuleSets.RemoveAll(r => r.Id == rc.Id));
-                        break;
-                }
-
-                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
-
-                return this.CreatedResult();
+                return failureResult;
             }
+
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            ClaimPermissions claimPermissions;
+
+            try
+            {
+                claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
+            }
+            catch (ClaimPermissionsNotFoundException)
+            {
+                return this.NotFoundResult();
+            }
+
+            var inputRuleSets = body.ToList();
+            if (inputRuleSets.Select(rs => rs.Id).Distinct().Count() != inputRuleSets.Count)
+            {
+                var response = new JObject
+                {
+                    ["status"] = 400,
+                    ["detail"] = "Request contains duplicate ruleset ids",
+                };
+                return new OpenApiResult
+                {
+                    StatusCode = 400,
+                    Results = { { "application/json", response } },
+                };
+            }
+
+            var existingRuleIds = new HashSet<string>(claimPermissions.ResourceAccessRuleSets.Select(rs => rs.Id));
+            var incomingRuleSetsMatchingExistingRuleSets = inputRuleSets.Where(inputRuleSet => existingRuleIds.Contains(inputRuleSet.Id)).ToList();
+            switch (operation)
+            {
+                case UpdateOperation.Add:
+                    if (incomingRuleSetsMatchingExistingRuleSets.Count != 0)
+                    {
+                        string existingRuleSetsText = string.Join(
+                            ", ",
+                            incomingRuleSetsMatchingExistingRuleSets.Select(rs => rs.Id));
+                        var response = new JObject
+                        {
+                            ["status"] = 400,
+                            ["detail"] = $"Request contains rulesets that are already present: {existingRuleSetsText}",
+                        };
+                        return new OpenApiResult
+                        {
+                            StatusCode = 400,
+                            Results = { { "application/json", response } },
+                        };
+                    }
+
+                    claimPermissions.ResourceAccessRuleSets.AddRange(body);
+                    break;
+                case UpdateOperation.Remove:
+                    if (incomingRuleSetsMatchingExistingRuleSets.Count != inputRuleSets.Count)
+                    {
+                        string wrongRuleSetsText = string.Join(
+                            ", ",
+                            inputRuleSets.Where(rs => !existingRuleIds.Contains(rs.Id)).Select(rs => rs.Id));
+                        var response = new JObject
+                        {
+                            ["status"] = 400,
+                            ["detail"] = $"Request contains rulesets that are not present: {wrongRuleSetsText}",
+                        };
+                        return new OpenApiResult
+                        {
+                            StatusCode = 400,
+                            Results = { { "application/json", response } },
+                        };
+                    }
+
+                    body.ForEach(rc => claimPermissions.ResourceAccessRuleSets.RemoveAll(r => r.Id == rc.Id));
+                    break;
+            }
+
+            await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
+
+            return this.CreatedResult();
         }
 
         /// <summary>
@@ -526,35 +502,32 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(body));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(SetClaimPermissionsResourceAccessRuleSetsOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body);
+            if (!allRulesExist)
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                (bool allRulesExist, OpenApiResult failureResult) = await this.CheckRuleSetsExist(tenant, body);
-                if (!allRulesExist)
-                {
-                    return failureResult;
-                }
-
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                ClaimPermissions claimPermissions;
-
-                try
-                {
-                    claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
-
-                claimPermissions.ResourceAccessRuleSets = body.ToList();
-
-                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
-
-                return this.OkResult();
+                return failureResult;
             }
+
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            ClaimPermissions claimPermissions;
+
+            try
+            {
+                claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
+            }
+            catch (ClaimPermissionsNotFoundException)
+            {
+                return this.NotFoundResult();
+            }
+
+            claimPermissions.ResourceAccessRuleSets = body.ToList();
+
+            await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
+
+            return this.OkResult();
         }
 
         /// <summary>
@@ -594,31 +567,28 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(accessType));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsPermissionOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            ClaimPermissions claimPermissions;
+
+            try
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                ClaimPermissions claimPermissions;
-
-                try
-                {
-                    claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
-                }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
-
-                var result =
-                    new PermissionResult
-                    {
-                        Permission = claimPermissions.HasPermissionFor(new Uri(resourceUri, UriKind.RelativeOrAbsolute), accessType) ? Permission.Allow : Permission.Deny,
-                    };
-
-                return this.OkResult(result, "application/json");
+                claimPermissions = await store.GetAsync(claimPermissionsId).ConfigureAwait(false);
             }
+            catch (ClaimPermissionsNotFoundException)
+            {
+                return this.NotFoundResult();
+            }
+
+            var result =
+                new PermissionResult
+                {
+                    Permission = claimPermissions.HasPermissionFor(new Uri(resourceUri, UriKind.RelativeOrAbsolute), accessType) ? Permission.Allow : Permission.Deny,
+                };
+
+            return this.OkResult(result, "application/json");
         }
 
         /// <summary>
@@ -645,50 +615,47 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(body));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(GetClaimPermissionsPermissionOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+
+            ClaimPermissionsCollection claimPermissions = await store.GetBatchAsync(body.Select(x => x.ClaimPermissionsId)).ConfigureAwait(false);
+
+            var serializer = JsonSerializer.Create(this.serializerSettingsProvider.Instance);
+
+            ClaimPermissionsBatchResponseItem[] result = body.Select(x =>
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                IClaimPermissionsStore store = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-
-                ClaimPermissionsCollection claimPermissions = await store.GetBatchAsync(body.Select(x => x.ClaimPermissionsId)).ConfigureAwait(false);
-
-                var serializer = JsonSerializer.Create(this.serializerSettingsProvider.Instance);
-
-                ClaimPermissionsBatchResponseItem[] result = body.Select(x =>
+                var responseItem = new ClaimPermissionsBatchResponseItem
                 {
-                    var responseItem = new ClaimPermissionsBatchResponseItem
-                    {
-                        ClaimPermissionsId = x.ClaimPermissionsId,
-                        ResourceUri = x.ResourceUri,
-                        ResourceAccessType = x.ResourceAccessType,
-                    };
+                    ClaimPermissionsId = x.ClaimPermissionsId,
+                    ResourceUri = x.ResourceUri,
+                    ResourceAccessType = x.ResourceAccessType,
+                };
 
-                    ClaimPermissions claimPermission = claimPermissions.Permissions.FirstOrDefault(c => c.Id == x.ClaimPermissionsId);
-                    Permission permission = Permission.Deny;
+                ClaimPermissions claimPermission = claimPermissions.Permissions.FirstOrDefault(c => c.Id == x.ClaimPermissionsId);
+                Permission permission = Permission.Deny;
 
-                    if (claimPermission == null)
-                    {
-                        responseItem.ResponseCode = 404;
-                    }
-                    else
-                    {
-                        responseItem.ResponseCode = 200;
-                        permission = claimPermission.HasPermissionFor(new Uri(x.ResourceUri, UriKind.RelativeOrAbsolute), x.ResourceAccessType) ? Permission.Allow : Permission.Deny;
-                    }
+                if (claimPermission == null)
+                {
+                    responseItem.ResponseCode = 404;
+                }
+                else
+                {
+                    responseItem.ResponseCode = 200;
+                    permission = claimPermission.HasPermissionFor(new Uri(x.ResourceUri, UriKind.RelativeOrAbsolute), x.ResourceAccessType) ? Permission.Allow : Permission.Deny;
+                }
 
-                    // Use the serializer to create a JToken from the permission value, then use this to populate
-                    // the Permission property of the response. We can't just do a ToString because the serializer
-                    // can be told how to format enum values and may be set to serialize them as lower case. Doing
-                    // this means that we can be sure this value is treated in a consistent way.
-                    var permissionToken = JToken.FromObject(permission, serializer);
-                    responseItem.Permission = permissionToken.Value<string>();
+                // Use the serializer to create a JToken from the permission value, then use this to populate
+                // the Permission property of the response. We can't just do a ToString because the serializer
+                // can be told how to format enum values and may be set to serialize them as lower case. Doing
+                // this means that we can be sure this value is treated in a consistent way.
+                var permissionToken = JToken.FromObject(permission, serializer);
+                responseItem.Permission = permissionToken.Value<string>();
 
-                    return responseItem;
-                }).ToArray();
+                return responseItem;
+            }).ToArray();
 
-                return this.OkResult(result, "application/json");
-            }
+            return this.OkResult(result, "application/json");
         }
 
         /// <summary>
@@ -712,30 +679,28 @@ namespace Marain.Claims.OpenApi
                 throw new ArgumentNullException(nameof(body));
             }
 
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(InitializeTenantOperationId))
+            ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
+
+            IClaimPermissionsStore permissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
+            IResourceAccessRuleSetStore ruleSetStore = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
+
+            bool alreadyInitialized = await permissionsStore.AnyPermissions().ConfigureAwait(false);
+            if (alreadyInitialized)
             {
-                ITenant tenant = await this.marainServicesTenancy.GetRequestingTenantAsync(context.CurrentTenantId).ConfigureAwait(false);
-
-                IClaimPermissionsStore permissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
-                IResourceAccessRuleSetStore ruleSetStore = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
-
-                bool alreadyInitialized = await permissionsStore.AnyPermissions().ConfigureAwait(false);
-                if (alreadyInitialized)
+                var response = new JObject
                 {
-                    var response = new JObject
-                    {
-                        ["status"] = 400,
-                        ["detail"] = "Tenant already initialized",
-                    };
-                    return new OpenApiResult
-                    {
-                        StatusCode = 400,
-                        Results = { { "application/json", response } },
-                    };
-                }
-
-                (string accessType, string resourceUri, string displayName)[] ruleData =
+                    ["status"] = 400,
+                    ["detail"] = "Tenant already initialized",
+                };
+                return new OpenApiResult
                 {
+                    StatusCode = 400,
+                    Results = { { "application/json", response } },
+                };
+            }
+
+            (string accessType, string resourceUri, string displayName)[] ruleData =
+            {
                     ("GET", "claimPermissions/**/*", "Read Claim Permissions"),
                     ("PUT", "claimPermissions/**/*", "Modify Claim Permissions"),
                     ("POST", "claimPermissions", "Create Claim Permissions"),
@@ -744,46 +709,45 @@ namespace Marain.Claims.OpenApi
                     ("PUT", "resourceAccessRuleSet/**/*", "Modify Resource Access Rules"),
                     ("POST", "resourceAccessRuleSet", "Create Resource Access Rules"),
                     ("POST", "resourceAccessRuleSet/**/*", "Add to Resource Access Rules"),
-                };
+            };
 
-                string prefix = ClaimsResourceTemplate.Replace("{tenantId}", context.CurrentTenantId);
+            string prefix = ClaimsResourceTemplate.Replace("{tenantId}", context.CurrentTenantId);
 
-                var ruleSet = new ResourceAccessRuleSet
-                {
-                    Id = "marainClaimsAdministrator",
-                    DisplayName = "Claims Administrator Permissions",
-                    Rules = ruleData
-                        .Select(rule =>
-                            new ResourceAccessRule(
-                            rule.accessType,
-                            new Resource(new Uri(prefix + rule.resourceUri, UriKind.Relative), rule.displayName),
-                            Permission.Allow))
-                        .ToList(),
-                };
+            var ruleSet = new ResourceAccessRuleSet
+            {
+                Id = "marainClaimsAdministrator",
+                DisplayName = "Claims Administrator Permissions",
+                Rules = ruleData
+                    .Select(rule =>
+                        new ResourceAccessRule(
+                        rule.accessType,
+                        new Resource(new Uri(prefix + rule.resourceUri, UriKind.Relative), rule.displayName),
+                        Permission.Allow))
+                    .ToList(),
+            };
 
-                ruleSet = await ruleSetStore.PersistAsync(ruleSet).ConfigureAwait(false);
+            ruleSet = await ruleSetStore.PersistAsync(ruleSet).ConfigureAwait(false);
 
-                var rulesetByIdOnlyForClaimPermissionsPersistence = new ResourceAccessRuleSet { Id = ruleSet.Id };
+            var rulesetByIdOnlyForClaimPermissionsPersistence = new ResourceAccessRuleSet { Id = ruleSet.Id };
 
-                string administratorPrincipalObjectId;
-                if (body.TryGetValue("administratorPrincipalObjectId", out JToken administratorPrincipalObjectIdJToken))
-                {
-                    administratorPrincipalObjectId = administratorPrincipalObjectIdJToken.Value<string>();
-                }
-                else
-                {
-                    administratorPrincipalObjectId =
-                        (context.CurrentPrincipal.FindFirst(ClaimTypes.Oid) ?? context.CurrentPrincipal.FindFirst(ClaimTypes.ObjectIdentifier)).Value;
-                }
-
-                var permissions = new ClaimPermissions
-                {
-                    Id = administratorPrincipalObjectId,
-                    ResourceAccessRuleSets = new[] { rulesetByIdOnlyForClaimPermissionsPersistence },
-                };
-                await permissionsStore.CreateAsync(permissions).ConfigureAwait(false);
-                return this.OkResult();
+            string administratorPrincipalObjectId;
+            if (body.TryGetValue("administratorPrincipalObjectId", out JToken administratorPrincipalObjectIdJToken))
+            {
+                administratorPrincipalObjectId = administratorPrincipalObjectIdJToken.Value<string>();
             }
+            else
+            {
+                administratorPrincipalObjectId =
+                    (context.CurrentPrincipal.FindFirst(ClaimTypes.Oid) ?? context.CurrentPrincipal.FindFirst(ClaimTypes.ObjectIdentifier)).Value;
+            }
+
+            var permissions = new ClaimPermissions
+            {
+                Id = administratorPrincipalObjectId,
+                ResourceAccessRuleSets = new[] { rulesetByIdOnlyForClaimPermissionsPersistence },
+            };
+            await permissionsStore.CreateAsync(permissions).ConfigureAwait(false);
+            return this.OkResult();
         }
 
         private async Task<(bool, OpenApiResult)> CheckRuleSetsExist(

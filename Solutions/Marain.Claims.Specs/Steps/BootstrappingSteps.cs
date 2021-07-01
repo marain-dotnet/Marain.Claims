@@ -111,8 +111,7 @@ namespace Marain.Claims.SpecFlow.Steps
             this.service = new ClaimPermissionsService(
                 this.permissionsStoreFactoryMock.Object,
                 ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IMarainServicesTenancy>(),
-                ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IJsonSerializerSettingsProvider>(),
-                new Microsoft.ApplicationInsights.TelemetryClient());
+                ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IJsonSerializerSettingsProvider>());
 
             var openApiContext = new Mock<IOpenApiContext>();
             openApiContext

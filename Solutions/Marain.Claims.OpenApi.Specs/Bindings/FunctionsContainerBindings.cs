@@ -13,7 +13,6 @@ namespace Marain.Workflows.Api.Specs.Bindings
     using Marain.Claims.OpenApi.Specs.Bindings;
     using Marain.Tenancy.Client;
 
-    using Microsoft.ApplicationInsights;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -44,8 +43,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     IConfiguration root = configurationBuilder.Build();
 
                     services.AddSingleton(root);
-                    services.AddJsonSerializerSettings();
-
+                    services.AddJsonNetSerializerSettingsProvider();
                     services.AddLogging();
 
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
@@ -56,7 +54,6 @@ namespace Marain.Workflows.Api.Specs.Bindings
                             AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
                         });
 
-                    services.AddRootTenant();
                     services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
 
                     TenancyClientOptions tenancyClientConfiguration = root.GetSection("TenancyClient").Get<TenancyClientOptions>();
@@ -64,8 +61,6 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddTenantProviderServiceClient();
 
                     services.AddTenantedClaimsApi(root);
-                    //// TODO: remove once upgraded to Corvus.Monitoring v2, and we've taken out the telemetry code from ClaimPermissionsService
-                    services.AddSingleton(new TelemetryClient(new Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration()));
 
                     services.AddClaimsClient(_ =>
                     {

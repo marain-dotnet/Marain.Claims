@@ -41,13 +41,11 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddLogging();
 
-            // Work around the fact that the tenancy client currently tries to fetch the root tenant on startup.
             services.AddMarainServiceConfiguration();
 
-            services.AddRootTenant();
             services.AddMarainServicesTenancy();
             services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
-            services.AddTenantProviderServiceClient();
+            services.AddTenantProviderServiceClient(enableResponseCaching: true);
 
             services.AddAzureManagedIdentityBasedTokenSource(
                 sp => new AzureManagedIdentityTokenSourceOptions
@@ -63,7 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddTenantedBlobContainerClaimsStore();
 
-            services.AddJsonSerializerSettings();
+            services.AddJsonNetSerializerSettingsProvider();
 
             services.AddSingleton<ClaimPermissionsService>();
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());
