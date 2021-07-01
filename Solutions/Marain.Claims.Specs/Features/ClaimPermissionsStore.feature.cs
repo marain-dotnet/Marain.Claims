@@ -136,8 +136,8 @@ namespace Marain.Claims.Specs.Features
                     "s ruleset store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
- testRunner.And("I have saved the claim permissions called \"claimpermissions\" to the claim permiss" +
-                    "ions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("I have created the claim permissions called \"claimpermissions\" in the claim permi" +
+                    "ssions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -221,10 +221,14 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 31
+ testRunner.And("an id exists named \"incorrectid\" but there is no claims permission associated wit" +
+                        "h it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 32
  testRunner.When("I request the claim permission with Id \"incorrectid\" from the claim permissions s" +
                         "tore", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 32
+#line 33
  testRunner.Then("a \"ClaimPermissionsNotFoundException\" exception is thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -242,7 +246,7 @@ this.FeatureBackground();
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving claim permissions when one or more of the referenced rule sets are mis" +
                     "sing", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 35
+#line 36
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -277,7 +281,7 @@ this.FeatureBackground();
                             "rulesets-4",
                             "Ruleset 4",
                             "{rules-2}"});
-#line 36
+#line 37
  testRunner.Given("I have resource access rulesets called \"rulesets-unsaved\"", ((string)(null)), table6, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
@@ -288,18 +292,18 @@ this.FeatureBackground();
                             "claimpermissions-2",
                             "",
                             "{rulesets-unsaved}"});
-#line 40
+#line 41
  testRunner.And("I have claim permissions called \"claimpermissions-2\"", ((string)(null)), table7, "And ");
 #line hidden
-#line 43
- testRunner.And("I have saved the claim permissions called \"claimpermissions-2\" to the claim permi" +
-                        "ssions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
 #line 44
+ testRunner.And("I have created the claim permissions called \"claimpermissions-2\" in the claim per" +
+                        "missions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 45
  testRunner.When("I request the claim permission with Id \"claimpermissions-2\" from the claim permis" +
                         "sions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 45
+#line 46
  testRunner.Then("a \"ResourceAccessRuleSetNotFoundException\" exception is thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

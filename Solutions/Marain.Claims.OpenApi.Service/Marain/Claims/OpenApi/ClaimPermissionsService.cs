@@ -110,10 +110,14 @@ namespace Marain.Claims.OpenApi
 
                 IClaimPermissionsStore claimPermissionsStore = await this.permissionsStoreFactory.GetClaimPermissionsStoreAsync(tenant).ConfigureAwait(false);
 
-                // Verify that the ID isn't already in use.
                 try
                 {
-                    ClaimPermissions claimPermissions = await claimPermissionsStore.GetAsync(body.Id).ConfigureAwait(false);
+                    ClaimPermissions result = await claimPermissionsStore.CreateAsync(body).ConfigureAwait(false);
+
+                    return this.OkResult(result, "application/json");
+                }
+                catch (InvalidOperationException)
+                {
                     var response = new JObject
                     {
                         ["status"] = 400,
@@ -125,13 +129,6 @@ namespace Marain.Claims.OpenApi
                         Results = { { "application/json", response } },
                     };
                 }
-                catch (ClaimPermissionsNotFoundException)
-                {
-                    // This is what we hope will happen.
-                }
-
-                ClaimPermissions result = await claimPermissionsStore.PersistAsync(body).ConfigureAwait(false);
-                return this.OkResult(result, "application/json");
             }
         }
 
@@ -320,7 +317,7 @@ namespace Marain.Claims.OpenApi
                         break;
                 }
 
-                await store.PersistAsync(claimPermissions).ConfigureAwait(false);
+                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
 
                 return this.CreatedResult();
             }
@@ -375,7 +372,7 @@ namespace Marain.Claims.OpenApi
 
                 claimPermissions.ResourceAccessRules = body.ToList();
 
-                await store.PersistAsync(claimPermissions).ConfigureAwait(false);
+                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
 
                 return this.OkResult();
             }
@@ -495,7 +492,7 @@ namespace Marain.Claims.OpenApi
                         break;
                 }
 
-                await store.PersistAsync(claimPermissions).ConfigureAwait(false);
+                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
 
                 return this.CreatedResult();
             }
@@ -554,7 +551,7 @@ namespace Marain.Claims.OpenApi
 
                 claimPermissions.ResourceAccessRuleSets = body.ToList();
 
-                await store.PersistAsync(claimPermissions).ConfigureAwait(false);
+                await store.UpdateAsync(claimPermissions).ConfigureAwait(false);
 
                 return this.OkResult();
             }
@@ -784,7 +781,7 @@ namespace Marain.Claims.OpenApi
                     Id = administratorPrincipalObjectId,
                     ResourceAccessRuleSets = new[] { rulesetByIdOnlyForClaimPermissionsPersistence },
                 };
-                await permissionsStore.PersistAsync(permissions).ConfigureAwait(false);
+                await permissionsStore.CreateAsync(permissions).ConfigureAwait(false);
                 return this.OkResult();
             }
         }

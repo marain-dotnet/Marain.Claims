@@ -38,15 +38,37 @@ namespace Marain.Claims
         Task<ClaimPermissionsCollection> GetBatchAsync(IEnumerable<string> ids, int maxParallelism = 5);
 
         /// <summary>
-        ///     Saves or updates the given <see cref="ClaimPermissions" />.
+        ///     Persists a new <see cref="ClaimPermissions" />.
         /// </summary>
         /// <param name="claimPermissions">
-        ///     The claim permissions to save.
+        ///     The claim permissions to create.
         /// </param>
         /// <returns>
-        ///     A <see cref="Task" /> that will return the <see cref="ClaimPermissions" /> when the store has been updated.
+        ///     A <see cref="Task" /> that will complete when the store has been updated, and which
+        ///     returns a <see cref="ClaimPermissions"/> with the ETag populated.
         /// </returns>
-        Task<ClaimPermissions> PersistAsync(ClaimPermissions claimPermissions);
+        /// <exception cref="System.InvalidOperationException">
+        ///     Thrown if a <see cref="ClaimPermissions"/> with the specified ID already exists.
+        /// </exception>
+        Task<ClaimPermissions> CreateAsync(ClaimPermissions claimPermissions);
+
+        /// <summary>
+        ///     Persists a modified version of an existing <see cref="ClaimPermissions" />.
+        /// </summary>
+        /// <param name="claimPermissions">
+        ///     The claim permissions to create.
+        /// </param>
+        /// <returns>
+        ///     A <see cref="Task" /> that will complete when the store has been updated.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        ///     Thrown if the <see cref="ClaimPermissions"/> passed has a null ETag property.
+        /// </exception>
+        /// <exception cref="System.InvalidOperationException">
+        ///     Thrown if a <see cref="ClaimPermissions"/> the persisted copy does not match the ETag,
+        ///     indicating that updates might be lost of the change is saved.
+        /// </exception>
+        Task<ClaimPermissions> UpdateAsync(ClaimPermissions claimPermissions);
 
         /// <summary>
         ///     Determines whether there are any claim permissions in the store.

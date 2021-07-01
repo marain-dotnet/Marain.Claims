@@ -289,7 +289,7 @@ namespace Marain.Claims.SpecFlow.Steps
         public void ThenNoClaimPermissionsAreCreated()
         {
             this.permissionStoreMock.Verify(
-                m => m.PersistAsync(It.IsAny<ClaimPermissions>()),
+                m => m.CreateAsync(It.IsAny<ClaimPermissions>()),
                 Times.Never);
         }
 
@@ -345,7 +345,7 @@ namespace Marain.Claims.SpecFlow.Steps
             else
             {
                 this.permissionStoreMock
-                    .Setup(m => m.PersistAsync(It.IsAny<ClaimPermissions>()))
+                    .Setup(m => m.CreateAsync(It.IsAny<ClaimPermissions>()))
                     .Returns((ClaimPermissions cp) =>
                     {
                         this.claimPermissionsPersistedToStore.Add(cp);

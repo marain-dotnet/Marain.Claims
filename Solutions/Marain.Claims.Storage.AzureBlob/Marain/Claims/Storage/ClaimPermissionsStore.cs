@@ -122,11 +122,41 @@ namespace Marain.Claims.Storage
         }
 
         /// <inheritdoc/>
-        public async Task<ClaimPermissions> PersistAsync(ClaimPermissions claimPermissions)
+        public async Task<ClaimPermissions> CreateAsync(ClaimPermissions claimPermissions)
         {
             if (claimPermissions is null)
             {
                 throw new ArgumentNullException(nameof(claimPermissions));
+            }
+
+            CloudBlockBlob blob = this.Container.GetBlockBlobReference(claimPermissions.Id);
+            string serializedPermissions = JsonConvert.SerializeObject(claimPermissions, this.serializerSettings);
+            try
+            {
+                await blob.UploadTextAsync(serializedPermissions, Encoding.UTF8, new AccessCondition { IfNoneMatchETag = "*" }, null, null).ConfigureAwait(false);
+            }
+            catch (StorageException x)
+            {
+                System.Diagnostics.Debug.WriteLine(x.ToString());
+                throw new InvalidOperationException();
+            }
+
+            claimPermissions.ETag = blob.Properties.ETag;
+            return claimPermissions;
+        }
+
+        /// <inheritdoc/>
+        public async Task<ClaimPermissions> UpdateAsync(ClaimPermissions claimPermissions)
+        {
+            if (claimPermissions is null)
+            {
+                throw new ArgumentNullException(nameof(claimPermissions));
+            }
+
+            if (string.IsNullOrWhiteSpace(claimPermissions.ETag))
+            {
+                throw new ArgumentException(
+                    "There is no ETag on this ClaimPermissions. Updates are not safe without an ETag.");
             }
 
             CloudBlockBlob blob = this.Container.GetBlockBlobReference(claimPermissions.Id);
@@ -208,7 +238,7 @@ namespace Marain.Claims.Storage
 
                 if (hasUpdates)
                 {
-                    tasks.Add(this.PersistAsync(permissions));
+                    tasks.Add(this.UpdateAsync(permissions));
                 }
                 else
                 {
