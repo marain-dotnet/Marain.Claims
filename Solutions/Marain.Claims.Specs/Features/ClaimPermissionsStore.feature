@@ -18,7 +18,7 @@ Background:
 	| Id                 | ResourceAccessRules | ResourceAccessRulesets |
 	| claimpermissions-1 |                     | {rulesets}             |
 	And I have saved the resource access rulesets called "rulesets" to the resource access ruleset store
-	And I have saved the claim permissions called "claimpermissions" to the claim permissions store
+	And I have created the claim permissions called "claimpermissions" in the claim permissions store
 
 @useChildObjects
 Scenario: Retrieving claim permissions from the repository
@@ -28,6 +28,7 @@ Scenario: Retrieving claim permissions from the repository
 
 @useChildObjects
 Scenario: Retrieving claim permissions with an invalid Id
+	And an id exists named "incorrectid" but there is no claims permission associated with it
 	When I request the claim permission with Id "incorrectid" from the claim permissions store
 	Then a "ClaimPermissionsNotFoundException" exception is thrown
 
@@ -40,7 +41,7 @@ Scenario: Retrieving claim permissions when one or more of the referenced rule s
 	And I have claim permissions called "claimpermissions-2"
 	| Id                 | ResourceAccessRules | ResourceAccessRulesets |
 	| claimpermissions-2 |                     | {rulesets-unsaved}     |
-	And I have saved the claim permissions called "claimpermissions-2" to the claim permissions store
+	And I have created the claim permissions called "claimpermissions-2" in the claim permissions store
 	When I request the claim permission with Id "claimpermissions-2" from the claim permissions store
 	Then a "ResourceAccessRuleSetNotFoundException" exception is thrown
 	

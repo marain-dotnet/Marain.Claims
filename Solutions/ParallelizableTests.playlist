@@ -1,0 +1,6 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Property Name="Project" Value="Marain.Claims.Specs" />
+    <Property Name="Trait" Value="parallelizable" />
+  </Rule>
+</Playlist>

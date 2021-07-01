@@ -12,6 +12,8 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
 
         public const int FunctionStartup = TransientTenantSetup + 1;
 
+        public const int FunctionRunning = FunctionStartup + 1;
+
         public const int TransientTenantTearDown = FunctionStartup + 1;
     }
 }

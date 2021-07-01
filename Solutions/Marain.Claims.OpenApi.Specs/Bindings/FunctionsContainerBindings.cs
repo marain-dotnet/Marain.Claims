@@ -5,14 +5,18 @@
 namespace Marain.Workflows.Api.Specs.Bindings
 {
     using System;
+
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
+
     using Marain.Claims.Client;
     using Marain.Claims.OpenApi.Specs.Bindings;
-    using Marain.Services;
     using Marain.Tenancy.Client;
+
+    using Microsoft.ApplicationInsights;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+
     using TechTalk.SpecFlow;
 
     /// <summary>
@@ -35,7 +39,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
                 {
                     IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                         .AddEnvironmentVariables()
-                        .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
+                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
                     IConfiguration root = configurationBuilder.Build();
 
@@ -55,9 +59,13 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddRootTenant();
                     services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
 
-                    services.AddSingleton(new MarainServiceConfiguration());
-                    services.AddMarainServicesTenancy();
+                    TenancyClientOptions tenancyClientConfiguration = root.GetSection("TenancyClient").Get<TenancyClientOptions>();
+                    services.AddSingleton(tenancyClientConfiguration);
                     services.AddTenantProviderServiceClient();
+
+                    services.AddTenantedClaimsApi(root);
+                    //// TODO: remove once upgraded to Corvus.Monitoring v2, and we've taken out the telemetry code from ClaimPermissionsService
+                    services.AddSingleton(new TelemetryClient(new Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration()));
 
                     services.AddClaimsClient(_ =>
                     {

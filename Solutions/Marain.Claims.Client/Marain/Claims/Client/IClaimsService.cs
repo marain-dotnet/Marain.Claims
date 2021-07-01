@@ -57,7 +57,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ClaimPermissions>> CreateClaimPermissionsWithHttpMessagesAsync(string tenantId, ClaimPermissions body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<object>> CreateClaimPermissionsWithHttpMessagesAsync(string tenantId, CreateClaimPermissionsRequest body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get a claim permissions
@@ -173,7 +173,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSet> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetIdOnly> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Set resource access rule sets for a claim permissions
@@ -195,7 +195,7 @@ namespace Marain.Claims.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSet> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProblemDetails>> SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetIdOnly> body, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets a permission result for a claim permissions for a target

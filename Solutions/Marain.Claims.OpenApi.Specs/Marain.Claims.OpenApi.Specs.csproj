@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
 
   <PropertyGroup>
@@ -24,15 +24,20 @@
     <PackageReference Include="Marain.Services.Tenancy" Version="2.2.0" />
     <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.0.1" />
     <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.1.1" />
+    <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Marain.Claims.Client.OpenApi\Marain.Claims.Client.OpenApi.csproj" />
     <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
+    <ProjectReference Include="..\Marain.Claims.Host.Functions\Marain.Claims.Host.Functions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="specflow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -53,4 +58,18 @@
     <EmbeddedResource Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
   </ItemGroup>
 
+  <!--
+  To enable execution of feature files for each hosting mode, we exploit the fact that SpecFlow's
+  NUnit integration generates partial classes. We modify these by adding a constructor and a test
+  fixture source that causes the suite for certain features to run multiple times, once for each
+  hosting type.
+  We put our custom additions to these partial classes in files named FeatureName.feature.multi.cs.
+  The following ItemGroup arranges for these to appear nested inside FeatureName.feature (just like
+  the FeatureName.feature.cs files that SpecFlow generates).
+  -->
+  <ItemGroup>
+    <Compile Update="**\*.feature.multi.cs">
+      <DependentUpon>%(RelativeDir)$([System.String]::Copy('%(Filename)').Replace(".multi.cs", ""))</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

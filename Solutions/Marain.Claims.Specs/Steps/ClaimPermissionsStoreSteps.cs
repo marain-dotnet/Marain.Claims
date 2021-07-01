@@ -27,6 +27,7 @@ namespace Marain.Claims.SpecFlow.Steps
         private readonly ScenarioContext scenarioContext;
         private readonly FeatureContext featureContext;
         private readonly IServiceProvider serviceProvider;
+        private readonly Dictionary<string, string> claimPermissionIds = new Dictionary<string, string>();
 
         public ClaimPermissionsStoreSteps(FeatureContext featureContext, ScenarioContext scenarioContext)
         {
@@ -60,6 +61,21 @@ namespace Marain.Claims.SpecFlow.Steps
         {
             var data = table.CreateSet<ClaimPermissions>().ToList();
 
+            // We need the ClaimPermission ids to be different every time because we create test
+            // tenants per-feature, but we create claims per-scenario. Now that everything has to
+            // be clear about whether it is creating or updating, reuse of ClaimPermission ids
+            // across scenarios within a feature now becomes a problem.
+            // We we have to use the technique in which ids specified in tests are actually
+            // references to dynamically generated ids. Note that it's not the name passed into
+            // this method, because that actually identifies a set of claims to be created. It's
+            // the ids of the individual claims themselves (which are set as the Id in the table).
+            foreach (ClaimPermissions cp in data)
+            {
+                string actualId = $"{cp.Id}-{Guid.NewGuid()}";
+                this.claimPermissionIds[cp.Id] = actualId;
+                cp.Id = actualId;
+            }
+
             // When we create the claim permissions, we need the rulesets to be trimmed down to only include their names.
             foreach (ClaimPermissions current in data)
             {
@@ -80,25 +96,42 @@ namespace Marain.Claims.SpecFlow.Steps
             await Task.WhenAll(tasks);
         }
 
-        [Given(@"I have saved the claim permissions called ""(.*)"" to the claim permissions store")]
-        public async Task GivenIHaveSavedTheClaimPermissionsCalledToTheClaimPermissionsStore(string claimPermissionsName)
+        [Given(@"I have created the claim permissions called ""(.*)"" in the claim permissions store")]
+        public async Task GivenIHaveCreatedTheClaimPermissionsCalledInTheClaimPermissionsStore(string claimPermissionsName)
         {
+            // Note: lookup via this.claimPermissionIds not required here because the name here is
+            // of the set of claims in the context, rather than the id itself. The mapping from id name
+            // to generated id is done at the point where the table is converted into a List<ClaimPermissions>.
             List<ClaimPermissions> claimPermissions = this.scenarioContext.Get<List<ClaimPermissions>>(claimPermissionsName);
             IClaimPermissionsStore claimPermissionsStore = await this.GetClaimPermissionsStoreAsync().ConfigureAwait(false);
 
-            IEnumerable<Task<ClaimPermissions>> tasks = claimPermissions.Select(claimPermissionsStore.PersistAsync);
+            IEnumerable<Task<ClaimPermissions>> tasks = claimPermissions.Select(claimPermissionsStore.CreateAsync);
 
-            await Task.WhenAll(tasks);
+            ClaimPermissions[] updatedClaimPermissions = await Task.WhenAll(tasks);
+
+            // The returned items all have the ETag set, which we need in later tests if they go on
+            // to modify the claim permissions further, because UpdateAsync refuses to run if you
+            // give it a ClaimPermissions with a null ETag.
+            this.scenarioContext.Set(updatedClaimPermissions.ToList(), claimPermissionsName);
+        }
+
+        [Given(@"an id exists named ""(.*)"" but there is no claims permission associated with it")]
+        public void GivenAnIdExistsNamedButThereIsNoClaimsPermissionAssociatedWithIt(string idName)
+        {
+            string actualId = $"{idName}-{Guid.NewGuid()}";
+            this.claimPermissionIds[idName] = actualId;
         }
 
         [When(@"I request the claim permission with Id ""(.*)"" from the claim permissions store")]
-        public async Task WhenIRequestTheClaimPermissionWithIdFromTheClaimPermissionsStore(string p0)
+        public async Task WhenIRequestTheClaimPermissionWithIdFromTheClaimPermissionsStore(string claimIdName)
         {
+            string claimId = this.claimPermissionIds[claimIdName];
+
             IClaimPermissionsStore store = await this.GetClaimPermissionsStoreAsync().ConfigureAwait(false);
 
             try
             {
-                ClaimPermissions result = await store.GetAsync(p0).ConfigureAwait(false);
+                ClaimPermissions result = await store.GetAsync(claimId).ConfigureAwait(false);
                 this.scenarioContext.Set(result, ClaimPermissionsResult);
             }
             catch (Exception ex)

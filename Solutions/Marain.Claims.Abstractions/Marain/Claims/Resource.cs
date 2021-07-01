@@ -73,12 +73,13 @@ namespace Marain.Claims
         public static bool operator !=(Resource x, Resource y) => !x.Equals(y);
 
         /// <summary>
-        /// Get a hash code for the object, based on the name and display name.
+        /// Get a hash code for the object, based on the <see cref="Uri"/>.
+        /// (<see cref="DisplayName"/> is ignored for comparison purposes.)
         /// </summary>
         /// <returns>A hash code.</returns>
         public override int GetHashCode()
         {
-            return (this.Uri.ToString().ToLowerInvariant(), this.DisplayName).GetHashCode();
+            return this.Uri.ToString().ToLowerInvariant().GetHashCode();
         }
 
         /// <summary>

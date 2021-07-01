@@ -31,7 +31,7 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ClaimPermissions CreateClaimPermissions(this IClaimsService operations, string tenantId, ClaimPermissions body)
+            public static object CreateClaimPermissions(this IClaimsService operations, string tenantId, CreateClaimPermissionsRequest body)
             {
                 return operations.CreateClaimPermissionsAsync(tenantId, body).GetAwaiter().GetResult();
             }
@@ -53,7 +53,7 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ClaimPermissions> CreateClaimPermissionsAsync(this IClaimsService operations, string tenantId, ClaimPermissions body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> CreateClaimPermissionsAsync(this IClaimsService operations, string tenantId, CreateClaimPermissionsRequest body, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateClaimPermissionsWithHttpMessagesAsync(tenantId, body, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -283,7 +283,7 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails UpdateClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSet> body)
+            public static ProblemDetails UpdateClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetIdOnly> body)
             {
                 return operations.UpdateClaimPermissionsResourceAccessRuleSetsAsync(tenantId, claimPermissionsId, operation, body).GetAwaiter().GetResult();
             }
@@ -311,7 +311,7 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> UpdateClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSet> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> UpdateClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, string operation, IList<ResourceAccessRuleSetIdOnly> body, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UpdateClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(tenantId, claimPermissionsId, operation, body, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -336,7 +336,7 @@ namespace Marain.Claims.Client
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static ProblemDetails SetClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSet> body)
+            public static ProblemDetails SetClaimPermissionsResourceAccessRuleSets(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetIdOnly> body)
             {
                 return operations.SetClaimPermissionsResourceAccessRuleSetsAsync(tenantId, claimPermissionsId, body).GetAwaiter().GetResult();
             }
@@ -361,7 +361,7 @@ namespace Marain.Claims.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProblemDetails> SetClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSet> body, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProblemDetails> SetClaimPermissionsResourceAccessRuleSetsAsync(this IClaimsService operations, string tenantId, string claimPermissionsId, IList<ResourceAccessRuleSetIdOnly> body, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SetClaimPermissionsResourceAccessRuleSetsWithHttpMessagesAsync(tenantId, claimPermissionsId, body, null, cancellationToken).ConfigureAwait(false))
                 {

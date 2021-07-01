@@ -117,7 +117,7 @@
                 object response = await this.ClaimsService.CreateResourceAccessRuleSetAsync(ClientTenantId, ruleSet);
             }
 
-            foreach (ClaimPermissions claimPermissions in input.ClaimPermissions)
+            foreach (CreateClaimPermissionsRequest claimPermissions in input.ClaimPermissions)
             {
                 object response = await this.ClaimsService.CreateClaimPermissionsAsync(ClientTenantId, claimPermissions);
             }
@@ -127,7 +127,7 @@
         {
             public IList<ResourceAccessRuleSet> RuleSets { get; set; }
 
-            public IList<ClaimPermissions> ClaimPermissions { get; set; }
+            public IList<CreateClaimPermissionsRequest> ClaimPermissions { get; set; }
         }
     }
 }
