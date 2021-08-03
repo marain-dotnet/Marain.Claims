@@ -140,10 +140,38 @@ namespace Marain.Claims.SpecFlow.Steps
             }
         }
 
+        [When("I request a batch of claim permissions by Id from the claim permissions store")]
+        public async Task WhenIRequestABatchOfClaimPermissionsByIdFromTheClaimPermissionsStore(Table table)
+        {
+            IEnumerable<string> claimIdNames = table.Rows.Select(x => x[0]);
+            IEnumerable<string> claimIds = claimIdNames.Select(x => this.claimPermissionIds[x]);
+
+            IClaimPermissionsStore store = await this.GetClaimPermissionsStoreAsync().ConfigureAwait(false);
+
+            try
+            {
+                ClaimPermissionsCollection result = await store.GetBatchAsync(claimIds).ConfigureAwait(false);
+                this.scenarioContext.Set(result, ClaimPermissionsResult);
+            }
+            catch (Exception ex)
+            {
+                this.scenarioContext.Set(ex);
+            }
+        }
+
         [Then(@"the claim permission is returned")]
         public void ThenTheClaimPermissionIsReturned()
         {
             if (!this.scenarioContext.TryGetValue(ClaimPermissionsResult, out ClaimPermissions _))
+            {
+                Assert.Fail("The expected result was not found in the scenario context.");
+            }
+        }
+
+        [Then("the claim permissions are returned")]
+        public void ThenClaimPermissionsAreReturned()
+        {
+            if (!this.scenarioContext.TryGetValue(ClaimPermissionsResult, out ClaimPermissionsCollection results))
             {
                 Assert.Fail("The expected result was not found in the scenario context.");
             }
@@ -163,6 +191,34 @@ namespace Marain.Claims.SpecFlow.Steps
 
                 Assert.NotNull(loadedRuleset, $"The loaded ClaimPermissions did not contain the expected ResourceAccessRuleset with Id '{current.Id}'");
                 Assert.That(loadedRuleset.Rules, Is.EquivalentTo(current.Rules), $"The loaded ResourceAccessRuleset with Id '{current.Id}' was not equivalent to the expected ResourceAccessRuleset");
+            }
+        }
+
+        [Then("the resource access rulesets on the claim permissions match the expected rulesets")]
+        public void ThenTheResourceAccessRulesetsOnTheClaimPermissionsMatchTheExpectedRulesets(Table table)
+        {
+            ClaimPermissionsCollection loadedClaimPermissionsBatch = this.scenarioContext.Get<ClaimPermissionsCollection>(ClaimPermissionsResult);
+
+            Assert.AreEqual(table.Rows.Count, loadedClaimPermissionsBatch.Permissions.Count, "The expected number of claim permissions were not loaded");
+
+            foreach (TableRow currentRow in table.Rows)
+            {
+                // For each row in the "expected results", we need to:
+                // - ensure we actually got the target ClaimPermissions back in the batch
+                // - load the expected rulesets and then make sure the loaded claim permission matches.
+                ClaimPermissions loadedClaimPermissions = loadedClaimPermissionsBatch.Permissions.Find(x => x.Id == this.claimPermissionIds[currentRow[0]]);
+                Assert.NotNull(loadedClaimPermissions, $"The ClaimPermissions with Id '{currentRow[0]}' was not loaded");
+
+                List<ResourceAccessRuleSet> expectedRulesets = this.scenarioContext.Get<List<ResourceAccessRuleSet>>(currentRow[1]);
+                Assert.AreEqual(expectedRulesets.Count, loadedClaimPermissions.ResourceAccessRuleSets.Count, $"The loaded ClaimPermissions with Id '{loadedClaimPermissions.Id}' did not contain the expected number of ResourceAccessRulesets");
+
+                foreach (ResourceAccessRuleSet currentRuleset in expectedRulesets)
+                {
+                    ResourceAccessRuleSet loadedRuleset = loadedClaimPermissions.ResourceAccessRuleSets.FirstOrDefault(x => x.Id == currentRuleset.Id);
+
+                    Assert.NotNull(loadedRuleset, $"The loaded ClaimPermissions did not contain the expected ResourceAccessRuleset with Id '{currentRuleset.Id}'");
+                    Assert.That(loadedRuleset.Rules, Is.EquivalentTo(currentRuleset.Rules), $"The loaded ResourceAccessRuleset with Id '{currentRuleset.Id}' was not equivalent to the expected ResourceAccessRuleset");
+                }
             }
         }
 
