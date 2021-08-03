@@ -265,14 +265,16 @@ this.FeatureBackground();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Retrieving claim permissions with an invalid Id")]
+        [NUnit.Framework.DescriptionAttribute("Retrieving a batch of claim permissions from the repository with duplicate claim " +
+            "permission Ids")]
         [NUnit.Framework.CategoryAttribute("useChildObjects")]
-        public virtual void RetrievingClaimPermissionsWithAnInvalidId()
+        public virtual void RetrievingABatchOfClaimPermissionsFromTheRepositoryWithDuplicateClaimPermissionIds()
         {
             string[] tagsOfScenario = new string[] {
                     "useChildObjects"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving claim permissions with an invalid Id", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving a batch of claim permissions from the repository with duplicate claim " +
+                    "permission Ids", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 46
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -296,33 +298,45 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                            "ClaimPermissionsId"});
+                table9.AddRow(new string[] {
+                            "claimpermissions-1"});
+                table9.AddRow(new string[] {
+                            "claimpermissions-1"});
 #line 47
- testRunner.And("an id exists named \"incorrectid\" but there is no claims permission associated wit" +
-                        "h it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("I request a batch of claim permissions by Id from the claim permissions store", ((string)(null)), table9, "When ");
 #line hidden
-#line 48
- testRunner.When("I request the claim permission with Id \"incorrectid\" from the claim permissions s" +
-                        "tore", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 51
+ testRunner.Then("the claim permissions are returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 49
- testRunner.Then("a \"ClaimPermissionsNotFoundException\" exception is thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                            "ClaimPermissionsId",
+                            "ExpectedRulesets"});
+                table10.AddRow(new string[] {
+                            "claimpermissions-1",
+                            "rulesets"});
+                table10.AddRow(new string[] {
+                            "claimpermissions-1",
+                            "rulesets"});
+#line 52
+ testRunner.And("the resource access rulesets on the claim permissions match the expected rulesets" +
+                        "", ((string)(null)), table10, "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Retrieving claim permissions when one or more of the referenced rule sets are mis" +
-            "sing")]
+        [NUnit.Framework.DescriptionAttribute("Retrieving claim permissions with an invalid Id")]
         [NUnit.Framework.CategoryAttribute("useChildObjects")]
-        public virtual void RetrievingClaimPermissionsWhenOneOrMoreOfTheReferencedRuleSetsAreMissing()
+        public virtual void RetrievingClaimPermissionsWithAnInvalidId()
         {
             string[] tagsOfScenario = new string[] {
                     "useChildObjects"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving claim permissions when one or more of the referenced rule sets are mis" +
-                    "sing", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 52
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving claim permissions with an invalid Id", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 58
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -345,41 +359,90 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
-                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+#line 59
+ testRunner.And("an id exists named \"incorrectid\" but there is no claims permission associated wit" +
+                        "h it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 60
+ testRunner.When("I request the claim permission with Id \"incorrectid\" from the claim permissions s" +
+                        "tore", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 61
+ testRunner.Then("a \"ClaimPermissionsNotFoundException\" exception is thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Retrieving claim permissions when one or more of the referenced rule sets are mis" +
+            "sing")]
+        [NUnit.Framework.CategoryAttribute("useChildObjects")]
+        public virtual void RetrievingClaimPermissionsWhenOneOrMoreOfTheReferencedRuleSetsAreMissing()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "useChildObjects"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving claim permissions when one or more of the referenced rule sets are mis" +
+                    "sing", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 64
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 6
+this.FeatureBackground();
+#line hidden
+                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "DisplayName",
                             "Rules"});
-                table9.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "rulesets-3",
                             "Ruleset 3",
                             "{rules-1}"});
-                table9.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "rulesets-4",
                             "Ruleset 4",
                             "{rules-2}"});
-#line 53
- testRunner.Given("I have resource access rulesets called \"rulesets-unsaved\"", ((string)(null)), table9, "Given ");
+#line 65
+ testRunner.Given("I have resource access rulesets called \"rulesets-unsaved\"", ((string)(null)), table11, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "ResourceAccessRules",
                             "ResourceAccessRulesets"});
-                table10.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "claimpermissions-2",
                             "",
                             "{rulesets-unsaved}"});
-#line 57
- testRunner.And("I have claim permissions called \"claimpermissions-2\"", ((string)(null)), table10, "And ");
+#line 69
+ testRunner.And("I have claim permissions called \"claimpermissions-2\"", ((string)(null)), table12, "And ");
 #line hidden
-#line 60
+#line 72
  testRunner.And("I have created the claim permissions called \"claimpermissions-2\" in the claim per" +
                         "missions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 61
+#line 73
  testRunner.When("I request the claim permission with Id \"claimpermissions-2\" from the claim permis" +
                         "sions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 62
+#line 74
  testRunner.Then("a \"ResourceAccessRuleSetNotFoundException\" exception is thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

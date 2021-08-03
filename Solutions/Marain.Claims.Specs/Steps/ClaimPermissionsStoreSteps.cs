@@ -171,6 +171,11 @@ namespace Marain.Claims.SpecFlow.Steps
         [Then("the claim permissions are returned")]
         public void ThenClaimPermissionsAreReturned()
         {
+            if (this.scenarioContext.TryGetValue(out Exception exception))
+            {
+                Assert.Fail("An exception was thrown when retrieving ClaimPermissions: " + exception.ToString());
+            }
+
             if (!this.scenarioContext.TryGetValue(ClaimPermissionsResult, out ClaimPermissionsCollection results))
             {
                 Assert.Fail("The expected result was not found in the scenario context.");
@@ -201,13 +206,15 @@ namespace Marain.Claims.SpecFlow.Steps
 
             Assert.AreEqual(table.Rows.Count, loadedClaimPermissionsBatch.Permissions.Count, "The expected number of claim permissions were not loaded");
 
-            foreach (TableRow currentRow in table.Rows)
+            for (int index = 0; index < table.Rows.Count; index++)
             {
+                TableRow currentRow = table.Rows[index];
+
                 // For each row in the "expected results", we need to:
                 // - ensure we actually got the target ClaimPermissions back in the batch
                 // - load the expected rulesets and then make sure the loaded claim permission matches.
-                ClaimPermissions loadedClaimPermissions = loadedClaimPermissionsBatch.Permissions.Find(x => x.Id == this.claimPermissionIds[currentRow[0]]);
-                Assert.NotNull(loadedClaimPermissions, $"The ClaimPermissions with Id '{currentRow[0]}' was not loaded");
+                ClaimPermissions loadedClaimPermissions = loadedClaimPermissionsBatch.Permissions[index];
+                Assert.AreEqual(this.claimPermissionIds[currentRow[0]], loadedClaimPermissions.Id);
 
                 List<ResourceAccessRuleSet> expectedRulesets = this.scenarioContext.Get<List<ResourceAccessRuleSet>>(currentRow[1]);
                 Assert.AreEqual(expectedRulesets.Count, loadedClaimPermissions.ResourceAccessRuleSets.Count, $"The loaded ClaimPermissions with Id '{loadedClaimPermissions.Id}' did not contain the expected number of ResourceAccessRulesets");
