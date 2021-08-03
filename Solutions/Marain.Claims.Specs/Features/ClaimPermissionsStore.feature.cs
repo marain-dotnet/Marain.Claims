@@ -266,15 +266,15 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Retrieving a batch of claim permissions from the repository with duplicate claim " +
-            "permission Ids")]
+            "permission Ids automatically deduplicates the requests")]
         [NUnit.Framework.CategoryAttribute("useChildObjects")]
-        public virtual void RetrievingABatchOfClaimPermissionsFromTheRepositoryWithDuplicateClaimPermissionIds()
+        public virtual void RetrievingABatchOfClaimPermissionsFromTheRepositoryWithDuplicateClaimPermissionIdsAutomaticallyDeduplicatesTheRequests()
         {
             string[] tagsOfScenario = new string[] {
                     "useChildObjects"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving a batch of claim permissions from the repository with duplicate claim " +
-                    "permission Ids", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+                    "permission Ids automatically deduplicates the requests", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 46
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -316,9 +316,6 @@ this.FeatureBackground();
                 table10.AddRow(new string[] {
                             "claimpermissions-1",
                             "rulesets"});
-                table10.AddRow(new string[] {
-                            "claimpermissions-1",
-                            "rulesets"});
 #line 52
  testRunner.And("the resource access rulesets on the claim permissions match the expected rulesets" +
                         "", ((string)(null)), table10, "And ");
@@ -336,7 +333,7 @@ this.FeatureBackground();
                     "useChildObjects"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving claim permissions with an invalid Id", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 58
+#line 57
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -359,15 +356,15 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line hidden
-#line 59
+#line 58
  testRunner.And("an id exists named \"incorrectid\" but there is no claims permission associated wit" +
                         "h it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 60
+#line 59
  testRunner.When("I request the claim permission with Id \"incorrectid\" from the claim permissions s" +
                         "tore", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 61
+#line 60
  testRunner.Then("a \"ClaimPermissionsNotFoundException\" exception is thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -385,7 +382,7 @@ this.FeatureBackground();
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Retrieving claim permissions when one or more of the referenced rule sets are mis" +
                     "sing", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 64
+#line 63
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -420,7 +417,7 @@ this.FeatureBackground();
                             "rulesets-4",
                             "Ruleset 4",
                             "{rules-2}"});
-#line 65
+#line 64
  testRunner.Given("I have resource access rulesets called \"rulesets-unsaved\"", ((string)(null)), table11, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -431,18 +428,18 @@ this.FeatureBackground();
                             "claimpermissions-2",
                             "",
                             "{rulesets-unsaved}"});
-#line 69
+#line 68
  testRunner.And("I have claim permissions called \"claimpermissions-2\"", ((string)(null)), table12, "And ");
 #line hidden
-#line 72
+#line 71
  testRunner.And("I have created the claim permissions called \"claimpermissions-2\" in the claim per" +
                         "missions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 73
+#line 72
  testRunner.When("I request the claim permission with Id \"claimpermissions-2\" from the claim permis" +
                         "sions store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 74
+#line 73
  testRunner.Then("a \"ResourceAccessRuleSetNotFoundException\" exception is thrown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

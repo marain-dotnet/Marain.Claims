@@ -43,7 +43,7 @@ Scenario: Retrieving a batch of claim permissions from the repository
 	| claimpermissions-2 | rulesets-single  |
 
 @useChildObjects
-Scenario: Retrieving a batch of claim permissions from the repository with duplicate claim permission Ids
+Scenario: Retrieving a batch of claim permissions from the repository with duplicate claim permission Ids automatically deduplicates the requests
 	When I request a batch of claim permissions by Id from the claim permissions store
 	| ClaimPermissionsId |
 	| claimpermissions-1 |
@@ -51,7 +51,6 @@ Scenario: Retrieving a batch of claim permissions from the repository with dupli
 	Then the claim permissions are returned
 	And the resource access rulesets on the claim permissions match the expected rulesets
 	| ClaimPermissionsId | ExpectedRulesets |
-	| claimpermissions-1 | rulesets         |
 	| claimpermissions-1 | rulesets         |
 
 @useChildObjects
