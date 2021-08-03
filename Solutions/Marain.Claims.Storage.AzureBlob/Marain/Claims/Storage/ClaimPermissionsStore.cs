@@ -98,7 +98,7 @@ namespace Marain.Claims.Storage
 
             var result = new ClaimPermissionsCollection();
 
-            foreach (IList<string> batch in ids.Buffer(maxParallelism))
+            foreach (IList<string> batch in ids.Distinct().Buffer(maxParallelism))
             {
                 IList<Task<ClaimPermissions>> taskBatch = batch.Select(id => Task.Run(async () =>
                 {

@@ -14,9 +14,13 @@ Background:
 	| Id         | DisplayName | Rules     |
 	| rulesets-1 | Ruleset 1   | {rules-1} |
 	| rulesets-2 | Ruleset 2   | {rules-2} |
+	And I have resource access rulesets called "rulesets-single"
+	| Id         | DisplayName | Rules     |
+	| rulesets-1 | Ruleset 1   | {rules-1} |
 	And I have claim permissions called "claimpermissions"
 	| Id                 | ResourceAccessRules | ResourceAccessRulesets |
 	| claimpermissions-1 |                     | {rulesets}             |
+	| claimpermissions-2 |                     | {rulesets-single}      |
 	And I have saved the resource access rulesets called "rulesets" to the resource access ruleset store
 	And I have created the claim permissions called "claimpermissions" in the claim permissions store
 
@@ -25,6 +29,29 @@ Scenario: Retrieving claim permissions from the repository
 	When I request the claim permission with Id "claimpermissions-1" from the claim permissions store
 	Then the claim permission is returned
 	And the resource access rulesets on the claim permission match the rulesets "rulesets"
+
+@useChildObjects
+Scenario: Retrieving a batch of claim permissions from the repository
+	When I request a batch of claim permissions by Id from the claim permissions store
+	| ClaimPermissionsId |
+	| claimpermissions-1 |
+	| claimpermissions-2 |
+	Then the claim permissions are returned
+	And the resource access rulesets on the claim permissions match the expected rulesets
+	| ClaimPermissionsId | ExpectedRulesets |
+	| claimpermissions-1 | rulesets         |
+	| claimpermissions-2 | rulesets-single  |
+
+@useChildObjects
+Scenario: Retrieving a batch of claim permissions from the repository with duplicate claim permission Ids automatically deduplicates the requests
+	When I request a batch of claim permissions by Id from the claim permissions store
+	| ClaimPermissionsId |
+	| claimpermissions-1 |
+	| claimpermissions-1 |
+	Then the claim permissions are returned
+	And the resource access rulesets on the claim permissions match the expected rulesets
+	| ClaimPermissionsId | ExpectedRulesets |
+	| claimpermissions-1 | rulesets         |
 
 @useChildObjects
 Scenario: Retrieving claim permissions with an invalid Id
