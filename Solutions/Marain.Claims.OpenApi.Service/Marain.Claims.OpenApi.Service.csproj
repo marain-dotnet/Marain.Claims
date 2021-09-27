@@ -29,7 +29,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Marain.Services.Tenancy" Version="2.2.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.17.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.18.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="[3.1.*,)" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="[3.1.*,)" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">

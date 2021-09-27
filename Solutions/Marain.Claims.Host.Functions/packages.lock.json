@@ -132,8 +132,8 @@
       },
       "Corvus.Extensions": {
         "type": "Transitive",
-        "resolved": "1.1.3",
-        "contentHash": "pl8BI4kzov/3Wv1rfS4NdbSPJs02oxI+Zfjn5HhOxV6nG/mdcduhMZoOv5vsQaoCSm2RZMbBuCX1JLpxGeFGbQ==",
+        "resolved": "1.1.4",
+        "contentHash": "WGwNzQDNrlxfH82iRSSXcG92yKhE8xlBMWoSC4dycp0MnH2Mle0TF+Y4keRgDAdDwXg8VC+3paZx64jVG1Jazg==",
         "dependencies": {
           "System.Interactive": "3.2.0"
         }
@@ -179,20 +179,20 @@
       },
       "Corvus.Monitoring.ApplicationInsights": {
         "type": "Transitive",
-        "resolved": "1.2.0",
-        "contentHash": "MDHAxQStXMAdVNDpoudyeF/fTdHXCOT3ZbTp3zgXijd1Du9Hwj9bN7QqTP3AcJ80rnLJD/n526MDk9ZSSHvlTA==",
+        "resolved": "1.3.1",
+        "contentHash": "tnbCflVOaiN6koeu0zwqwmj0q0W7Nr2f4M7YnQcav0n4IjxZLEVEJx3tZ241naoSl4XPPeHo9pT7zukdOGoDVg==",
         "dependencies": {
-          "Corvus.Monitoring.Instrumentation.Abstractions": "1.2.0",
+          "Corvus.Monitoring.Instrumentation.Abstractions": "1.3.1",
           "Microsoft.ApplicationInsights": "2.9.1",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.11"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.18"
         }
       },
       "Corvus.Monitoring.Instrumentation.Abstractions": {
         "type": "Transitive",
-        "resolved": "1.2.0",
-        "contentHash": "dXBsCEnAlpkiky2b620wRhCpXnlPaCKRsQLV3E+MJKhQh/XYD5tNEbfPkpSOPL7P3U7HCQwbNYzsJgvIbwTlwA==",
+        "resolved": "1.3.1",
+        "contentHash": "ZGQtoehovlD/VhiPIew93LBU1wi3/gqYKFCxC9PGZU7I+/x1d2FD8RM6a6Zk6satmQSttif8eyAXZJDvMOuF+A==",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.11"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.18"
         }
       },
       "Corvus.Retry": {
@@ -231,8 +231,8 @@
       },
       "Marain.Tenancy.Client": {
         "type": "Transitive",
-        "resolved": "1.1.1",
-        "contentHash": "gT6YVXfi6lHipx47wYFODcsvWb6vMWEtePEPV+9dY2s8QrmmIXq2Lv2Zr7LVzl5rhx3EE+bpvJ0UtBimjNYoBQ==",
+        "resolved": "1.1.2",
+        "contentHash": "770vE+oTJ2/U9ouAVhv92e+YqKuL/q4ZotSOoKL/qZ9SByOcmtH5w7k+biBiXLTAsq2hupUed8m3IY+CqnogNQ==",
         "dependencies": {
           "Corvus.ContentHandling.Json": "1.1.0",
           "Corvus.Extensions": "1.1.2",
@@ -243,11 +243,11 @@
       },
       "Marain.Tenancy.ClientTenantProvider": {
         "type": "Transitive",
-        "resolved": "1.1.1",
-        "contentHash": "oGLBugF7gPOy4hEGs9YdJliLLobCvmkuhxghom+1WAk4ivJApmbJ3ZFWXNFq+tsSlQFeHU2nSTVKUVDlXQrJOQ==",
+        "resolved": "1.1.2",
+        "contentHash": "aWtNXUf66vBFdjc1+eGWLp4uMpBbYSqH2/Wp7pNMvGidbXGFDN2AwsThLXyhuhsYRnRH3+yayO/GN+nVba1pLg==",
         "dependencies": {
           "Corvus.Tenancy.Abstractions": "1.1.1",
-          "Marain.Tenancy.Client": "1.1.1",
+          "Marain.Tenancy.Client": "1.1.2",
           "Microsoft.AspNetCore.WebUtilities": "2.2.0"
         }
       },
@@ -299,8 +299,8 @@
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
-        "resolved": "2.17.0",
-        "contentHash": "moAOrjhwiCWdg8I4fXPEd+bnnyCSRxo6wmYQ0HuNrWJUctzZEiyVTbJ8QTS6+dBOFTxpI6x+OY5wHPHrgWOk1Q==",
+        "resolved": "2.18.0",
+        "contentHash": "milJB3VOCoC4EWmpE/Co9cOJ7SV6Ji6VqV4Rf5UlqL9QCg+rAX1y+3Y+j1Gu/j4IExYiPq7SEKqkP2BFnEu6Vw==",
         "dependencies": {
           "System.Diagnostics.DiagnosticSource": "5.0.0"
         }
@@ -2544,14 +2544,13 @@
         "type": "Project",
         "dependencies": {
           "Corvus.Identity.ManagedServiceIdentity.ClientAuthentication": "1.0.7",
-          "Corvus.Monitoring.ApplicationInsights": "1.2.0",
+          "Corvus.Monitoring.ApplicationInsights": "1.3.1",
           "Corvus.Tenancy.Storage.Azure.Blob": "1.1.1",
           "Marain.Claims.OpenApi": "1.0.0",
           "Marain.Claims.OpenApi.AspNetCore": "1.0.0",
           "Marain.Claims.OpenApi.Service": "1.0.0",
           "Marain.Claims.Tenancy.AzureBlob": "1.0.0",
-          "Marain.Tenancy.ClientTenantProvider": "1.1.1",
-          "System.IdentityModel.Tokens.Jwt": "5.5.0"
+          "Marain.Tenancy.ClientTenantProvider": "1.1.2"
         }
       },
       "marain.claims.openapi": {
@@ -2575,7 +2574,7 @@
           "Corvus.Azure.Storage.Tenancy": "1.1.1",
           "Marain.Claims.Abstractions": "1.0.0",
           "Marain.Services.Tenancy": "2.2.2",
-          "Microsoft.ApplicationInsights": "2.17.0",
+          "Microsoft.ApplicationInsights": "2.18.0",
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.0",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.0"
         }
@@ -2583,7 +2582,7 @@
       "marain.claims.storage.azureblob": {
         "type": "Project",
         "dependencies": {
-          "Corvus.Extensions": "1.1.3",
+          "Corvus.Extensions": "1.1.4",
           "Corvus.Extensions.Newtonsoft.Json": "1.2.0",
           "Marain.Claims.Abstractions": "1.0.0",
           "Microsoft.Azure.Storage.Blob": "11.2.3"
