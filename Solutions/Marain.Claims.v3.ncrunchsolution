@@ -1,0 +1,14 @@
+﻿<SolutionConfiguration>
+  <Settings>
+    <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <SolutionConfigured>True</SolutionConfigured>
+  </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>Fast tests</Name>
+      <Settings>
+        <TestsToExecuteAutomatically>(ProjectNameMatchesRegex 'Marain\\.Claims\\.Specs' AND True OR (ProjectNameMatchesRegex 'Marain\\.Claims\\.OpenApi\\.Specs' AND HasCategory 'parallelizable'))</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
+</SolutionConfiguration>

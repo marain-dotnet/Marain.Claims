@@ -14,12 +14,12 @@
   <ItemGroup>
     <PackageReference Include="Corvus.Monitoring.ApplicationInsights" Version="1.3.0" />
     <PackageReference Include="Corvus.Identity.ManagedServiceIdentity.ClientAuthentication" Version="1.0.7" />
-    <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="2.0.7" />
+    <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="3.0.0-PullRequest0336.3" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.1.11" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.0-menes-v3.5" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

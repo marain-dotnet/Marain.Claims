@@ -60,7 +60,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddSingleton(tenancyClientConfiguration);
                     services.AddTenantProviderServiceClient();
 
-                    services.AddTenantedClaimsApi(root);
+                    services.AddTenantedClaimsApiWithOpenApiActionResultHosting();
 
                     services.AddClaimsClient(_ =>
                     {

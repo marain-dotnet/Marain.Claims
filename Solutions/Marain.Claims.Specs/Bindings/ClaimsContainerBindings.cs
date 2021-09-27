@@ -45,14 +45,14 @@ namespace Marain.Claims.SpecFlow.Bindings
 
                     serviceCollection.AddJsonNetSerializerSettingsProvider();
 
-                    var tenantCloudBlobContainerFactoryOptions = new TenantCloudBlobContainerFactoryOptions
+                    var tenantBlobContainerClientFactoryOptions = new TenantBlobContainerClientFactoryOptions
                     {
                         AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
                     };
 
-                    serviceCollection.AddSingleton(tenantCloudBlobContainerFactoryOptions);
+                    serviceCollection.AddSingleton(tenantBlobContainerClientFactoryOptions);
 
-                    serviceCollection.AddTenantCloudBlobContainerFactory(tenantCloudBlobContainerFactoryOptions);
+                    serviceCollection.AddTenantBlobContainerClientFactory(tenantBlobContainerClientFactoryOptions);
 
                     serviceCollection.AddTenantedBlobContainerClaimsStore();
 

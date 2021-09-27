@@ -31,7 +31,7 @@ namespace Marain.Claims.Functions
             services.AddApplicationInsightsInstrumentationTelemetry();
             services.AddLogging();
 
-            services.AddTenantedClaimsApi(root, config => config.Documents.AddSwaggerEndpoint());
+            services.AddTenantedClaimsApiWithOpenApiActionResultHosting(config => config.Documents.AddSwaggerEndpoint());
         }
     }
 }

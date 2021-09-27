@@ -11,6 +11,10 @@ namespace Marain.Claims.SpecFlow.Steps
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Models;
+
     using Corvus.Extensions.Json;
     using Corvus.Tenancy;
     using Corvus.Testing.SpecFlow;
@@ -20,7 +24,6 @@ namespace Marain.Claims.SpecFlow.Steps
     using Marain.Services.Tenancy;
     using Marain.TenantManagement.Testing;
     using Menes;
-    using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Newtonsoft.Json.Linq;
@@ -294,21 +297,21 @@ namespace Marain.Claims.SpecFlow.Steps
 
         private Task DeleteAllPermissions()
         {
-            CloudBlobContainer container = ((ClaimPermissionsStore)this.claimPermissionsStore).Container;
+            BlobContainerClient container = ((ClaimPermissionsStore)this.claimPermissionsStore).Container;
             return this.DeleteAllDocuments(container);
         }
 
         private Task DeleteAllRuleSets()
         {
-            CloudBlobContainer container = ((ResourceAccessRuleSetStore)this.ruleSetStore).Container;
+            BlobContainerClient container = ((ResourceAccessRuleSetStore)this.ruleSetStore).Container;
             return this.DeleteAllDocuments(container);
         }
 
-        private async Task DeleteAllDocuments(CloudBlobContainer container)
+        private async Task DeleteAllDocuments(BlobContainerClient container)
         {
-            foreach (CloudBlockBlob blob in container.ListBlobs(null, true))
+            foreach (BlobItem blob in container.GetBlobs())
             {
-                await blob.DeleteAsync().ConfigureAwait(false);
+                await container.DeleteBlobAsync(blob.Name).ConfigureAwait(false);
             }
         }
 

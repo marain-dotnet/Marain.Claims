@@ -31,6 +31,16 @@ namespace Marain.Claims.Storage
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAccessRuleSetNotFoundException"/> class.
         /// </summary>
+        /// <param name="id">The id of the rule set that couldn't be found.</param>
+        public ResourceAccessRuleSetNotFoundException(string id)
+            : base("Resource access rule set not found")
+        {
+            this.ResourceAccessRuleSetIds = new[] { id };
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceAccessRuleSetNotFoundException"/> class.
+        /// </summary>
         /// <param name="ids">The ids of the rule sets that couldn't be found.</param>
         /// <param name="innerException"> The inner exception. </param>
         public ResourceAccessRuleSetNotFoundException(IEnumerable<string> ids, Exception innerException)

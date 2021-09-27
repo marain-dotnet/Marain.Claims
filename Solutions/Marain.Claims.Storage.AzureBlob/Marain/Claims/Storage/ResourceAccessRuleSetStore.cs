@@ -10,9 +10,13 @@ namespace Marain.Claims.Storage
     using System.Net;
     using System.Text;
     using System.Threading.Tasks;
+
+    using Azure;
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Models;
+    using Azure.Storage.Blobs.Specialized;
+
     using Corvus.Extensions.Json;
-    using Microsoft.Azure.Storage;
-    using Microsoft.Azure.Storage.Blob;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -42,11 +46,11 @@ namespace Marain.Claims.Storage
         ///     backed by the given repository.
         /// </summary>
         /// <param name="container">
-        ///     The <see cref="CloudBlobContainer" /> in which permissions will be stored.
+        ///     The <see cref="BlobContainerClient" /> in which permissions will be stored.
         /// </param>
         /// <param name="serializerSettingsProvider">The <see cref="IJsonSerializerSettingsProvider"/> for serializion.</param>
         public ResourceAccessRuleSetStore(
-            CloudBlobContainer container,
+            BlobContainerClient container,
             IJsonSerializerSettingsProvider serializerSettingsProvider)
         {
             this.Container = container;
@@ -54,10 +58,10 @@ namespace Marain.Claims.Storage
         }
 
         /// <summary>
-        ///     Gets the <see cref="CloudBlobContainer" /> in which resource access rule sets will
+        ///     Gets the <see cref="BlobContainerClient" /> in which resource access rule sets will
         ///     be stored.
         /// </summary>
-        public CloudBlobContainer Container { get; }
+        public BlobContainerClient Container { get; }
 
         /// <inheritdoc/>
         public Task<ResourceAccessRuleSet> GetAsync(string id, string eTag)
@@ -137,29 +141,49 @@ namespace Marain.Claims.Storage
                 throw new ArgumentNullException(nameof(ruleSet));
             }
 
-            CloudBlockBlob blob = this.Container.GetBlockBlobReference(ruleSet.Id);
+            BlockBlobClient blob = this.Container.GetBlockBlobClient(ruleSet.Id);
             string serializedPermissions = JsonConvert.SerializeObject(ruleSet, this.serializerSettings);
-            await blob.UploadTextAsync(serializedPermissions, Encoding.UTF8, new AccessCondition { IfMatchETag = ruleSet.ETag }, null, null).ConfigureAwait(false);
-            ruleSet.ETag = blob.Properties.ETag;
+            using var content = BinaryData.FromString(serializedPermissions).ToStream();
+            Response<BlobContentInfo> response = await blob.UploadAsync(
+                content,
+                new BlobUploadOptions { Conditions = new BlobRequestConditions { IfMatch = new ETag(ruleSet.ETag) } })
+                .ConfigureAwait(false);
+            ruleSet.ETag = response.Value.ETag.ToString("G");
             return ruleSet;
         }
 
         private async Task<ResourceAccessRuleSet> DownloadBlobAsync(string id, string eTag)
         {
+            BlockBlobClient blob = this.Container.GetBlockBlobClient(id);
+
+            // Can't use DownloadContentAsync because of https://github.com/Azure/azure-sdk-for-net/issues/22598
             try
             {
-                CloudBlockBlob blob = this.Container.GetBlockBlobReference(id);
-                string ruleSetJson = await blob.DownloadTextAsync(Encoding.UTF8, eTag != null ? AccessCondition.GenerateIfNoneMatchCondition(eTag) : null, null, null).ConfigureAwait(false);
+                Response<BlobDownloadStreamingResult> response = await blob.DownloadStreamingAsync(
+                    conditions: string.IsNullOrEmpty(eTag) ? null : new BlobRequestConditions { IfNoneMatch = new ETag(eTag!) })
+                    .ConfigureAwait(false);
+
+                int status = response.GetRawResponse().Status;
+                if (status == 304)
+                {
+                    // NOP - we are quite happy to ignore that, as the blob hasn't changed.
+                    return null;
+                }
+
+                // Note: it is technically possible to use System.Text.Json to work directly from
+                // the UTF-8 data, which is more efficient than decoding to a .NET UTF-16 string
+                // first. However, we have to do this for the time being because we are in the world of
+                // IJsonSerializerSettingsProvider, where all serialization options are managed in
+                // terms of JSON.NET.
+                using BlobDownloadStreamingResult blobDownloadStreamingResult = response.Value;
+                BinaryData data = await BinaryData.FromStreamAsync(blobDownloadStreamingResult.Content).ConfigureAwait(false);
+                string ruleSetJson = data.ToString();
+
                 ResourceAccessRuleSet ruleSet = JsonConvert.DeserializeObject<ResourceAccessRuleSet>(ruleSetJson, this.serializerSettings);
-                ruleSet.ETag = blob.Properties.ETag;
+                ruleSet.ETag = response.Value.Details.ETag.ToString("G");
                 return ruleSet;
             }
-            catch (StorageException storeEx) when (storeEx.RequestInformation.HttpStatusCode == (int)HttpStatusCode.NotModified)
-            {
-                // NOP - we are quite happy to ignore that, as the blob hasn't changed.
-                return null;
-            }
-            catch (Exception ex)
+            catch (RequestFailedException ex) when (ex.Status == 404)
             {
                 throw new ResourceAccessRuleSetNotFoundException(id, ex);
             }

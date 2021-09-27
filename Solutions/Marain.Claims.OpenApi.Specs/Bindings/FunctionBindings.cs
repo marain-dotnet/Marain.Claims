@@ -60,7 +60,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                 case TestHostModes.InProcessEmulateFunctionWithActionResult:
                     var hostManager = new OpenApiWebHostManager();
                     context.Set(hostManager);
-                    await hostManager.StartHostAsync<FunctionsStartupWrapper>(
+                    await hostManager.StartInProcessFunctionsHostAsync<FunctionsStartupWrapper>(
                         ServiceUrl,
                         services =>
                         {
