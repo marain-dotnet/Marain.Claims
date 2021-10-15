@@ -47,7 +47,7 @@
     </PackageReference>
     <PackageReference Include="Marain.Services.Tenancy" Version="2.2.2" />
     <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.0.1" />
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.1.2" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.1.14" />
     <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
   </ItemGroup>
