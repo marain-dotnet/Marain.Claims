@@ -17,6 +17,10 @@ namespace Marain.Workflows.Api.Specs.Bindings
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
+
     using TechTalk.SpecFlow;
 
     /// <summary>
@@ -44,7 +48,11 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     IConfiguration root = configurationBuilder.Build();
 
                     services.AddSingleton(root);
-                    services.AddJsonSerializerSettings();
+                    services.AddJsonNetSerializerSettingsProvider();
+                    services.AddJsonNetPropertyBag();
+                    services.AddJsonNetCultureInfoConverter();
+                    services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
+                    services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
                     services.AddLogging();
 
@@ -56,7 +64,6 @@ namespace Marain.Workflows.Api.Specs.Bindings
                             AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
                         });
 
-                    services.AddRootTenant();
                     services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
 
                     TenancyClientOptions tenancyClientConfiguration = root.GetSection("TenancyClient").Get<TenancyClientOptions>();
