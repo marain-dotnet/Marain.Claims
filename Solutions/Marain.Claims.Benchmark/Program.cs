@@ -47,7 +47,7 @@
             if (args.Length > 1)
             {
                 string version = args[1];
-                config = config.With(Job.Default.With(new Argument[] { new MsBuildArgument($"/p:Version={version}") }));
+                config = config.AddJob(Job.Default.WithArguments(new Argument[] { new MsBuildArgument($"/p:Version={version}") }));
             }
 
             BenchmarkRunner.Run<SimpleClaimsBenchmarks>(config);

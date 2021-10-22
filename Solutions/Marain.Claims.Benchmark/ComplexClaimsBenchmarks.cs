@@ -97,7 +97,7 @@
         [Benchmark]
         public Task GetClaimPermissionsResourceAccessRules() => this.ClaimsService.GetClaimPermissionsResourceAccessRulesAsync("One", this.ClientTenantId);
 
-        /// <summary>
+        /// <inheritdoc/>
         protected override async Task SetupTestDataAsync()
         {
             RulesetsAndClaimPermissions input = JsonConvert.DeserializeObject<RulesetsAndClaimPermissions>(
