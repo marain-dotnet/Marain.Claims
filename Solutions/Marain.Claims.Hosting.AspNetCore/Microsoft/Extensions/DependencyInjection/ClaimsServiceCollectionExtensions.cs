@@ -15,6 +15,10 @@ namespace Microsoft.Extensions.DependencyInjection
     using Menes.AccessControlPolicies;
     using Microsoft.Extensions.Configuration;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
+
     /// <summary>
     /// Extension methods for configuring DI for the Operations Open API services.
     /// </summary>
@@ -115,6 +119,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTenantedBlobContainerClaimsStore();
 
             services.AddJsonNetSerializerSettingsProvider();
+            services.AddJsonNetPropertyBag();
+            services.AddJsonNetCultureInfoConverter();
+            services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
+            services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
             services.AddSingleton<ClaimPermissionsService>();
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());

@@ -71,6 +71,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
         /// inheritance of fixture-building test attributes, which is why we can't just slap this
         /// on <see cref="MultiTestHostBase"/> once and for all.
         /// </remarks>
+        [AttributeUsage(AttributeTargets.Class)]
         public class MultiHostTestAttribute : Attribute, IFixtureBuilder2
         {
             private readonly NUnitTestFixtureBuilder builder = new NUnitTestFixtureBuilder();
