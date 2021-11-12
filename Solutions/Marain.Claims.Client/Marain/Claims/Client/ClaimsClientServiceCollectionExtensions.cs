@@ -29,11 +29,13 @@ namespace Marain.Claims.Client
             return services.AddSingleton<IClaimsService>(sp =>
             {
                 ClaimsClientOptions options = getOptions(sp);
+#pragma warning disable CS0618 // Type or member is obsolete
                 IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 return options.ResourceIdForMsiAuthentication == null
                    ? new UnauthenticatedClaimsService(options.BaseUri)
                    : new ClaimsService(options.BaseUri, new TokenCredentials(
                            new ServiceIdentityTokenProvider(
+#pragma warning restore CS0618 // Type or member is obsolete
                                serviceIdentityTokenSource,
                                options.ResourceIdForMsiAuthentication)));
             });
@@ -54,6 +56,7 @@ namespace Marain.Claims.Client
                 ClaimsClientWithCachingOptions options = getOptions(sp);
 
                 var handler = new InMemoryCacheHandler(new HttpClientHandler(), options.CacheExpirationPerHttpResponseCode);
+#pragma warning disable CS0618 // Type or member is obsolete
                 IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 return options.ResourceIdForMsiAuthentication == null
                 ? new UnauthenticatedClaimsService(options.BaseUri, handler)
@@ -61,6 +64,7 @@ namespace Marain.Claims.Client
                     options.BaseUri,
                     new TokenCredentials(
                         new ServiceIdentityTokenProvider(
+#pragma warning restore CS0618 // Type or member is obsolete
                             serviceIdentityTokenSource,
                             options.ResourceIdForMsiAuthentication)),
                     handler);

@@ -57,11 +57,13 @@ namespace Marain.Workflows.Api.Specs.Bindings
 
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
 
+#pragma warning disable CS0618 // Type or member is obsolete
                     services.AddAzureManagedIdentityBasedTokenSource(
                         new AzureManagedIdentityTokenSourceOptions
                         {
                             AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
                         });
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
 
@@ -69,7 +71,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddSingleton(tenancyClientConfiguration);
                     services.AddTenantProviderServiceClient();
 
-                    services.AddTenantedClaimsApiWithOpenApiActionResultHosting();
+                    services.AddTenantedClaimsApiWithOpenApiActionResultHosting(root);
 
                     services.AddClaimsClient(_ =>
                     {

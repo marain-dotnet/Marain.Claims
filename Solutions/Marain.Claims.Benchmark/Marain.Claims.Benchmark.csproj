@@ -32,7 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
-    <PackageReference Include="Corvus.Azure.Storage.Tenancy" Version="3.0.0-PullRequest0336.3" />
+    <PackageReference Include="Corvus.Storage.Azure.BlobStorage.Tenancy" Version="3.0.0-v3-blob.11" />
     <PackageReference Include="Marain.Tenancy.Client" Version="2.0.0-menes-v3.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="[3.1.*,)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="[3.1.*,)" />

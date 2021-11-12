@@ -39,17 +39,19 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration rootTenantDefaultConfiguration,
             Action<IOpenApiHostConfiguration> configureHost = null)
         {
-            return services.AddTenantedClaimsApiWithOpenApiActionResultHosting(configureHost);
+            return services.AddTenantedClaimsApiWithOpenApiActionResultHosting(rootTenantDefaultConfiguration, configureHost);
         }
 
         /// <summary>
         /// Add services required by the Operations Status API.
         /// </summary>
         /// <param name="services">The service collection.</param>
+        /// <param name="rootConfiguration">Application configuration.</param>
         /// <param name="configureHost">Optional callback for additional host configuration.</param>
         /// <returns>The service collection, to enable chaining.</returns>
         public static IServiceCollection AddTenantedClaimsApiWithAspNetPipelineHosting(
             this IServiceCollection services,
+            IConfiguration rootConfiguration,
             Action<IOpenApiHostConfiguration> configureHost = null)
         {
             if (services.Any(s => typeof(TenancyService).IsAssignableFrom(s.ServiceType)))
@@ -57,7 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return services;
             }
 
-            services.AddEverythingExceptHosting();
+            services.AddEverythingExceptHosting(rootConfiguration);
 
             services.AddOpenApiAspNetPipelineHosting<SimpleOpenApiContext>((config) =>
             {
@@ -72,10 +74,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Add services required by the Operations Status API.
         /// </summary>
         /// <param name="services">The service collection.</param>
+        /// <param name="rootConfiguration">Application configuration.</param>
         /// <param name="configureHost">Optional callback for additional host configuration.</param>
         /// <returns>The service collection, to enable chaining.</returns>
         public static IServiceCollection AddTenantedClaimsApiWithOpenApiActionResultHosting(
             this IServiceCollection services,
+            IConfiguration rootConfiguration,
             Action<IOpenApiHostConfiguration> configureHost = null)
         {
             if (services.Any(s => typeof(TenancyService).IsAssignableFrom(s.ServiceType)))
@@ -83,7 +87,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return services;
             }
 
-            services.AddEverythingExceptHosting();
+            services.AddEverythingExceptHosting(rootConfiguration);
 
             services.AddOpenApiActionResultHosting<SimpleOpenApiContext>((config) =>
             {
@@ -94,7 +98,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static void AddEverythingExceptHosting(this IServiceCollection services)
+        private static void AddEverythingExceptHosting(
+            this IServiceCollection services,
+            IConfiguration rootConfiguration)
         {
             services.AddLogging();
 
@@ -104,17 +110,27 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
             services.AddTenantProviderServiceClient(enableResponseCaching: true);
 
-            services.AddAzureManagedIdentityBasedTokenSource(
-                sp => new AzureManagedIdentityTokenSourceOptions
-                {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                });
+            services.AddBlobContainerV2ToV3Transition();
 
-            services.AddTenantBlobContainerClientFactory(
-                sp => new TenantBlobContainerClientFactoryOptions
+            // TODO: want to move over to newer identity library
+            ////"Consider using Corvus.Identity.Azure's AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString, optionally with LegacyAzureServiceTokenProviderOptions, or Corvus.Identity.MicrosoftRest's AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource instead")]
+            // But we can't get rid of this yet because the Tenancy Client still wants IServiceIdentityTokenSource
+#pragma warning disable CS0618 // Type or member is obsolete
+            services.AddAzureManagedIdentityBasedTokenSource(sp => new AzureManagedIdentityTokenSourceOptions
                 {
                     AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
                 });
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(rootConfiguration["AzureServicesAuthConnectionString"]);
+            services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
+
+            services.AddAzureBlobStorageClient();
+            ////services.AddTenantBlobContainerClientFactory(
+            ////    sp => new TenantBlobContainerClientFactoryOptions
+            ////    {
+            ////        AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+            ////    });
 
             services.AddTenantedBlobContainerClaimsStore();
 

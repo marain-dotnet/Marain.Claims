@@ -53,14 +53,8 @@ namespace Marain.Claims.SpecFlow.Bindings
                     serviceCollection.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
                     serviceCollection.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    var tenantBlobContainerClientFactoryOptions = new TenantBlobContainerClientFactoryOptions
-                    {
-                        AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                    };
-
-                    serviceCollection.AddSingleton(tenantBlobContainerClientFactoryOptions);
-
-                    serviceCollection.AddTenantBlobContainerClientFactory(tenantBlobContainerClientFactoryOptions);
+                    serviceCollection.AddBlobContainerV2ToV3Transition();
+                    serviceCollection.AddAzureBlobStorageClient();
 
                     serviceCollection.AddTenantedBlobContainerClaimsStore();
 
