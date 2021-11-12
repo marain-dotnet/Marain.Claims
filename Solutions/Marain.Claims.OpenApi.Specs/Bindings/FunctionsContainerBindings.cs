@@ -15,6 +15,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
 
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -53,7 +54,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
                     services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    services.AddLogging();
+                    services.AddLogging(config => config.AddConsole());
 
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
 

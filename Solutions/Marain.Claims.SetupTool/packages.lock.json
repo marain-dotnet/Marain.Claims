@@ -82,12 +82,6 @@
           "Microsoft.SourceLink.Common": "1.0.0"
         }
       },
-      "StyleCop.Analyzers": {
-        "type": "Direct",
-        "requested": "[1.1.118, )",
-        "resolved": "1.1.118",
-        "contentHash": "Onx6ovGSqXSK07n/0eM3ZusiNdB6cIlJdabQhWGgJp3Vooy9AaLS/tigeybOJAobqbtggTamoWndz72JscZBvw=="
-      },
       "Cimpress.Extensions.Http.Caching.Abstractions": {
         "type": "Transitive",
         "resolved": "2.1.111",
