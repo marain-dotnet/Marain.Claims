@@ -2,9 +2,10 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.Workflows.Api.Specs.Bindings
+namespace Marain.Claims.OpenApi.Specs.Bindings
 {
     using System;
+    using System.Text;
 
     using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
@@ -54,7 +55,12 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
                     services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    services.AddLogging(config => config.AddConsole());
+                    var logCollector = new LogProvider();
+                    services.AddSingleton(logCollector);
+                    services.AddLogging(config => config
+                        .AddProvider(logCollector)
+                        ////.AddConsole(opt => opt.LogToStandardErrorThreshold = LogLevel.Debug)
+                        );
 
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
 
@@ -83,6 +89,53 @@ namespace Marain.Workflows.Api.Specs.Bindings
                         };
                     });
                 });
+        }
+
+        public class LogProvider : ILoggerProvider
+        {
+            public StringBuilder Output { get; } = new StringBuilder();
+
+            public ILogger CreateLogger(string categoryName)
+            {
+                return new Logger(this);
+            }
+
+            public void Dispose()
+            {
+            }
+
+            private class Logger : ILogger
+            {
+                private LogProvider logProvider;
+
+                public Logger(LogProvider logProvider)
+                {
+                    this.logProvider = logProvider;
+                }
+
+                public IDisposable BeginScope<TState>(TState state)
+                {
+                    return new Scope();
+                }
+
+                public bool IsEnabled(LogLevel logLevel)
+                {
+                    return true;
+                }
+
+                public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+                {
+                    this.logProvider.Output.AppendLine(
+                        $"[{logLevel}] [{eventId}], {formatter(state, exception)}");
+                }
+
+                private class Scope : IDisposable
+                {
+                    public void Dispose()
+                    {
+                    }
+                }
+            }
         }
     }
 }

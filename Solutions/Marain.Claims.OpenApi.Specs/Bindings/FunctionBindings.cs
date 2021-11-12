@@ -131,6 +131,9 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     sb.AppendLine(po.StandardErrorText);
                 }
 
+                FunctionsContainerBindings.LogProvider logProvider = ContainerBindings.GetServiceProvider(context).GetRequiredService<FunctionsContainerBindings.LogProvider>();
+                sb.AppendLine(logProvider.Output.ToString());
+
                 throw new Exception(sb.ToString());
             }
         }
