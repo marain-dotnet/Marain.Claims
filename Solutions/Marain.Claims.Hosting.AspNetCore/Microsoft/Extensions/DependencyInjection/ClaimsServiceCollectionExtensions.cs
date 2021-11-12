@@ -115,14 +115,15 @@ namespace Microsoft.Extensions.DependencyInjection
             // TODO: want to move over to newer identity library
             ////"Consider using Corvus.Identity.Azure's AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString, optionally with LegacyAzureServiceTokenProviderOptions, or Corvus.Identity.MicrosoftRest's AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource instead")]
             // But we can't get rid of this yet because the Tenancy Client still wants IServiceIdentityTokenSource
+            string legacyAuthConnectionString = rootConfiguration["AzureServicesAuthConnectionString"];
 #pragma warning disable CS0618 // Type or member is obsolete
-            services.AddAzureManagedIdentityBasedTokenSource(sp => new AzureManagedIdentityTokenSourceOptions
+            services.AddAzureManagedIdentityBasedTokenSource(new AzureManagedIdentityTokenSourceOptions
                 {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                    AzureServicesAuthConnectionString = legacyAuthConnectionString,
                 });
 #pragma warning restore CS0618 // Type or member is obsolete
 
-            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(rootConfiguration["AzureServicesAuthConnectionString"]);
+            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(legacyAuthConnectionString);
             services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
             services.AddAzureBlobStorageClient();

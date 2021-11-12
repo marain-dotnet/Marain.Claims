@@ -19,17 +19,23 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
     public class FunctionsStartupWrapper : IWebJobsStartup
     {
         private readonly Startup wrappedStartup = new Startup();
+        private IConfiguration configuration;
+
+        public FunctionsStartupWrapper(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         public void Configure(IWebJobsBuilder builder)
         {
-            IConfigurationBuilder cb = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>
-                {
-                    { "Logging:LogLevel:Menes", "Information" },
-                });
+            ////IConfigurationBuilder cb = new ConfigurationBuilder()
+            ////    .AddInMemoryCollection(new Dictionary<string, string>
+            ////    {
+            ////        { "Logging:LogLevel:Menes", "Information" },
+            ////    });
             var context = new WebJobsBuilderContext
             {
-                Configuration = cb.Build(),
+                Configuration = this.configuration,
             };
             builder.Services.AddLogging(config =>
                 config.AddConsole(opt => opt.LogToStandardErrorThreshold = LogLevel.Debug));

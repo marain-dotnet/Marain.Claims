@@ -59,11 +59,11 @@
       },
       "Menes.Testing.AspNetCoreSelfHosting": {
         "type": "Direct",
-        "requested": "[3.0.0-preview.5, )",
-        "resolved": "3.0.0-preview.5",
-        "contentHash": "m98ZqWzDKDkzMeaLs/WGa2qz4Xu6BML3i0QDGaBa5hfKwEUfe/CM0FXaVo7WbdduApjNBdLTsAYIKIchmuZm3Q==",
+        "requested": "[3.0.0-vnext.4, )",
+        "resolved": "3.0.0-vnext.4",
+        "contentHash": "9/CLSR7vhlisnCQp/ofVYfIhW+Px3yyku23okDVxjKWqWCFbmn4fhicNUArxolZhrYTATN+zxQOusVrBPXvJ9A==",
         "dependencies": {
-          "Menes.Hosting.AspNetCore": "3.0.0-preview.5",
+          "Menes.Hosting.AspNetCore": "3.0.0-vnext.4",
           "Microsoft.AspNetCore": "2.2.0",
           "Microsoft.AspNetCore.Mvc.Abstractions": "2.2.0",
           "Microsoft.Azure.WebJobs": "3.0.27"
@@ -105,6 +105,12 @@
           "Microsoft.Extensions.Logging": "3.1.21",
           "Microsoft.Extensions.Logging.Configuration": "3.1.21"
         }
+      },
+      "StyleCop.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.1.118, )",
+        "resolved": "1.1.118",
+        "contentHash": "Onx6ovGSqXSK07n/0eM3ZusiNdB6cIlJdabQhWGgJp3Vooy9AaLS/tigeybOJAobqbtggTamoWndz72JscZBvw=="
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -488,15 +494,15 @@
       },
       "Menes.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.0.0-preview.5",
-        "contentHash": "6gOemt+Y+DoIZTrnhlyxurjOpZevjRYyPBgP7UC3tLd28lOOtcBNYQTS8vYWr4+wF40j+0BmM4C1gYhrI3+qIg==",
+        "resolved": "3.0.0-vnext.4",
+        "contentHash": "nUerpY8sRmgB9N9Bbyf/qe1hcDyvRPCrhHZpzlgftR4TcFf2S4OG/2Lbfs3UfcFokpG58hYXuWVPwGSNEEkBEQ==",
         "dependencies": {
-          "Corvus.ContentHandling": "2.0.4",
-          "Corvus.Extensions": "1.1.2",
-          "Corvus.Extensions.Newtonsoft.Json": "2.0.2",
-          "Corvus.Monitoring.Instrumentation.Abstractions": "1.2.0",
+          "Corvus.ContentHandling": "2.0.8",
+          "Corvus.Extensions": "1.1.3",
+          "Corvus.Extensions.Newtonsoft.Json": "2.0.4",
+          "Corvus.Monitoring.Instrumentation.Abstractions": "1.3.0",
           "Microsoft.CSharp": "4.7.0",
-          "Microsoft.Extensions.Logging": "3.1.15",
+          "Microsoft.Extensions.Logging": "3.1.16",
           "Microsoft.OpenApi.Readers": "1.2.3",
           "System.Interactive": "4.1.1",
           "System.Text.Encodings.Web": "4.7.2",
@@ -505,18 +511,18 @@
       },
       "Menes.Hosting": {
         "type": "Transitive",
-        "resolved": "3.0.0-preview.5",
-        "contentHash": "ul2Jljp/5RTBnKKjPUSLP4XJMF72jCDw0w5ra/0gVTrQ+kFOKUoxshE4MEGqXhENFzZLsYVUUbvGVNWUN7F1ew==",
+        "resolved": "3.0.0-vnext.4",
+        "contentHash": "WactTL+8zqUA1j94FEWFxtaaFIHutJk93/XaGh0qT1aXQiHVH7w6dlvyHhZNcOkoLxMC29kjtFQP7XT7yuRXug==",
         "dependencies": {
-          "Menes.Abstractions": "3.0.0-preview.5"
+          "Menes.Abstractions": "3.0.0-vnext.4"
         }
       },
       "Menes.Hosting.AspNetCore": {
         "type": "Transitive",
-        "resolved": "3.0.0-preview.5",
-        "contentHash": "+DJ5ggmxjsUsy0UkJDgM7YJeGDdnXQL1RCzYEDCdbDaTOfj7Rp1b0RE7bI3Z9bhphURJtY5fd/tuWQVZ5UNf3g==",
+        "resolved": "3.0.0-vnext.4",
+        "contentHash": "QXmIh1CiafSaaxC9iEH81P3xngxeYk5Sd7v6aXa0hixUnJBFWbPa7MFJYFnhoiYF82t92aWsaIGfhTJEalvoVQ==",
         "dependencies": {
-          "Menes.Hosting": "3.0.0-preview.5"
+          "Menes.Hosting": "3.0.0-vnext.4"
         }
       },
       "Microsoft.ApplicationInsights": {
@@ -3251,7 +3257,8 @@
           "Corvus.Storage.Azure.BlobStorage.Tenancy": "3.0.0-v3-blob.11",
           "Marain.Claims.OpenApi": "1.0.0",
           "Marain.Claims.Storage.AzureBlob": "1.0.0",
-          "Menes.Hosting.AspNetCore": "3.0.0-preview.5",
+          "Menes.Hosting.AspNetCore": "3.0.0-vnext.4",
+          "Menes.Testing.AspNetCoreSelfHosting": "3.0.0-vnext.4",
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.0",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "3.1.0"
         }

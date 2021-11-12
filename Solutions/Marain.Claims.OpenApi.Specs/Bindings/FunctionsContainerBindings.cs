@@ -58,9 +58,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     var logCollector = new LogProvider();
                     services.AddSingleton(logCollector);
                     services.AddLogging(config => config
-                        .AddProvider(logCollector)
-                        ////.AddConsole(opt => opt.LogToStandardErrorThreshold = LogLevel.Debug)
-                        );
+                        .AddProvider(logCollector));
 
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
 
