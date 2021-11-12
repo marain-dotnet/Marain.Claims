@@ -52,6 +52,7 @@ namespace Marain.Claims.SpecFlow.Bindings
                             AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
                         });
 #pragma warning restore CS0618 // Type or member is obsolete
+                    serviceCollection.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(rootConfiguration["AzureServicesAuthConnectionString"]);
 
                     serviceCollection.AddInMemoryTenantProvider();
 

@@ -64,6 +64,7 @@ namespace Marain.Workflows.Api.Specs.Bindings
                             AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
                         });
 #pragma warning restore CS0618 // Type or member is obsolete
+                    services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
 
                     services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
 
