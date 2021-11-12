@@ -4,7 +4,7 @@
 
 namespace Marain.Claims.SpecFlow.Bindings
 {
-    using Corvus.Azure.Storage.Tenancy;
+    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
 
     using Microsoft.Extensions.Configuration;
@@ -44,6 +44,14 @@ namespace Marain.Claims.SpecFlow.Bindings
                     serviceCollection.AddSingleton(root);
 
                     serviceCollection.AddLogging();
+
+#pragma warning disable CS0618 // Type or member is obsolete
+                    serviceCollection.AddAzureManagedIdentityBasedTokenSource(
+                        new AzureManagedIdentityTokenSourceOptions
+                        {
+                            AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
+                        });
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     serviceCollection.AddInMemoryTenantProvider();
 
