@@ -86,7 +86,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     await FunctionsBindings.GetFunctionsController(context).StartFunctionsInstance(
                             "Marain.Claims.Host.Functions",
                             ClaimsHostPort,
-                            "netcoreapp3.1",
+                            "net6.0",
                             "csharp",
                             functionConfiguration);
                     break;

@@ -47,7 +47,7 @@ jobs:
         inputs:
           command: custom
           verbose: false
-          customCommand: 'install -g azure-functions-core-tools@3 --unsafe-perm true'
+          customCommand: 'install -g azure-functions-core-tools@4 --unsafe-perm true'
       - task: UseDotNet@2
         displayName: 'Install Microsoft.AspNetCore.App for .NET Core 3.1 '
         inputs:
