@@ -73,20 +73,20 @@ jobs:
     #   * integrate with scripted build
     #   * use the correct folders once we're on .NET 6.0 for most things
     preCopyNugetPackages:
-    - task: ArchiveFiles@2
-     displayName: 'Archive Function App'
-     inputs:
-       rootFolderOrFile: 'Solutions/Marain.Claims.Host.Functions/bin/Release/net6.0/'
-       includeRootFolder: false
-       archiveType: 'zip'
-       archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Host.Functions.zip'
-       replaceExistingArchive: true
-    - task: ArchiveFiles@2
-     displayName: 'Archive Deployment Artifacts'
-     inputs:
-       rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
-       includeRootFolder: false
-       archiveType: 'zip'
-       archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
-       replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: 'Archive Function App'
+        inputs:
+          rootFolderOrFile: 'Solutions/Marain.Claims.Host.Functions/bin/Release/net6.0/'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Host.Functions.zip'
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: 'Archive Deployment Artifacts'
+        inputs:
+          rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
+          replaceExistingArchive: true
     netSdkVersion: '6.x'
