@@ -118,6 +118,8 @@ $SkipPackage = $false
 # Advanced build settings
 $EnableGitVersionAdoVariableWorkaround = $false
 
+$GitVersionToolVersion = "5.6.6"
+
 #
 # Build process configuration
 #
@@ -129,6 +131,16 @@ task . FullBuild
 
 
 # build extensibility tasks
+task PostVersion {
+    # Should be these, but Endjin.RecommendePractices.Build beta008 is not adding the GITVERSION_ prefix
+    # Write-Host "##vso[task.setvariable variable=Endjin_IsPreRelease]$((-not ([string]::IsNullOrEmpty($Env:GITVERSION_PRERELEASETAG))))"
+    # Write-Host "##vso[task.setvariable variable=Endjin_Repository_Name]$Env:BUILD_REPOSITORY_NAME"
+    Write-Host "##vso[task.setvariable variable=Endjin_IsPreRelease]$((-not ([string]::IsNullOrEmpty($Env:PRERELEASETAG))))"
+    Write-Host "##vso[task.setvariable variable=Endjin_Repository_Name]$Env:BUILD_REPOSITORY_NAME"
+
+    # Scripted build currently doesn't do this for us
+    Write-Host "##vso[build.updatebuildnumber]]$Env:BUILD_REPOSITORY_NAME"
+}
 task PreBuild {}
 task PostBuild {}
 task PreTest {}
