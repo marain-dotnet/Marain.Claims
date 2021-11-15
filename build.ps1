@@ -141,7 +141,7 @@ task PostVersion {
 
     # Scripted build currently doesn't do this for us.
     # This should really be $Env:GITVERSION_SemVer, but see comment above re beta008 bug.
-    Write-Host "##vso[build.updatebuildnumber]]$Env:SemVer"
+    Write-Host "##vso[build.updatebuildnumber]$Env:SemVer"
 }
 task PreBuild {}
 task PostBuild {}
