@@ -43,7 +43,7 @@ jobs:
           ENDJIN_MARAINCLAIMSSERVICEDISPLAYNAME: $(Endjin_MarainClaimsServiceDisplayName)
           ENDJIN_MARAINCLAIMSSERVICETENANTID: $(Endjin_MarainClaimsServiceTenantId)
       - task: Npm@1
-        displayName: 'Install Latest Azure Functions V3 Runtime'
+        displayName: 'Install Latest Azure Functions V4 Runtime'
         inputs:
           command: custom
           verbose: false
@@ -72,21 +72,21 @@ jobs:
     # TODO: find the right way to do this:
     #   * integrate with scripted build
     #   * use the correct folders once we're on .NET 6.0 for most things
-    #postSpecs:
-    #- task: ArchiveFiles@2
-    #  displayName: 'Archive Function App'
-    #  inputs:
-    #    rootFolderOrFile: 'Solutions/Marain.Claims.Host.Functions/bin/Release/netcoreapp3.1/'
-    #    includeRootFolder: false
-    #    archiveType: 'zip'
-    #    archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Host.Functions.zip'
-    #    replaceExistingArchive: true
-    #- task: ArchiveFiles@2
-    #  displayName: 'Archive Deployment Artifacts'
-    #  inputs:
-    #    rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
-    #    includeRootFolder: false
-    #    archiveType: 'zip'
-    #    archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
-    #    replaceExistingArchive: true
+    preCopyNugetPackages:
+    - task: ArchiveFiles@2
+     displayName: 'Archive Function App'
+     inputs:
+       rootFolderOrFile: 'Solutions/Marain.Claims.Host.Functions/bin/Release/net6.0/'
+       includeRootFolder: false
+       archiveType: 'zip'
+       archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Host.Functions.zip'
+       replaceExistingArchive: true
+    - task: ArchiveFiles@2
+     displayName: 'Archive Deployment Artifacts'
+     inputs:
+       rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
+       includeRootFolder: false
+       archiveType: 'zip'
+       archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
+       replaceExistingArchive: true
     netSdkVersion: '6.x'
