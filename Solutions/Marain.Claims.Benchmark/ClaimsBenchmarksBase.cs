@@ -43,11 +43,8 @@ namespace Marain.Claims.Benchmark
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddClaimsClient(sp => configuration.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
                 .AddSingleton(sp => configuration.GetSection("TenancyClient").Get<TenancyClientOptions>())
-                ////.AddTenancyClient(enableResponseCaching: true)
-                ////.AddTenantBlobContainerClientFactory(sp => new TenantBlobContainerClientFactoryOptions
-                ////{
-                ////    AzureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"]
-                ////})
+                .AddTenancyClient(enableResponseCaching: true)
+                .AddJsonNetPropertyBag()
                 .AddAzureManagedIdentityBasedTokenSource(
                     sp => new AzureManagedIdentityTokenSourceOptions
                     {
