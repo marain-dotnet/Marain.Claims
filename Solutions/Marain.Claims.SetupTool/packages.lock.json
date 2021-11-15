@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    ".NETCoreApp,Version=v3.1": {
+    "net6.0": {
       "Endjin.RecommendedPractices": {
         "type": "Direct",
         "requested": "[1.2.0, )",
@@ -1276,10 +1276,7 @@
       "System.Reflection.Metadata": {
         "type": "Transitive",
         "resolved": "5.0.0",
-        "contentHash": "5NecZgXktdGg34rh1OenY1rFNDCI8xSjFr+Z4OU4cU06AQHUdRnIIEeWENu3Wl4YowbzkymAIMvi3WyK9U53pQ==",
-        "dependencies": {
-          "System.Collections.Immutable": "5.0.0"
-        }
+        "contentHash": "5NecZgXktdGg34rh1OenY1rFNDCI8xSjFr+Z4OU4cU06AQHUdRnIIEeWENu3Wl4YowbzkymAIMvi3WyK9U53pQ=="
       },
       "System.Reflection.Primitives": {
         "type": "Transitive",
