@@ -118,7 +118,8 @@ $SkipPackage = $false
 # Advanced build settings
 $EnableGitVersionAdoVariableWorkaround = $false
 
-$GitVersionToolVersion = "5.6.6"
+# Doesn't need .NET Core 3.1 or 5.0
+$GitVersionToolVersion = "5.8.0"
 
 #
 # Build process configuration
