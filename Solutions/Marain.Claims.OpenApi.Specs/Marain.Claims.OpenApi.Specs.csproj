@@ -50,7 +50,7 @@
     <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.0-menes-v3.5" />
     <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="3.0.0-vnext.4" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.21" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="[6.0.*,)" />
   </ItemGroup>
 
   <ItemGroup>

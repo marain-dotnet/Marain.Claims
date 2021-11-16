@@ -53,7 +53,7 @@
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.1.0" />
     <PackageReference Include="Microsoft.Azure.Management.AppService.Fluent" Version="1.38.0" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[3.1.*,)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure.Authentication" Version="2.4.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
