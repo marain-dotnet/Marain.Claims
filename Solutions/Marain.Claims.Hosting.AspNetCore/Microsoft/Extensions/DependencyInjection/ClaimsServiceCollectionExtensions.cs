@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add services required by the Operations Status API.
+        /// Add services required by the claims API.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="rootConfiguration">Application configuration.</param>
@@ -71,7 +71,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Add services required by the Operations Status API.
+        /// Add services required by the claims API.
         /// </summary>
         /// <param name="services">The service collection.</param>
         /// <param name="rootConfiguration">Application configuration.</param>
@@ -113,7 +113,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddBlobContainerV2ToV3Transition();
 
             // TODO: want to move over to newer identity library
-            ////"Consider using Corvus.Identity.Azure's AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString, optionally with LegacyAzureServiceTokenProviderOptions, or Corvus.Identity.MicrosoftRest's AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource instead")]
             // But we can't get rid of this yet because the Tenancy Client still wants IServiceIdentityTokenSource
             string legacyAuthConnectionString = rootConfiguration["AzureServicesAuthConnectionString"];
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -127,11 +126,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
             services.AddAzureBlobStorageClient();
-            ////services.AddTenantBlobContainerClientFactory(
-            ////    sp => new TenantBlobContainerClientFactoryOptions
-            ////    {
-            ////        AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-            ////    });
 
             services.AddTenantedBlobContainerClaimsStore();
 
