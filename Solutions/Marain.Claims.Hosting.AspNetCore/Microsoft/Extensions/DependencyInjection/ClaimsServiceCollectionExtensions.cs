@@ -33,36 +33,99 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="configureHost">Optional callback for additional host configuration.</param>
         /// <returns>The service collection, to enable chaining.</returns>
+        [Obsolete("Use AddTenantedClaimsApiWithOpenApiActionResultHosting, or consider changing to AddTenantedClaimsApiWithAspNetPipelineHosting")]
         public static IServiceCollection AddTenantedClaimsApi(
             this IServiceCollection services,
             IConfiguration rootTenantDefaultConfiguration,
             Action<IOpenApiHostConfiguration> configureHost = null)
         {
-            if (services.Any(s => typeof(ClaimPermissionsService).IsAssignableFrom(s.ImplementationType)))
+            return services.AddTenantedClaimsApiWithOpenApiActionResultHosting(rootTenantDefaultConfiguration, configureHost);
+        }
+
+        /// <summary>
+        /// Add services required by the claims API.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="rootConfiguration">Application configuration.</param>
+        /// <param name="configureHost">Optional callback for additional host configuration.</param>
+        /// <returns>The service collection, to enable chaining.</returns>
+        public static IServiceCollection AddTenantedClaimsApiWithAspNetPipelineHosting(
+            this IServiceCollection services,
+            IConfiguration rootConfiguration,
+            Action<IOpenApiHostConfiguration> configureHost = null)
+        {
+            if (services.Any(s => typeof(TenancyService).IsAssignableFrom(s.ServiceType)))
             {
                 return services;
             }
 
+            services.AddEverythingExceptHosting(rootConfiguration);
+
+            services.AddOpenApiAspNetPipelineHosting<SimpleOpenApiContext>((config) =>
+            {
+                config.Documents.RegisterOpenApiServiceWithEmbeddedDefinition<ClaimPermissionsService>();
+                configureHost?.Invoke(config);
+            });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add services required by the claims API.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="rootConfiguration">Application configuration.</param>
+        /// <param name="configureHost">Optional callback for additional host configuration.</param>
+        /// <returns>The service collection, to enable chaining.</returns>
+        public static IServiceCollection AddTenantedClaimsApiWithOpenApiActionResultHosting(
+            this IServiceCollection services,
+            IConfiguration rootConfiguration,
+            Action<IOpenApiHostConfiguration> configureHost = null)
+        {
+            if (services.Any(s => typeof(TenancyService).IsAssignableFrom(s.ServiceType)))
+            {
+                return services;
+            }
+
+            services.AddEverythingExceptHosting(rootConfiguration);
+
+            services.AddOpenApiActionResultHosting<SimpleOpenApiContext>((config) =>
+            {
+                config.Documents.RegisterOpenApiServiceWithEmbeddedDefinition<ClaimPermissionsService>();
+                configureHost?.Invoke(config);
+            });
+
+            return services;
+        }
+
+        private static void AddEverythingExceptHosting(
+            this IServiceCollection services,
+            IConfiguration rootConfiguration)
+        {
             services.AddLogging();
 
-            // Work around the fact that the tenancy client currently tries to fetch the root tenant on startup.
             services.AddMarainServiceConfiguration();
 
             services.AddMarainServicesTenancy();
             services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
-            services.AddTenantProviderServiceClient();
+            services.AddTenantProviderServiceClient(enableResponseCaching: true);
 
-            services.AddAzureManagedIdentityBasedTokenSource(
-                sp => new AzureManagedIdentityTokenSourceOptions
-                {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
-                });
+            services.AddBlobContainerV2ToV3Transition();
 
-            services.AddTenantCloudBlobContainerFactory(
-                sp => new TenantCloudBlobContainerFactoryOptions
+            // TODO: want to move over to newer identity library
+            // But we can't get rid of this yet because the Tenancy Client still wants IServiceIdentityTokenSource
+            string legacyAuthConnectionString = rootConfiguration["AzureServicesAuthConnectionString"];
+#pragma warning disable CS0618 // Type or member is obsolete
+            services.AddAzureManagedIdentityBasedTokenSource(new AzureManagedIdentityTokenSourceOptions
                 {
-                    AzureServicesAuthConnectionString = sp.GetRequiredService<IConfiguration>()["AzureServicesAuthConnectionString"],
+                    AzureServicesAuthConnectionString = legacyAuthConnectionString,
                 });
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(legacyAuthConnectionString);
+            services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
+
+            services.AddAzureBlobStorageClient();
 
             services.AddTenantedBlobContainerClaimsStore();
 
@@ -78,12 +141,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IOpenApiService, ResourceAccessRuleSetService>(s => s.GetRequiredService<ResourceAccessRuleSetService>());
 
             services.AddApplicationInsightsInstrumentationTelemetry();
-
-            services.AddOpenApiHttpRequestHosting<SimpleOpenApiContext>((config) =>
-            {
-                config.Documents.RegisterOpenApiServiceWithEmbeddedDefinition<ClaimPermissionsService>();
-                configureHost?.Invoke(config);
-            });
 
             services.AddSingleton<IResourceAccessEvaluator, LocalResourceAccessEvaluator>();
 
@@ -107,8 +164,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 new ExemptOperationIdsAccessPolicy(openOperationIds));
 
             services.RegisterCoreClaimsContentTypes();
-
-            return services;
         }
     }
 }

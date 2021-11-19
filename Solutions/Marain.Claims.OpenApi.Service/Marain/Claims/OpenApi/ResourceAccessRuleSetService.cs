@@ -13,8 +13,6 @@ namespace Marain.Claims.OpenApi
     using Marain.Claims.Storage;
     using Marain.Services.Tenancy;
     using Menes;
-    using Microsoft.ApplicationInsights;
-    using Microsoft.ApplicationInsights.DataContracts;
 
     /// <summary>
     ///     Handles resource access rule set requests.
@@ -27,22 +25,18 @@ namespace Marain.Claims.OpenApi
         private const string SetResourceAccessRuleSetResourceAccessRulesOperationId = "setResourceAccessRuleSetResourceAccessRules";
         private readonly IMarainServicesTenancy tenancyHelper;
         private readonly IPermissionsStoreFactory permissionsStoreFactory;
-        private readonly TelemetryClient telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAccessRuleSetService"/> class.
         /// </summary>
         /// <param name="tenancyHelper">The tenant provider.</param>
         /// <param name="permissionsStoreFactory">Provides access to the permissions store.</param>
-        /// <param name="telemetryClient">A <see cref="TelemetryClient"/> to log telemetry.</param>
         public ResourceAccessRuleSetService(
             IMarainServicesTenancy tenancyHelper,
-            IPermissionsStoreFactory permissionsStoreFactory,
-            TelemetryClient telemetryClient)
+            IPermissionsStoreFactory permissionsStoreFactory)
         {
             this.tenancyHelper = tenancyHelper ?? throw new ArgumentNullException(nameof(tenancyHelper));
             this.permissionsStoreFactory = permissionsStoreFactory ?? throw new ArgumentNullException(nameof(permissionsStoreFactory));
-            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
         }
 
         /// <summary>
@@ -56,14 +50,11 @@ namespace Marain.Claims.OpenApi
             string tenantId,
             ResourceAccessRuleSet body)
         {
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(CreateResourceAccessRuleSetOperationId))
-            {
-                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+            ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
 
-                IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
-                ResourceAccessRuleSet result = await store.PersistAsync(body).ConfigureAwait(false);
-                return this.OkResult(result, "application/json");
-            }
+            IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
+            ResourceAccessRuleSet result = await store.PersistAsync(body).ConfigureAwait(false);
+            return this.OkResult(result, "application/json");
         }
 
         /// <summary>
@@ -77,20 +68,17 @@ namespace Marain.Claims.OpenApi
             string tenantId,
             string resourceAccessRuleSetId)
         {
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(GetResourceAccessRuleSetOperationId))
-            {
-                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+            ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
 
-                IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
-                try
-                {
-                    ResourceAccessRuleSet result = await store.GetAsync(resourceAccessRuleSetId).ConfigureAwait(false);
-                    return this.OkResult(result, "application/json");
-                }
-                catch (ResourceAccessRuleSetNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
+            IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
+            try
+            {
+                ResourceAccessRuleSet result = await store.GetAsync(resourceAccessRuleSetId).ConfigureAwait(false);
+                return this.OkResult(result, "application/json");
+            }
+            catch (ResourceAccessRuleSetNotFoundException)
+            {
+                return this.NotFoundResult();
             }
         }
 
@@ -109,37 +97,34 @@ namespace Marain.Claims.OpenApi
             UpdateOperation operation,
             IEnumerable<ResourceAccessRule> body)
         {
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(UpdateResourceAccessRuleSetResourceAccessRulesOperationId))
+            ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+
+            IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
+
+            ResourceAccessRuleSet ruleSet;
+
+            try
             {
-                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
-
-                IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
-
-                ResourceAccessRuleSet ruleSet;
-
-                try
-                {
-                    ruleSet = await store.GetAsync(resourceAccessRuleSetId).ConfigureAwait(false);
-                }
-                catch (ResourceAccessRuleSetNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
-
-                switch (operation)
-                {
-                    case UpdateOperation.Add:
-                        ruleSet.Rules.AddRange(body);
-                        break;
-                    case UpdateOperation.Remove:
-                        body.ForEach(rc => ruleSet.Rules.Remove(rc));
-                        break;
-                }
-
-                await store.PersistAsync(ruleSet).ConfigureAwait(false);
-
-                return this.CreatedResult();
+                ruleSet = await store.GetAsync(resourceAccessRuleSetId).ConfigureAwait(false);
             }
+            catch (ResourceAccessRuleSetNotFoundException)
+            {
+                return this.NotFoundResult();
+            }
+
+            switch (operation)
+            {
+                case UpdateOperation.Add:
+                    ruleSet.Rules.AddRange(body);
+                    break;
+                case UpdateOperation.Remove:
+                    body.ForEach(rc => ruleSet.Rules.Remove(rc));
+                    break;
+            }
+
+            await store.PersistAsync(ruleSet).ConfigureAwait(false);
+
+            return this.CreatedResult();
         }
 
         /// <summary>
@@ -155,29 +140,26 @@ namespace Marain.Claims.OpenApi
             string resourceAccessRuleSetId,
             IEnumerable<ResourceAccessRule> body)
         {
-            using (this.telemetryClient.StartOperation<RequestTelemetry>(SetResourceAccessRuleSetResourceAccessRulesOperationId))
+            ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
+
+            IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
+
+            ResourceAccessRuleSet ruleSet;
+
+            try
             {
-                ITenant tenant = await this.tenancyHelper.GetRequestingTenantAsync(tenantId).ConfigureAwait(false);
-
-                IResourceAccessRuleSetStore store = await this.permissionsStoreFactory.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false);
-
-                ResourceAccessRuleSet ruleSet;
-
-                try
-                {
-                    ruleSet = await store.GetAsync(resourceAccessRuleSetId).ConfigureAwait(false);
-                }
-                catch (ResourceAccessRuleSetNotFoundException)
-                {
-                    return this.NotFoundResult();
-                }
-
-                ruleSet.Rules = body.ToList();
-
-                await store.PersistAsync(ruleSet).ConfigureAwait(false);
-
-                return this.OkResult();
+                ruleSet = await store.GetAsync(resourceAccessRuleSetId).ConfigureAwait(false);
             }
+            catch (ResourceAccessRuleSetNotFoundException)
+            {
+                return this.NotFoundResult();
+            }
+
+            ruleSet.Rules = body.ToList();
+
+            await store.PersistAsync(ruleSet).ConfigureAwait(false);
+
+            return this.OkResult();
         }
     }
 }

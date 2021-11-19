@@ -4,9 +4,9 @@
 
 namespace Marain.Claims.SpecFlow.Bindings
 {
-    using System.Collections.Generic;
-    using Corvus.Azure.Storage.Tenancy;
+    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
+
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -45,6 +45,15 @@ namespace Marain.Claims.SpecFlow.Bindings
 
                     serviceCollection.AddLogging();
 
+#pragma warning disable CS0618 // Type or member is obsolete
+                    serviceCollection.AddAzureManagedIdentityBasedTokenSource(
+                        new AzureManagedIdentityTokenSourceOptions
+                        {
+                            AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
+                        });
+#pragma warning restore CS0618 // Type or member is obsolete
+                    serviceCollection.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+
                     serviceCollection.AddInMemoryTenantProvider();
 
                     serviceCollection.AddJsonNetSerializerSettingsProvider();
@@ -53,14 +62,8 @@ namespace Marain.Claims.SpecFlow.Bindings
                     serviceCollection.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
                     serviceCollection.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    var tenantCloudBlobContainerFactoryOptions = new TenantCloudBlobContainerFactoryOptions
-                    {
-                        AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                    };
-
-                    serviceCollection.AddSingleton(tenantCloudBlobContainerFactoryOptions);
-
-                    serviceCollection.AddTenantCloudBlobContainerFactory(tenantCloudBlobContainerFactoryOptions);
+                    serviceCollection.AddBlobContainerV2ToV3Transition();
+                    serviceCollection.AddAzureBlobStorageClient();
 
                     serviceCollection.AddTenantedBlobContainerClaimsStore();
 

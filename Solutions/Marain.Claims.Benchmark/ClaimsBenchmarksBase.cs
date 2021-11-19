@@ -1,15 +1,19 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Corvus.Azure.Storage.Tenancy;
+﻿using System.Threading.Tasks;
+
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+
 using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
 using Corvus.Json;
+using Corvus.Storage.Azure.BlobStorage.Tenancy;
 using Corvus.Tenancy;
+
 using Marain.Claims.Client;
 using Marain.Tenancy.Client;
-using Microsoft.Azure.Storage.Blob;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -19,7 +23,7 @@ namespace Marain.Claims.Benchmark
     {
         protected readonly IClaimsService ClaimsService;
         protected readonly ITenancyService TenancyService;
-        protected readonly ITenantCloudBlobContainerFactory TenantCloudBlobContainerFactory;
+        protected readonly IBlobContainerSourceWithTenantLegacyTransition TenantBlobContainerClientFactory;
         protected readonly IPropertyBagFactory PropertyBagFactory;
         protected readonly string ClientTenantId;
         protected readonly string AdministratorPrincipalObjectId;
@@ -35,24 +39,25 @@ namespace Marain.Claims.Benchmark
             this.ClientTenantId = configuration["ClientTenantId"];
             this.AdministratorPrincipalObjectId = configuration["AdministratorPrincipalObjectId"];
 
+#pragma warning disable CS0618 // Type or member is obsolete
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddClaimsClient(sp => configuration.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
                 .AddSingleton(sp => configuration.GetSection("TenancyClient").Get<TenancyClientOptions>())
-                .AddTenancyClient(enableResponseCaching: false)
-                .AddTenantCloudBlobContainerFactory(sp => new TenantCloudBlobContainerFactoryOptions
-                {
-                    AzureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"]
-                })
+                .AddTenancyClient(enableResponseCaching: true)
+                .AddJsonNetPropertyBag()
+                .AddBlobContainerV2ToV3Transition()
+                .AddAzureBlobStorageClient()
                 .AddAzureManagedIdentityBasedTokenSource(
                     sp => new AzureManagedIdentityTokenSourceOptions
                     {
                         AzureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"],
                     })
+#pragma warning restore CS0618 // Type or member is obsolete
                 .BuildServiceProvider();
 
             this.ClaimsService = serviceProvider.GetRequiredService<IClaimsService>();
             this.TenancyService = serviceProvider.GetRequiredService<ITenancyService>();
-            this.TenantCloudBlobContainerFactory = serviceProvider.GetRequiredService<ITenantCloudBlobContainerFactory>();
+            this.TenantBlobContainerClientFactory = serviceProvider.GetRequiredService<IBlobContainerSourceWithTenantLegacyTransition>();
             this.PropertyBagFactory = serviceProvider.GetRequiredService<IPropertyBagFactory>();
         }
 
@@ -66,19 +71,20 @@ namespace Marain.Claims.Benchmark
 
             var tenant = new Tenant(clientTenant.Id, clientTenant.Name, this.PropertyBagFactory.Create(clientTenant.Properties));
 
-            CloudBlobContainer claimPermissionsContainer =
-                await this.TenantCloudBlobContainerFactory.GetBlobContainerForTenantAsync(tenant, new BlobStorageContainerDefinition("claimpermissions"));
-            CloudBlobContainer resourceAccessRuleSetsContainer =
-                await this.TenantCloudBlobContainerFactory.GetBlobContainerForTenantAsync(tenant, new BlobStorageContainerDefinition("resourceaccessrulesets"));
+            BlobContainerClient claimPermissionsContainer =
+                await this.TenantBlobContainerClientFactory.GetBlobContainerClientFromTenantAsync(
+                    tenant,
+                    "StorageConfiguration__claimpermissions",
+                    "StorageConfigurationV3__claimpermissions");
+            BlobContainerClient resourceAccessRuleSetsContainer =
+                await this.TenantBlobContainerClientFactory.GetBlobContainerClientFromTenantAsync(
+                    tenant,
+                    "StorageConfiguration__resourceaccessrulesets",
+                    "StorageConfigurationV3__resourceaccessrulesets");
 
-            foreach (CloudBlockBlob blob in claimPermissionsContainer.ListBlobs().OfType<CloudBlockBlob>())
+            foreach (BlobItem blob in claimPermissionsContainer.GetBlobs())
             {
-                await blob.DeleteAsync();
-            }
-
-            foreach (CloudBlockBlob blob in resourceAccessRuleSetsContainer.ListBlobs().OfType<CloudBlockBlob>())
-            {
-                await blob.DeleteAsync();
+                await claimPermissionsContainer.DeleteBlobAsync(blob.Name);
             }
         }
     }

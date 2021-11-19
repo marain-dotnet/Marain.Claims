@@ -20,7 +20,6 @@ namespace Marain.Claims.Functions
         {
             IServiceCollection services = builder.Services;
 
-            // Note: in in-process test scenarios, Configuration can be empty.
             IConfiguration root = builder.GetContext().Configuration;
             string serviceTenantIdOverride = root?["MarainServiceConfiguration:ServiceTenantIdOverride"];
             if (!string.IsNullOrWhiteSpace(serviceTenantIdOverride))
@@ -31,7 +30,9 @@ namespace Marain.Claims.Functions
             services.AddApplicationInsightsInstrumentationTelemetry();
             services.AddLogging();
 
-            services.AddTenantedClaimsApi(root, config => config.Documents.AddSwaggerEndpoint());
+            services.AddTenantedClaimsApiWithOpenApiActionResultHosting(
+                root,
+                config => config.Documents.AddSwaggerEndpoint());
         }
     }
 }
