@@ -1,6 +1,6 @@
 # Marain.Claims
-[![Build Status](https://dev.azure.com/endjin-labs/Marain.Claims/_apis/build/status/marain-dotnet.Marain.Claims?branchName=master)](https://dev.azure.com/endjin-labs/Marain.Claims/_build/latest?definitionId=4&branchName=master)
-[![GitHub license](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://raw.githubusercontent.com/marain-dotnet/Marain.Claims/master/LICENSE)
+[![Build Status](https://dev.azure.com/endjin-labs/Marain.Claims/_apis/build/status/marain-dotnet.Marain.Claims?branchName=main)](https://dev.azure.com/endjin-labs/Marain.Claims/_build/latest?definitionId=4&branchName=main)
+[![GitHub license](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://raw.githubusercontent.com/marain-dotnet/Marain.Claims/main/LICENSE)
 [![IMM](https://endimmfuncdev.azurewebsites.net/api/imm/github/marain-dotnet/Marain.Claims/total?cache=false)](https://endimmfuncdev.azurewebsites.net/api/imm/github/marain-dotnet/Marain.Claims/total?cache=false)
 
 This provides a claims store API.
