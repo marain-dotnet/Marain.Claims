@@ -20,11 +20,7 @@ namespace Marain.Claims.Functions
         {
             IServiceCollection services = builder.Services;
 
-            // Note: in in-process test scenarios, Configuration can be empty.
-            // But some tests rely on it being non-null, so we cruft up an
-            // empty one if there isn't one.
-            IConfiguration root = builder.GetContext().Configuration
-                ?? new ConfigurationBuilder().Build();
+            IConfiguration root = builder.GetContext().Configuration;
             string serviceTenantIdOverride = root?["MarainServiceConfiguration:ServiceTenantIdOverride"];
             if (!string.IsNullOrWhiteSpace(serviceTenantIdOverride))
             {
