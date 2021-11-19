@@ -62,14 +62,6 @@ jobs:
           packageType: sdk
           version: 3.1.x
 
-      # # Temporary, to get output because we don't get that from the scripted build
-      # - task: DotNetCoreCLI@2
-      #   displayName: 'Run Executable Specifications'
-      #   inputs:
-      #     command: 'test'
-      #     projects: $(SolutionToBuild)
-      #     arguments: '-c $(BuildConfiguration) --logger "console;verbosity=detailed"'
-
     # TODO: find the right way to do this:
     #   * integrate with scripted build
     #   * use the correct folders once we're on .NET 6.0 for most things

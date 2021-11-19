@@ -4,8 +4,6 @@
 
 namespace Marain.Claims.OpenApi.Specs.MultiHost
 {
-    using System.Collections.Generic;
-
     using Marain.Claims.Functions;
 
     using Microsoft.ApplicationInsights;
@@ -28,11 +26,6 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
 
         public void Configure(IWebJobsBuilder builder)
         {
-            ////IConfigurationBuilder cb = new ConfigurationBuilder()
-            ////    .AddInMemoryCollection(new Dictionary<string, string>
-            ////    {
-            ////        { "Logging:LogLevel:Menes", "Information" },
-            ////    });
             var context = new WebJobsBuilderContext
             {
                 Configuration = this.configuration,
@@ -42,7 +35,8 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
             this.wrappedStartup.Configure(context, builder);
 
             // Add services normally automatically present in the Functions Host that we rely on.
-            // TODO: remove once upgraded to Corvus.Monitoring v2, and we've taken out the telemetry code from ClaimPermissionsService
+            // TODO: we were planning to remove thisd once upgraded to Corvus.Monitoring v2, but for some
+            // reason the tests fail without this. Need to work out why.
             builder.Services.AddSingleton(new TelemetryClient(new TelemetryConfiguration()));
         }
     }
