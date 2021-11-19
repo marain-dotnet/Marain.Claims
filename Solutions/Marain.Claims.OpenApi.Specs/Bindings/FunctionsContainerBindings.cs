@@ -55,11 +55,6 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
                     services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    var logCollector = new LogProvider();
-                    services.AddSingleton(logCollector);
-                    services.AddLogging(config => config
-                        .AddProvider(logCollector));
-
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -87,53 +82,6 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                         };
                     });
                 });
-        }
-
-        public class LogProvider : ILoggerProvider
-        {
-            public StringBuilder Output { get; } = new StringBuilder();
-
-            public ILogger CreateLogger(string categoryName)
-            {
-                return new Logger(this);
-            }
-
-            public void Dispose()
-            {
-            }
-
-            private class Logger : ILogger
-            {
-                private LogProvider logProvider;
-
-                public Logger(LogProvider logProvider)
-                {
-                    this.logProvider = logProvider;
-                }
-
-                public IDisposable BeginScope<TState>(TState state)
-                {
-                    return new Scope();
-                }
-
-                public bool IsEnabled(LogLevel logLevel)
-                {
-                    return true;
-                }
-
-                public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-                {
-                    this.logProvider.Output.AppendLine(
-                        $"[{logLevel}] [{eventId}], {formatter(state, exception)}");
-                }
-
-                private class Scope : IDisposable
-                {
-                    public void Dispose()
-                    {
-                    }
-                }
-            }
         }
     }
 }
