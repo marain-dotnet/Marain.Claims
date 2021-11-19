@@ -45,6 +45,8 @@ namespace Marain.Claims.Benchmark
                 .AddSingleton(sp => configuration.GetSection("TenancyClient").Get<TenancyClientOptions>())
                 .AddTenancyClient(enableResponseCaching: true)
                 .AddJsonNetPropertyBag()
+                .AddBlobContainerV2ToV3Transition()
+                .AddAzureBlobStorageClient()
                 .AddAzureManagedIdentityBasedTokenSource(
                     sp => new AzureManagedIdentityTokenSourceOptions
                     {
@@ -55,7 +57,7 @@ namespace Marain.Claims.Benchmark
 
             this.ClaimsService = serviceProvider.GetRequiredService<IClaimsService>();
             this.TenancyService = serviceProvider.GetRequiredService<ITenancyService>();
-            ////this.TenantBlobContainerClientFactory = serviceProvider.GetRequiredService<ITenantBlobContainerClientFactory>();
+            this.TenantBlobContainerClientFactory = serviceProvider.GetRequiredService<IBlobContainerSourceWithTenantLegacyTransition>();
             this.PropertyBagFactory = serviceProvider.GetRequiredService<IPropertyBagFactory>();
         }
 
