@@ -3,7 +3,6 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
-using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
 using Corvus.Json;
 using Corvus.Storage.Azure.BlobStorage.Tenancy;
 using Corvus.Tenancy;
@@ -39,7 +38,6 @@ namespace Marain.Claims.Benchmark
             this.ClientTenantId = configuration["ClientTenantId"];
             this.AdministratorPrincipalObjectId = configuration["AdministratorPrincipalObjectId"];
 
-#pragma warning disable CS0618 // Type or member is obsolete
             ServiceProvider serviceProvider = new ServiceCollection()
                 .AddClaimsClient(sp => configuration.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
                 .AddSingleton(sp => configuration.GetSection("TenancyClient").Get<TenancyClientOptions>())
@@ -47,12 +45,8 @@ namespace Marain.Claims.Benchmark
                 .AddJsonNetPropertyBag()
                 .AddBlobContainerV2ToV3Transition()
                 .AddAzureBlobStorageClient()
-                .AddAzureManagedIdentityBasedTokenSource(
-                    sp => new AzureManagedIdentityTokenSourceOptions
-                    {
-                        AzureServicesAuthConnectionString = configuration["AzureServicesAuthConnectionString"],
-                    })
-#pragma warning restore CS0618 // Type or member is obsolete
+                .AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(configuration["AzureServicesAuthConnectionString"])
+                .AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource()
                 .BuildServiceProvider();
 
             this.ClaimsService = serviceProvider.GetRequiredService<IClaimsService>();

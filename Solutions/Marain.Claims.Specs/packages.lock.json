@@ -293,13 +293,13 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.20"
         }
       },
-      "Corvus.Identity.ManagedServiceIdentity.ClientAuthentication": {
+      "Corvus.Identity.MicrosoftRest": {
         "type": "Transitive",
-        "resolved": "3.0.0-identity-configuration.3",
-        "contentHash": "qcntbbjyZeuTMoXSroqjPfuphYH9xb2fSdeFO4xSnBm03mBPSaMnaTczm7hxI59ZSzOaVn29xMuW7IcSqz4mYg==",
+        "resolved": "3.0.0-alpha.3",
+        "contentHash": "aOHqhlUH57XB+m1m103eyKs7m4XZ83LkkV2eHUu799XX8MdAwGRhuOme34u6PeZRj0hy35qcfJMx8H7MQ11/oA==",
         "dependencies": {
-          "Microsoft.Azure.Services.AppAuthentication": "1.6.2",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.20",
+          "Corvus.Identity.Azure": "3.0.0-alpha.3",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.21",
           "Microsoft.Rest.ClientRuntime": "2.3.23"
         }
       },
@@ -332,11 +332,11 @@
       },
       "Corvus.Storage.Azure.BlobStorage.Tenancy": {
         "type": "Transitive",
-        "resolved": "3.0.0-v3-blob.11",
-        "contentHash": "AouZfixuJOV+fK1IaEJDsSixSON4HjcRJTWuRZSRbt/6fZ+SfbiK981BMwEEFg0miI+LADJVJoIO9HmuLb2wng==",
+        "resolved": "3.0.0-alpha.3",
+        "contentHash": "aQ/WtonoXdEtJbnx5H9++LyOQscxdsOLR7B6u4SIWYsNqq3Lsxb9GNmVN2OVh3TaaMPoLCKVUEUUKd2Sp/t/Rg==",
         "dependencies": {
           "Corvus.Storage.Azure.BlobStorage": "3.0.0-1-refactor-from-tenancy.10",
-          "Corvus.Tenancy.Abstractions": "3.0.0-v3-blob.11"
+          "Corvus.Tenancy.Abstractions": "3.0.0-alpha.3"
         }
       },
       "Corvus.Storage.Common": {
@@ -351,8 +351,8 @@
       },
       "Corvus.Tenancy.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.0.0-v3-blob.11",
-        "contentHash": "bRhFGCHioBAMbGxPLmfIXKYWq9Tx18gMPZ5aISVgVoRErxt9TNIOkLhQG3WkjayX22bA9zWSm9vg4qG3DIsRPg==",
+        "resolved": "3.0.0-alpha.3",
+        "contentHash": "YsPXYMqVXydyZp9I28bwFZV9cjA5XUJIHInw8iN/WVHUegPYr0rrP38PltqnPLn6cLnInEA9Ge4NMUM9EUFa3A==",
         "dependencies": {
           "Corvus.ContentHandling.Json": "2.0.11",
           "Corvus.Extensions": "1.1.4",
@@ -866,10 +866,10 @@
       },
       "Microsoft.Azure.Services.AppAuthentication": {
         "type": "Transitive",
-        "resolved": "1.6.2",
-        "contentHash": "rSQhTv43ionr9rWvE4vxIe/i73XR5hoBYfh7UUgdaVOGW1MZeikR9RmgaJhonTylimCcCuJvrU0zXsSIFOsTGw==",
+        "resolved": "1.6.1",
+        "contentHash": "78AcjpxnhJDov7HJa4kPpZxpI0coZhS0tdA9ZLUSPExKz5KTgfozayBTLAXDuTuq0gLRzFyf85SvIkrtbB8KpA==",
         "dependencies": {
-          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.0",
           "System.Diagnostics.Process": "4.3.0"
         }
       },
@@ -1229,15 +1229,14 @@
       },
       "Microsoft.IdentityModel.Clients.ActiveDirectory": {
         "type": "Transitive",
-        "resolved": "5.2.9",
-        "contentHash": "WhBAG/9hWiMHIXve4ZgwXP3spRwf7kFFfejf76QA5BvumgnPp8iDkDCiJugzAcpW1YaHB526z1UVxHhVT1E5qw==",
+        "resolved": "5.2.0",
+        "contentHash": "5zCom0plcWSAuPp2B/Fo7XFKdrPUOaE+1dhVW5Ui2Gny7YYv1fDJ1Z8GeZEJuCd3rKN4UBO834wPEhU5gIPQMw==",
         "dependencies": {
           "Microsoft.CSharp": "4.3.0",
           "NETStandard.Library": "1.6.1",
           "System.ComponentModel.TypeConverter": "4.3.0",
           "System.Dynamic.Runtime": "4.3.0",
           "System.Net.Http": "4.3.4",
-          "System.Private.Uri": "4.3.2",
           "System.Runtime.Serialization.Formatters": "4.3.0",
           "System.Runtime.Serialization.Json": "4.3.0",
           "System.Runtime.Serialization.Primitives": "4.3.0",
@@ -1272,8 +1271,8 @@
       },
       "Microsoft.NETCore.Targets": {
         "type": "Transitive",
-        "resolved": "1.1.3",
-        "contentHash": "3Wrmi0kJDzClwAC+iBdUBpEKmEle8FQNsCs77fkiOIw/9oYA07bL1EZNX0kQ2OMN3xpwvl0vAtOCYY3ndDNlhQ=="
+        "resolved": "1.1.0",
+        "contentHash": "aOZA3BWfz9RXjpzt0sRJJMjAscAUm3Hoa4UWAfceV9UTYxgwZ1lZt5nO2myFf+/jetYQo4uTP7zS8sJY67BBxg=="
       },
       "Microsoft.OData.Core": {
         "type": "Transitive",
@@ -2244,15 +2243,6 @@
           "System.Xml.XmlSerializer": "4.3.0"
         }
       },
-      "System.Private.Uri": {
-        "type": "Transitive",
-        "resolved": "4.3.2",
-        "contentHash": "o1+7RJnu3Ik3PazR7Z7tJhjPdE000Eq2KGLLWhqJJKXj04wrS8lwb1OFtDF9jzXXADhUuZNJZlPc98uwwqmpFA==",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.1",
-          "Microsoft.NETCore.Targets": "1.1.3"
-        }
-      },
       "System.Reflection": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -2896,7 +2886,7 @@
       "marain.claims.abstractions": {
         "type": "Project",
         "dependencies": {
-          "Corvus.Tenancy.Abstractions": "3.0.0-v3-blob.11",
+          "Corvus.Tenancy.Abstractions": "3.0.0-alpha.3",
           "Menes.Abstractions": "2.0.1",
           "Microsoft.Extensions.FileSystemGlobbing": "6.0.0",
           "Newtonsoft.Json": "12.0.3"
@@ -2906,7 +2896,7 @@
         "type": "Project",
         "dependencies": {
           "Cimpress.Extensions.Http.Caching.InMemory": "2.1.111",
-          "Corvus.Identity.ManagedServiceIdentity.ClientAuthentication": "3.0.0-identity-configuration.3",
+          "Corvus.Identity.MicrosoftRest": "3.0.0-alpha.3",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.0",
           "Microsoft.Rest.ClientRuntime": "2.3.23"
         }
@@ -2939,7 +2929,7 @@
       "marain.claims.tenancy.azureblob": {
         "type": "Project",
         "dependencies": {
-          "Corvus.Storage.Azure.BlobStorage.Tenancy": "3.0.0-v3-blob.11",
+          "Corvus.Storage.Azure.BlobStorage.Tenancy": "3.0.0-alpha.3",
           "Marain.Claims.OpenApi": "1.0.0",
           "Marain.Claims.Storage.AzureBlob": "1.0.0",
           "Menes.Hosting.AspNetCore": "3.0.0-vnext.4",

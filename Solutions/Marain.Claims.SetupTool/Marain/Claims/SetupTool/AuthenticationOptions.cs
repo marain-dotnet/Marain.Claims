@@ -8,14 +8,21 @@ namespace Marain.Claims.SetupTool
     using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.Azure.KeyVault;
-    using Microsoft.Azure.KeyVault.Models;
+
+    using Azure;
+    using Azure.Core;
+    using Azure.Security.KeyVault.Secrets;
+
+    using Corvus.Identity.ClientAuthentication.Azure;
+    using Corvus.Identity.ClientAuthentication.MicrosoftRest;
+
     using Microsoft.Azure.Management.ResourceManager.Fluent;
     using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
-    using Microsoft.Azure.Services.AppAuthentication;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Clients.ActiveDirectory;
     using Microsoft.Rest;
     using Microsoft.Rest.Azure.Authentication;
+
     using Newtonsoft.Json.Linq;
 
     /// <summary>
@@ -29,22 +36,26 @@ namespace Marain.Claims.SetupTool
         private const string MarainClaimsSetupAADClientId = "7c814853-82dc-4b38-93e3-f4e627927e00";
         private const string AzureManagementResourceId = "https://management.core.windows.net/";
         private const string GraphApiResourceId = "https://graph.windows.net/";
-        private readonly Lazy<AzureServiceTokenProvider> azureServiceTokenProvider;
+        private readonly IServiceIdentityMicrosoftRestTokenProviderSource serviceIdTokenProviderSource;
+        private readonly IServiceIdentityAzureTokenCredentialSource serviceIdAzureTokenCredentialSource;
 
         /// <summary>
         /// Creates an <see cref="AuthenticationOptions"/>.
         /// </summary>
         /// <param name="tenantId">The Azure AD tenant against which to authenticate.</param>
+        /// <param name="serviceIdTokenProviderSource">Provides token providers representing the application.</param>
+        /// <param name="serviceIdAzureTokenCredentialSource">Provides Azure token credentials representing the application.</param>
         /// <param name="azureServiceTokenProviderConnectionString">The connection string for the azure service token provide if additional claims are needed.</param>
         private AuthenticationOptions(
             string tenantId,
+            IServiceIdentityMicrosoftRestTokenProviderSource serviceIdTokenProviderSource,
+            IServiceIdentityAzureTokenCredentialSource serviceIdAzureTokenCredentialSource,
             string azureServiceTokenProviderConnectionString)
         {
             this.TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
+            this.serviceIdTokenProviderSource = serviceIdTokenProviderSource;
+            this.serviceIdAzureTokenCredentialSource = serviceIdAzureTokenCredentialSource;
             this.AzureServiceTokenProviderConnectionString = azureServiceTokenProviderConnectionString;
-
-            this.azureServiceTokenProvider =
-            new Lazy<AzureServiceTokenProvider>(() => new AzureServiceTokenProvider(this.AzureServiceTokenProviderConnectionString));
         }
 
         /// <summary>
@@ -60,8 +71,6 @@ namespace Marain.Claims.SetupTool
         /// <c>az account get-access-token</c>) or, in scenarios where it's available, the MSI.
         /// </remarks>
         public string AzureServiceTokenProviderConnectionString { get; }
-
-        private AzureServiceTokenProvider TokenProvider => this.azureServiceTokenProvider.Value;
 
         /// <summary>
         /// Gets an <see cref="AzureCredentials"/> for the specified subscription.
@@ -112,11 +121,10 @@ namespace Marain.Claims.SetupTool
             string keyVaultName,
             string claimsSetupAppCredentialsSecretName)
         {
-            var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(this.TokenProvider.KeyVaultTokenCallback));
-
-            SecretBundle accountKey = await keyVaultClient
-                     .GetSecretAsync($"https://{keyVaultName}.vault.azure.net/secrets/{claimsSetupAppCredentialsSecretName}")
-                     .ConfigureAwait(false);
+            TokenCredential creds = await this.serviceIdAzureTokenCredentialSource.GetTokenCredentialAsync().ConfigureAwait(false);
+            var secretClient = new SecretClient(new Uri($"https://{keyVaultName}.vault.azure.net/"), creds);
+            Response<KeyVaultSecret> getSecretResponse = await secretClient.GetSecretAsync(claimsSetupAppCredentialsSecretName);
+            KeyVaultSecret accountKey = getSecretResponse.Value;
 
             var credentials = JObject.Parse(accountKey.Value);
             string appId = credentials["appId"].Value<string>();
@@ -157,7 +165,16 @@ namespace Marain.Claims.SetupTool
                 azureServiceTokenProviderConnectionString = "RunAs=Developer; DeveloperTool=AzureCLI";
             }
 
-            return new AuthenticationOptions(tenantId, azureServiceTokenProviderConnectionString);
+            var services = new ServiceCollection();
+            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(
+                azureServiceTokenProviderConnectionString ?? string.Empty);
+            ServiceProvider sp = services.BuildServiceProvider();
+
+            return new AuthenticationOptions(
+                tenantId,
+                sp.GetRequiredService<IServiceIdentityMicrosoftRestTokenProviderSource>(),
+                sp.GetRequiredService<IServiceIdentityAzureTokenCredentialSource>(),
+                azureServiceTokenProviderConnectionString);
         }
 
         /// <summary>
@@ -220,8 +237,8 @@ namespace Marain.Claims.SetupTool
                 throw new ArgumentException($"Cannot access non-Azure resource {resourceId} this way", nameof(resourceId));
             }
 
-            return new TokenCredentials(new CallbackTokenProvider(
-                () => this.TokenProvider.GetAccessTokenAsync(resourceId)));
+            return new TokenCredentials(
+                this.serviceIdTokenProviderSource.GetTokenProvider($"{resourceId}/.default"));
         }
 
         private class CallbackTokenProvider : ITokenProvider

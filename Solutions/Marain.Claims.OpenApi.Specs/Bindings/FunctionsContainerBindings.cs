@@ -5,18 +5,14 @@
 namespace Marain.Claims.OpenApi.Specs.Bindings
 {
     using System;
-    using System.Text;
 
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
 
     using Marain.Claims.Client;
-    using Marain.Claims.OpenApi.Specs.Bindings;
     using Marain.Tenancy.Client;
 
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -56,15 +52,8 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
-
-#pragma warning disable CS0618 // Type or member is obsolete
-                    services.AddAzureManagedIdentityBasedTokenSource(
-                        new AzureManagedIdentityTokenSourceOptions
-                        {
-                            AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                        });
-#pragma warning restore CS0618 // Type or member is obsolete
                     services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+                    services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
                     services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
 

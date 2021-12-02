@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Tenancy.Abstractions" Version="3.0.0-v3-blob.11" />
+    <PackageReference Include="Corvus.Tenancy.Abstractions" Version="3.0.0-alpha.3" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
