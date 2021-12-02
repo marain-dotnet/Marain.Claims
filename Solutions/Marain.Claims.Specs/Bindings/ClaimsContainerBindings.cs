@@ -4,7 +4,6 @@
 
 namespace Marain.Claims.SpecFlow.Bindings
 {
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
 
     using Microsoft.Extensions.Configuration;
@@ -38,21 +37,13 @@ namespace Marain.Claims.SpecFlow.Bindings
                         .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
                     IConfiguration root = configurationBuilder.Build();
-
-                    string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
-
                     serviceCollection.AddSingleton(root);
 
                     serviceCollection.AddLogging();
 
-#pragma warning disable CS0618 // Type or member is obsolete
-                    serviceCollection.AddAzureManagedIdentityBasedTokenSource(
-                        new AzureManagedIdentityTokenSourceOptions
-                        {
-                            AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                        });
-#pragma warning restore CS0618 // Type or member is obsolete
+                    string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
                     serviceCollection.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+                    serviceCollection.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
                     serviceCollection.AddInMemoryTenantProvider();
 

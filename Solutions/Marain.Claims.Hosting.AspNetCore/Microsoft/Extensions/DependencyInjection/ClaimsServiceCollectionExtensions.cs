@@ -6,8 +6,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     using System;
     using System.Linq;
-    using Corvus.Azure.Storage.Tenancy;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Marain.Claims.Hosting.AspNetCore;
     using Marain.Claims.OpenApi;
     using Marain.Tenancy.Client;
@@ -112,16 +110,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddBlobContainerV2ToV3Transition();
 
-            // TODO: want to move over to newer identity library
-            // But we can't get rid of this yet because the Tenancy Client still wants IServiceIdentityTokenSource
             string legacyAuthConnectionString = rootConfiguration["AzureServicesAuthConnectionString"];
-#pragma warning disable CS0618 // Type or member is obsolete
-            services.AddAzureManagedIdentityBasedTokenSource(new AzureManagedIdentityTokenSourceOptions
-                {
-                    AzureServicesAuthConnectionString = legacyAuthConnectionString,
-                });
-#pragma warning restore CS0618 // Type or member is obsolete
-
             services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(legacyAuthConnectionString);
             services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 

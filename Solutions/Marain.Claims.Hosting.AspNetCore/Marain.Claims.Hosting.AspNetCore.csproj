@@ -12,14 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Identity.MicrosoftRest" Version="3.0.0-identity-configuration.3" />
     <PackageReference Include="Corvus.Monitoring.ApplicationInsights" Version="1.3.2" />
-    <PackageReference Include="Corvus.Identity.ManagedServiceIdentity.ClientAuthentication" Version="3.0.0-identity-configuration.3" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.0-menes-v3.5" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.0-alpha.7" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

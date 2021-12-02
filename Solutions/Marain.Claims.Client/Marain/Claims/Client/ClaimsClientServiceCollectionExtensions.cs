@@ -7,7 +7,8 @@ namespace Marain.Claims.Client
     using System;
     using System.Net.Http;
     using Cimpress.Extensions.Http.Caching.InMemory;
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
+
+    using Corvus.Identity.ClientAuthentication.MicrosoftRest;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Rest;
 
@@ -29,15 +30,14 @@ namespace Marain.Claims.Client
             return services.AddSingleton<IClaimsService>(sp =>
             {
                 ClaimsClientOptions options = getOptions(sp);
-#pragma warning disable CS0618 // Type or member is obsolete
-                IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
+
                 return options.ResourceIdForMsiAuthentication == null
                    ? new UnauthenticatedClaimsService(options.BaseUri)
-                   : new ClaimsService(options.BaseUri, new TokenCredentials(
-                           new ServiceIdentityTokenProvider(
-#pragma warning restore CS0618 // Type or member is obsolete
-                               serviceIdentityTokenSource,
-                               options.ResourceIdForMsiAuthentication)));
+                   : new ClaimsService(
+                       options.BaseUri,
+                       new TokenCredentials(
+                           sp.GetRequiredService<IServiceIdentityMicrosoftRestTokenProviderSource>().GetTokenProvider(
+                               $"{options.ResourceIdForMsiAuthentication}/.default")));
             });
         }
 
@@ -56,17 +56,13 @@ namespace Marain.Claims.Client
                 ClaimsClientWithCachingOptions options = getOptions(sp);
 
                 var handler = new InMemoryCacheHandler(new HttpClientHandler(), options.CacheExpirationPerHttpResponseCode);
-#pragma warning disable CS0618 // Type or member is obsolete
-                IServiceIdentityTokenSource serviceIdentityTokenSource = sp.GetRequiredService<IServiceIdentityTokenSource>();
                 return options.ResourceIdForMsiAuthentication == null
                 ? new UnauthenticatedClaimsService(options.BaseUri, handler)
                 : new ClaimsService(
                     options.BaseUri,
                     new TokenCredentials(
-                        new ServiceIdentityTokenProvider(
-#pragma warning restore CS0618 // Type or member is obsolete
-                            serviceIdentityTokenSource,
-                            options.ResourceIdForMsiAuthentication)),
+                        sp.GetRequiredService<IServiceIdentityMicrosoftRestTokenProviderSource>().GetTokenProvider(
+                            $"{options.ResourceIdForMsiAuthentication}/.default")),
                     handler);
             });
         }
