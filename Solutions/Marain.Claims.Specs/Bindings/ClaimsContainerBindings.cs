@@ -54,7 +54,7 @@ namespace Marain.Claims.SpecFlow.Bindings
                     serviceCollection.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
                     serviceCollection.AddBlobContainerV2ToV3Transition();
-                    serviceCollection.AddAzureBlobStorageClient();
+                    serviceCollection.AddAzureBlobStorageClientSourceFromDynamicConfiguration();
 
                     serviceCollection.AddTenantedBlobContainerClaimsStore();
 
