@@ -114,7 +114,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(legacyAuthConnectionString);
             services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
-            services.AddAzureBlobStorageClient();
+            services.AddAzureBlobStorageClientSourceFromDynamicConfiguration();
 
             services.AddTenantedBlobContainerClaimsStore();
 

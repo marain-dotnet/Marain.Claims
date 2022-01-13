@@ -44,7 +44,7 @@ namespace Marain.Claims.Benchmark
                 .AddTenancyClient(enableResponseCaching: true)
                 .AddJsonNetPropertyBag()
                 .AddBlobContainerV2ToV3Transition()
-                .AddAzureBlobStorageClient()
+                .AddAzureBlobStorageClientSourceFromDynamicConfiguration()
                 .AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(configuration["AzureServicesAuthConnectionString"])
                 .AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource()
                 .BuildServiceProvider();
