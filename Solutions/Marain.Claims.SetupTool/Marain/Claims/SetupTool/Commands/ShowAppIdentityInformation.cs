@@ -27,16 +27,6 @@ namespace Marain.Claims.SetupTool.Commands
     [HelpOption]
     public class ShowAppIdentityInformation
     {
-        private readonly AppServiceManagerSource appServiceManagerSource;
-
-        /// <summary>
-        /// Create a <see cref="ShowAppIdentityInformation"/>.
-        /// </summary>
-        public ShowAppIdentityInformation()
-        {
-            this.appServiceManagerSource = new AppServiceManagerSource();
-        }
-
         /// <summary>
         /// Gets or sets the Azure subscription ID.
         /// </summary>
@@ -70,7 +60,7 @@ namespace Marain.Claims.SetupTool.Commands
         private async Task<int> OnExecuteAsync(CommandLineApplication app, CancellationToken cancellationToken = default)
         {
             var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
-            IAppServiceManager appServiceManager = this.appServiceManagerSource.Get(
+            IAppServiceManager appServiceManager = AppServiceManagerSource.Get(
                 authenticationOptions, this.SubscriptionId);
             IWebAppAuthentication webAppAuthConfig;
             ManagedServiceIdentity managedIdentity;
@@ -87,7 +77,7 @@ namespace Marain.Claims.SetupTool.Commands
             if (function != null)
             {
                 managedIdentity = function.Inner.Identity;
-                webAppAuthConfig = await function.GetAuthenticationConfigAsync().ConfigureAwait(false);
+                webAppAuthConfig = await function.GetAuthenticationConfigAsync(cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -99,7 +89,7 @@ namespace Marain.Claims.SetupTool.Commands
                 }
 
                 managedIdentity = webApp.Inner.Identity;
-                webAppAuthConfig = await webApp.GetAuthenticationConfigAsync().ConfigureAwait(false);
+                webAppAuthConfig = await webApp.GetAuthenticationConfigAsync(cancellationToken).ConfigureAwait(false);
             }
 
             if (webAppAuthConfig.Inner.Enabled == true)

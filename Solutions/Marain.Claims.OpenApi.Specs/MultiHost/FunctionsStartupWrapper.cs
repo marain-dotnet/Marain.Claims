@@ -16,8 +16,8 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
 
     public class FunctionsStartupWrapper : IWebJobsStartup
     {
-        private readonly Startup wrappedStartup = new Startup();
-        private IConfiguration configuration;
+        private readonly Startup wrappedStartup = new ();
+        private readonly IConfiguration configuration;
 
         public FunctionsStartupWrapper(IConfiguration configuration)
         {

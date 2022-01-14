@@ -117,7 +117,7 @@ namespace Marain.Claims.SetupTool.Commands
                     {
                         app.Out.WriteLine($"Ruleset {ruleSet.Id} ('{ruleSet.DisplayName}')");
                         HttpOperationResponse<ResourceAccessRuleSet> result = await claimsClient.GetResourceAccessRuleSetWithHttpMessagesAsync(
-                            ruleSet.Id, this.MarainTenantId).ConfigureAwait(false);
+                            ruleSet.Id, this.MarainTenantId, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                         if (result.Response.StatusCode == HttpStatusCode.NotFound)
                         {
@@ -129,18 +129,18 @@ namespace Marain.Claims.SetupTool.Commands
                                 Rules = ruleSet.Rules,
                             };
                             await claimsClient.CreateResourceAccessRuleSetAsync(
-                                this.MarainTenantId, request).ConfigureAwait(false);
+                                this.MarainTenantId, request, cancellationToken: cancellationToken).ConfigureAwait(false);
                         }
                         else if (result.Response.IsSuccessStatusCode)
                         {
                             app.Out.WriteLine("Already exists. Updating.");
                             await claimsClient.SetResourceAccessRuleSetResourceAccessRulesAsync(
-                                this.MarainTenantId, ruleSet.Id, ruleSet.Rules).ConfigureAwait(false);
+                                this.MarainTenantId, ruleSet.Id, ruleSet.Rules, cancellationToken: cancellationToken).ConfigureAwait(false);
                         }
                         else
                         {
                             app.Error.WriteLine("Error: " + result.Response.StatusCode);
-                            string body = await result.Response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            string body = await result.Response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                             if (!string.IsNullOrWhiteSpace(body))
                             {
                                 app.Error.WriteLine(body);
@@ -160,7 +160,7 @@ namespace Marain.Claims.SetupTool.Commands
                     {
                         app.Out.WriteLine($"Claim Permissions {claimPermissions.Id}");
                         HttpOperationResponse<ClaimPermissions> result = await claimsClient.GetClaimPermissionsWithHttpMessagesAsync(
-                            claimPermissions.Id, this.MarainTenantId).ConfigureAwait(false);
+                            claimPermissions.Id, this.MarainTenantId, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                         if (result.Response.StatusCode == HttpStatusCode.NotFound)
                         {
@@ -172,25 +172,31 @@ namespace Marain.Claims.SetupTool.Commands
                                 ResourceAccessRuleSets = claimPermissions.ResourceAccessRuleSets,
                             };
                             await claimsClient.CreateClaimPermissionsAsync(
-                                this.MarainTenantId, request).ConfigureAwait(false);
+                                this.MarainTenantId, request, cancellationToken: cancellationToken).ConfigureAwait(false);
                         }
                         else if (result.Response.IsSuccessStatusCode)
                         {
                             app.Out.WriteLine("Already exists. Updating resource access rules.");
                             await claimsClient.SetClaimPermissionsResourceAccessRulesAsync(
-                                this.MarainTenantId, claimPermissions.Id, claimPermissions.ResourceAccessRules).ConfigureAwait(false);
+                                this.MarainTenantId,
+                                claimPermissions.Id,
+                                claimPermissions.ResourceAccessRules,
+                                cancellationToken: cancellationToken).ConfigureAwait(false);
                             app.Out.WriteLine("Updating resource access rule sets");
                             var ruleSetIds = claimPermissions
                                 .ResourceAccessRuleSets
                                 .Select(rs => new ResourceAccessRuleSetIdOnly(rs.Id))
                                 .ToList();
                             await claimsClient.SetClaimPermissionsResourceAccessRuleSetsAsync(
-                                this.MarainTenantId, claimPermissions.Id, ruleSetIds).ConfigureAwait(false);
+                                this.MarainTenantId,
+                                claimPermissions.Id,
+                                ruleSetIds,
+                                cancellationToken: cancellationToken).ConfigureAwait(false);
                         }
                         else
                         {
                             app.Error.WriteLine("Error: " + result.Response.StatusCode);
-                            string body = await result.Response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            string body = await result.Response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                             if (!string.IsNullOrWhiteSpace(body))
                             {
                                 app.Error.WriteLine(body);

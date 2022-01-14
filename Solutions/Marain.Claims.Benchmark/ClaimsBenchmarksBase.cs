@@ -80,6 +80,11 @@ namespace Marain.Claims.Benchmark
             {
                 await claimPermissionsContainer.DeleteBlobAsync(blob.Name);
             }
+
+            foreach (BlobItem blob in resourceAccessRuleSetsContainer.GetBlobs())
+            {
+                await claimPermissionsContainer.DeleteBlobAsync(blob.Name);
+            }
         }
     }
 }

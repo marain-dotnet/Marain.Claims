@@ -47,7 +47,7 @@ namespace Marain.Claims.OpenApi
 
                 if (val.StartsWith("Bearer "))
                 {
-                    var jwt = new JwtSecurityToken(val.Substring(7));
+                    var jwt = new JwtSecurityToken(val[7..]);
 
                     result = new ClaimsIdentity(jwt.Claims, "azuread", "name", "roles");
                 }

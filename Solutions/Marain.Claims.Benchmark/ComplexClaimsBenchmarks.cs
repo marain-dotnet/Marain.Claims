@@ -114,12 +114,12 @@
 
             foreach (ResourceAccessRuleSet ruleSet in input.RuleSets)
             {
-                object response = await this.ClaimsService.CreateResourceAccessRuleSetAsync(ClientTenantId, ruleSet);
+                await this.ClaimsService.CreateResourceAccessRuleSetAsync(this.ClientTenantId, ruleSet);
             }
 
             foreach (CreateClaimPermissionsRequest claimPermissions in input.ClaimPermissions)
             {
-                object response = await this.ClaimsService.CreateClaimPermissionsAsync(ClientTenantId, claimPermissions);
+                await this.ClaimsService.CreateClaimPermissionsAsync(this.ClientTenantId, claimPermissions);
             }
         }
 

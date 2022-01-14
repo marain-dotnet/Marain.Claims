@@ -2,9 +2,6 @@
 // Copyright (c) Endjin. All rights reserved.
 // </copyright>
 
-#pragma warning disable SA1600 // Elements should be documented
-#pragma warning disable CS1591 // Elements should be documented
-
 namespace Marain.Claims.SpecFlow.Steps
 {
     using System;
@@ -24,14 +21,14 @@ namespace Marain.Claims.SpecFlow.Steps
 
         private readonly ScenarioContext scenarioContext;
 
-        private readonly List<ResourceAccessRule> directResourceAccessRules = new List<ResourceAccessRule>
+        private readonly List<ResourceAccessRule> directResourceAccessRules = new ()
         {
             new ResourceAccessRule("GET", new Resource(new Uri("foo1", UriKind.Relative), "Foo1"), Permission.Allow),
             new ResourceAccessRule("GET", new Resource(new Uri("foo2", UriKind.Relative), "Foo2"), Permission.Allow),
             new ResourceAccessRule("POST", new Resource(new Uri("foo1", UriKind.Relative), "Foo1"), Permission.Deny),
         };
 
-        private readonly List<ResourceAccessRule> directOverlappingResourceAccessRules = new List<ResourceAccessRule>
+        private readonly List<ResourceAccessRule> directOverlappingResourceAccessRules = new ()
         {
             new ResourceAccessRule("GET", new Resource(new Uri("foo1", UriKind.Relative), "Foo1"), Permission.Allow),
             new ResourceAccessRule("GET", new Resource(new Uri("foo2", UriKind.Relative), "Foo2"), Permission.Allow),
@@ -39,19 +36,19 @@ namespace Marain.Claims.SpecFlow.Steps
             new ResourceAccessRule("GET", new Resource(new Uri("foo4", UriKind.Relative), "Foo4"), Permission.Allow),
         };
 
-        private readonly List<ResourceAccessRule> resourceAccessRuleSet1ResourceAccessRules = new List<ResourceAccessRule>
+        private readonly List<ResourceAccessRule> resourceAccessRuleSet1ResourceAccessRules = new ()
         {
             new ResourceAccessRule("GET", new Resource(new Uri("foo3", UriKind.Relative), "Foo3"), Permission.Allow),
             new ResourceAccessRule("GET", new Resource(new Uri("foo4", UriKind.Relative), "Foo4"), Permission.Allow),
         };
 
-        private readonly List<ResourceAccessRule> resourceAccessRuleSet2ResourceAccessRules = new List<ResourceAccessRule>
+        private readonly List<ResourceAccessRule> resourceAccessRuleSet2ResourceAccessRules = new ()
         {
             new ResourceAccessRule("GET", new Resource(new Uri("foo5", UriKind.Relative), "Foo5"), Permission.Allow),
             new ResourceAccessRule("GET", new Resource(new Uri("foo6", UriKind.Relative), "Foo6"), Permission.Allow),
         };
 
-        private readonly List<ResourceAccessRule> resourceAccessRuleSet3ResourceAccessRules = new List<ResourceAccessRule>
+        private readonly List<ResourceAccessRule> resourceAccessRuleSet3ResourceAccessRules = new ()
         {
             new ResourceAccessRule("GET", new Resource(new Uri("foo4", UriKind.Relative), "Foo4"), Permission.Allow),
             new ResourceAccessRule("GET", new Resource(new Uri("foo5", UriKind.Relative), "Foo5"), Permission.Allow),

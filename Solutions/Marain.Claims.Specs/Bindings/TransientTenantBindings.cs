@@ -6,15 +6,18 @@ namespace Marain.Claims.Specs.Bindings
 {
     using System;
     using System.Threading.Tasks;
+
     using Corvus.Azure.Storage.Tenancy;
     using Corvus.Tenancy;
     using Corvus.Testing.SpecFlow;
+
     using Marain.Claims.Storage;
-    using Marain.Services;
     using Marain.TenantManagement.EnrollmentConfiguration;
     using Marain.TenantManagement.Testing;
+
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+
     using TechTalk.SpecFlow;
 
     /// <summary>

@@ -6,7 +6,6 @@ namespace Marain.Claims.Storage
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -17,6 +16,7 @@ namespace Marain.Claims.Storage
 
     using Corvus.Extensions;
     using Corvus.Extensions.Json;
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -86,7 +86,7 @@ namespace Marain.Claims.Storage
                 permissions = await this.UpdateRuleSetsAsync(permissions).ConfigureAwait(false);
                 return permissions;
             }
-            catch (Exception ex) when (!(ex is ResourceAccessRuleSetNotFoundException))
+            catch (Exception ex) when (ex is not ResourceAccessRuleSetNotFoundException)
             {
                 throw new ClaimPermissionsNotFoundException(id, ex);
             }
@@ -182,7 +182,9 @@ namespace Marain.Claims.Storage
             // LINQ Any operator would be more succinct, but we don't currently have a dependency on
             // System.Linq.Async, which is where LINQ for IAsyncEnumerable is defined, and it seems
             // a rather simple job to lug in an extra dependency for.
+#pragma warning disable IDE0059 // Unnecessary assignment of a value - foreach loop requires an iteration variable
             await foreach (BlobItem blob in this.Container.GetBlobsAsync())
+#pragma warning restore IDE0059
             {
                 return true;
             }
