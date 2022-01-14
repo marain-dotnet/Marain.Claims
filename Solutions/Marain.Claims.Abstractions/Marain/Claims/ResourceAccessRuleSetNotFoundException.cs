@@ -2,7 +2,9 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#pragma warning disable IDE0079 // If you don't have Roslynator, the next suppression is considered redundant
 #pragma warning disable RCS1194 // Roslynator's 'all the constructors' fixation
+#pragma warning restore IDE0079
 
 namespace Marain.Claims.Storage
 {

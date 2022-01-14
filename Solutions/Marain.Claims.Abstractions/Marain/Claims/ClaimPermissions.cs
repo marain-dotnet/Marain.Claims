@@ -48,7 +48,9 @@ namespace Marain.Claims
         /// <summary>
         /// Gets the content type used when this object is serialized/deserialized.
         /// </summary>
+#pragma warning disable CA1822 // Mark members as static - content handling reads this with reflection
         public string ContentType => RegisteredContentType;
+#pragma warning restore CA1822
 
         /// <summary>
         ///  Gets or sets the unique identifier of the claim for which permissions are being defined.
@@ -71,7 +73,7 @@ namespace Marain.Claims
         /// </summary>
         public IList<ResourceAccessRule> ResourceAccessRules
         {
-            get { return this.resourceAccessRules ?? (this.resourceAccessRules = new List<ResourceAccessRule>()); }
+            get { return this.resourceAccessRules ??= new List<ResourceAccessRule>(); }
             set { this.resourceAccessRules = value; }
         }
 
@@ -80,7 +82,7 @@ namespace Marain.Claims
         /// </summary>
         public IList<ResourceAccessRuleSet> ResourceAccessRuleSets
         {
-            get { return this.resourceAccessRuleSets ?? (this.resourceAccessRuleSets = new List<ResourceAccessRuleSet>()); }
+            get { return this.resourceAccessRuleSets ??= new List<ResourceAccessRuleSet>(); }
             set { this.resourceAccessRuleSets = value; }
         }
 

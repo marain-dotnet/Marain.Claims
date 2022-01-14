@@ -21,7 +21,7 @@ namespace Marain.Claims.OpenApi.Specs.Steps
     public class ClaimPermissionsSteps
     {
         private readonly ITestableClaimsService serviceWrapper;
-        private readonly Dictionary<string, string> claimIds = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> claimIds = new ();
 
         private ClaimPermissions newClaimPermissions;
 

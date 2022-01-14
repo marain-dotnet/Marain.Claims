@@ -7,8 +7,6 @@ namespace Marain.Claims.Storage
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
-    using System.Text;
     using System.Threading.Tasks;
 
     using Azure;
@@ -17,6 +15,7 @@ namespace Marain.Claims.Storage
     using Azure.Storage.Blobs.Specialized;
 
     using Corvus.Extensions.Json;
+
     using Newtonsoft.Json;
 
     /// <summary>

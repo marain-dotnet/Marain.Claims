@@ -18,7 +18,7 @@ namespace Marain.Claims
         /// </summary>
         public List<ClaimPermissions> Permissions
         {
-            get => this.permissions ?? (this.permissions = new List<ClaimPermissions>());
+            get => this.permissions ??= new List<ClaimPermissions>();
             set => this.permissions = value;
         }
     }

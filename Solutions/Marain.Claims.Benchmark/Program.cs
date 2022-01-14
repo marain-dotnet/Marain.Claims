@@ -1,7 +1,7 @@
 ﻿namespace Marain.Claims.Benchmark
 {
-    using System;
     using System.IO;
+
     using BenchmarkDotNet.Configs;
     using BenchmarkDotNet.Jobs;
     using BenchmarkDotNet.Running;

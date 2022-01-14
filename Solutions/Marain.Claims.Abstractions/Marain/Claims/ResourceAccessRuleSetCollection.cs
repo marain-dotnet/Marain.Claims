@@ -18,7 +18,7 @@ namespace Marain.Claims
         /// </summary>
         public List<ResourceAccessRuleSet> RuleSets
         {
-            get => this.ruleSets ?? (this.ruleSets = new List<ResourceAccessRuleSet>());
+            get => this.ruleSets ??= new List<ResourceAccessRuleSet>();
             set => this.ruleSets = value;
         }
     }

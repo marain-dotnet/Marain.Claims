@@ -13,22 +13,15 @@ namespace Marain.Claims.SetupTool
     /// knowing what the tenant and sub ID are. So we need to force deferred creation of the
     /// relevant credentials and settings.
     /// </summary>
-    public class AppServiceManagerSource
+    public static class AppServiceManagerSource
     {
-        /// <summary>
-        /// Create a <see cref="AppServiceManagerSource"/>.
-        /// </summary>
-        public AppServiceManagerSource()
-        {
-        }
-
         /// <summary>
         /// Gets the app service manager.
         /// </summary>
         /// <param name="authenticationOptions">Authenticate settings.</param>
         /// <param name="subscriptionId">The subscription to manage.</param>
         /// <returns>The app service manager.</returns>
-        public IAppServiceManager Get(
+        public static IAppServiceManager Get(
             AuthenticationOptions authenticationOptions,
             string subscriptionId)
         {

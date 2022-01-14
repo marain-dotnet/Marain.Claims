@@ -2,9 +2,6 @@
 // Copyright (c) Endjin. All rights reserved.
 // </copyright>
 
-#pragma warning disable SA1600 // Elements should be documented
-#pragma warning disable CS1591 // Elements should be documented
-
 namespace Marain.Claims.SpecFlow.Steps
 {
     using System;
@@ -27,7 +24,7 @@ namespace Marain.Claims.SpecFlow.Steps
         private readonly ScenarioContext scenarioContext;
         private readonly FeatureContext featureContext;
         private readonly IServiceProvider serviceProvider;
-        private readonly Dictionary<string, string> claimPermissionIds = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> claimPermissionIds = new ();
 
         public ClaimPermissionsStoreSteps(FeatureContext featureContext, ScenarioContext scenarioContext)
         {
@@ -176,7 +173,7 @@ namespace Marain.Claims.SpecFlow.Steps
                 Assert.Fail("An exception was thrown when retrieving ClaimPermissions: " + exception.ToString());
             }
 
-            if (!this.scenarioContext.TryGetValue(ClaimPermissionsResult, out ClaimPermissionsCollection results))
+            if (!this.scenarioContext.TryGetValue(ClaimPermissionsResult, out ClaimPermissionsCollection _))
             {
                 Assert.Fail("The expected result was not found in the scenario context.");
             }
