@@ -56,7 +56,7 @@ namespace Marain.Claims.SpecFlow.Bindings
                     serviceCollection.AddBlobContainerV2ToV3Transition();
                     serviceCollection.AddAzureBlobStorageClientSourceFromDynamicConfiguration();
 
-                    serviceCollection.AddTenantedBlobContainerClaimsStore();
+                    serviceCollection.AddTenantedClaimsStoreOnAzureBlobStorage();
 
                     serviceCollection.AddMarainServiceConfiguration();
                     serviceCollection.AddMarainServicesTenancy();

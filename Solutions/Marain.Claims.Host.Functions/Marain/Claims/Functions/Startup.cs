@@ -6,6 +6,8 @@
 
 namespace Marain.Claims.Functions
 {
+    using Marain.Claims.OpenApi;
+
     using Microsoft.Azure.Functions.Extensions.DependencyInjection;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -21,18 +23,43 @@ namespace Marain.Claims.Functions
             IServiceCollection services = builder.Services;
 
             IConfiguration root = builder.GetContext().Configuration;
-            string serviceTenantIdOverride = root?["MarainServiceConfiguration:ServiceTenantIdOverride"];
+            string serviceTenantIdOverride = root["MarainServiceConfiguration:ServiceTenantIdOverride"];
             if (!string.IsNullOrWhiteSpace(serviceTenantIdOverride))
             {
                 root["MarainServiceConfiguration:ServiceTenantId"] = serviceTenantIdOverride;
             }
 
-            services.AddApplicationInsightsInstrumentationTelemetry();
-            services.AddLogging();
+            ConfigureInstrumentation(services);
+            ConfigureServiceIdentity(services, root);
+            ConfigureAuthenticationStrategies(services);
 
+            services.AddTenantedClaimsStoreOnAzureBlobStorage();
             services.AddTenantedClaimsApiWithOpenApiActionResultHosting(
                 root,
                 config => config.Documents.AddSwaggerEndpoint());
+        }
+
+        private static void ConfigureInstrumentation(IServiceCollection services)
+        {
+            services.AddApplicationInsightsInstrumentationTelemetry();
+            services.AddLogging();
+        }
+
+        private static void ConfigureServiceIdentity(IServiceCollection services, IConfiguration root)
+        {
+            string legacyAuthConnectionString = root["AzureServicesAuthConnectionString"];
+            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(legacyAuthConnectionString);
+            services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
+        }
+
+        private static void ConfigureAuthenticationStrategies(IServiceCollection services)
+        {
+#if DEBUG
+            services.AddClaimsProviderStrategy<UnsafeJwtAuthorizationBearerTokenStrategy>();
+            services.AddClaimsProviderStrategy<MarainClaimsStrategy>();
+#endif
+
+            services.AddClaimsProviderStrategy<EasyAuthJwtStrategy>();
         }
     }
 }
