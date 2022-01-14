@@ -61,6 +61,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     services.AddSingleton(tenancyClientConfiguration);
                     services.AddTenantProviderServiceClient();
 
+                    services.AddTenantedClaimsStoreOnAzureBlobStorage();
                     services.AddTenantedClaimsApiWithOpenApiActionResultHosting(root);
 
                     services.AddClaimsClient(_ =>

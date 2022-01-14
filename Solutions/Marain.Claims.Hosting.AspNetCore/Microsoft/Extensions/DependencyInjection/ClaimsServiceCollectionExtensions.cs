@@ -13,10 +13,6 @@ namespace Microsoft.Extensions.DependencyInjection
     using Menes.AccessControlPolicies;
     using Microsoft.Extensions.Configuration;
 
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using Newtonsoft.Json.Serialization;
-
     /// <summary>
     /// Extension methods for configuring DI for the Operations Open API services.
     /// </summary>
@@ -103,45 +99,21 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddLogging();
 
             services.AddMarainServiceConfiguration();
-
             services.AddMarainServicesTenancy();
-            services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
+            services.AddSingleton(rootConfiguration.GetSection("TenancyClient").Get<TenancyClientOptions>());
             services.AddTenantProviderServiceClient(enableResponseCaching: true);
-
-            services.AddBlobContainerV2ToV3Transition();
-
-            string legacyAuthConnectionString = rootConfiguration["AzureServicesAuthConnectionString"];
-            services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(legacyAuthConnectionString);
-            services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
-
-            services.AddAzureBlobStorageClientSourceFromDynamicConfiguration();
-
-            services.AddTenantedBlobContainerClaimsStore();
-
-            services.AddJsonNetSerializerSettingsProvider();
-            services.AddJsonNetPropertyBag();
-            services.AddJsonNetCultureInfoConverter();
-            services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
-            services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
             services.AddSingleton<ClaimPermissionsService>();
             services.AddSingleton<IOpenApiService, ClaimPermissionsService>(s => s.GetRequiredService<ClaimPermissionsService>());
             services.AddSingleton<ResourceAccessRuleSetService>();
             services.AddSingleton<IOpenApiService, ResourceAccessRuleSetService>(s => s.GetRequiredService<ResourceAccessRuleSetService>());
 
-            services.AddApplicationInsightsInstrumentationTelemetry();
+            // Applications are likely to call AddApplicationInsightsInstrumentationTelemetry, but
+            // in case they haven't we call the basic instrumentation registration as a fallback.
+            services.AddInstrumentation();
 
             services.AddSingleton<IResourceAccessEvaluator, LocalResourceAccessEvaluator>();
-
-            services.AddOpenApiClaims();
-
-#if DEBUG
-            services.AddClaimsProviderStrategy<UnsafeJwtAuthorizationBearerTokenStrategy>();
-            services.AddClaimsProviderStrategy<MarainClaimsStrategy>();
-#endif
-
-            services.AddClaimsProviderStrategy<EasyAuthJwtStrategy>();
-
+            services.AddClaimsOpenApiContextBuilder();
             string[] openOperationIds =
             {
                     ClaimPermissionsService.GetClaimPermissionsPermissionOperationId,
