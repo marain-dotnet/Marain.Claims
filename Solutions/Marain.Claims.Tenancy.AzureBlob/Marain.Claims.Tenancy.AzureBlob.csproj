@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -18,14 +18,15 @@
     </PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Corvus.Azure.Storage.Tenancy" Version="2.0.13" />
+    <PackageReference Include="Corvus.Storage.Azure.BlobStorage.Tenancy" Version="3.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Menes.Hosting.AspNetCore" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="[3.1.*,)" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="[3.1.*,)" />
+    <PackageReference Include="Menes.Hosting.AspNetCore" Version="3.1.2" />
+    <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="[6.0.*,)" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="[6.0.*,)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marain.Claims.OpenApi\Marain.Claims.OpenApi.csproj" />
