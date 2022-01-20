@@ -2,8 +2,7 @@
 // Copyright (c) Endjin. All rights reserved.
 // </copyright>
 
-#pragma warning disable SA1600 // Elements should be documented
-#pragma warning disable CS1591 // Elements should be documented
+#pragma warning disable CA1822 // Mark members as static - step methods invoked through reflection
 
 namespace Marain.Claims.Specs.Steps
 {

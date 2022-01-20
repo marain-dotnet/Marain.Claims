@@ -2,15 +2,16 @@
 // Copyright (c) Endjin. All rights reserved.
 // </copyright>
 
-#pragma warning disable SA1600 // Elements should be documented
-#pragma warning disable CS1591 // Elements should be documented
-
 namespace Marain.Claims.SpecFlow.Steps
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Models;
+
     using Corvus.Extensions.Json;
     using Corvus.Tenancy;
     using Corvus.Testing.SpecFlow;
@@ -20,7 +21,6 @@ namespace Marain.Claims.SpecFlow.Steps
     using Marain.Services.Tenancy;
     using Marain.TenantManagement.Testing;
     using Menes;
-    using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Newtonsoft.Json.Linq;
@@ -35,10 +35,10 @@ namespace Marain.Claims.SpecFlow.Steps
         private readonly TransientTenantManager transientTenantManager;
         private readonly bool useRealDb;
 
-        private readonly Mock<IClaimPermissionsStore> permissionStoreMock = new Mock<IClaimPermissionsStore>();
-        private readonly Mock<IResourceAccessRuleSetStore> resourceAccessRuleSetStoreMock = new Mock<IResourceAccessRuleSetStore>();
-        private readonly List<ClaimPermissions> claimPermissionsPersistedToStore = new List<ClaimPermissions>();
-        private readonly List<ResourceAccessRuleSet> resourceAccessRulesPersistedToStore = new List<ResourceAccessRuleSet>();
+        private readonly Mock<IClaimPermissionsStore> permissionStoreMock = new ();
+        private readonly Mock<IResourceAccessRuleSetStore> resourceAccessRuleSetStoreMock = new ();
+        private readonly List<ClaimPermissions> claimPermissionsPersistedToStore = new ();
+        private readonly List<ResourceAccessRuleSet> resourceAccessRulesPersistedToStore = new ();
         private readonly IOpenApiContext openApiContext;
 
         private ClaimPermissionsService service;
@@ -58,11 +58,15 @@ namespace Marain.Claims.SpecFlow.Steps
             this.transientTenantManager = TransientTenantManager.GetInstance(featureContext);
 
             string[] tags = this.scenarioContext.ScenarioInfo.Tags;
+#pragma warning disable IDE0075 // I disagree with VS's contention that what it wants do to would "Simplify" this.
+#pragma warning disable IDE0079 // Avoid redundant suppression message for users who don't have Roslynator
 #pragma warning disable RCS1104 // I disagree with Roslynators contention that what it wants do to would "Simplify" this.
             this.useRealDb = tags.Contains("realStore")
                 ? true
                 : (tags.Contains("inMemoryStore") ? false : throw new InvalidOperationException("You must tag this test with either @realStore or @inMemoryStore"));
 #pragma warning restore RCS1104 // Simplify conditional expression.
+#pragma warning restore IDE0079
+#pragma warning restore IDE0075
 
             var openApiContextMock = new Mock<IOpenApiContext>();
             openApiContextMock
@@ -104,15 +108,13 @@ namespace Marain.Claims.SpecFlow.Steps
         }
 
         [When("I initialise the tenant with the object id '(.*)'")]
-        [Obsolete]
         public async Task WhenIInitialiseTheTenantWithTheObjectId(
             string objectId)
         {
             this.service = new ClaimPermissionsService(
                 this.permissionsStoreFactoryMock.Object,
                 ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IMarainServicesTenancy>(),
-                ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IJsonSerializerSettingsProvider>(),
-                new Microsoft.ApplicationInsights.TelemetryClient());
+                ContainerBindings.GetServiceProvider(this.featureContext).GetRequiredService<IJsonSerializerSettingsProvider>());
 
             var openApiContext = new Mock<IOpenApiContext>();
             openApiContext
@@ -293,24 +295,24 @@ namespace Marain.Claims.SpecFlow.Steps
                 Times.Never);
         }
 
+        private static async Task DeleteAllDocuments(BlobContainerClient container)
+        {
+            foreach (BlobItem blob in container.GetBlobs())
+            {
+                await container.DeleteBlobAsync(blob.Name).ConfigureAwait(false);
+            }
+        }
+
         private Task DeleteAllPermissions()
         {
-            CloudBlobContainer container = ((ClaimPermissionsStore)this.claimPermissionsStore).Container;
-            return this.DeleteAllDocuments(container);
+            BlobContainerClient container = ((ClaimPermissionsStore)this.claimPermissionsStore).Container;
+            return DeleteAllDocuments(container);
         }
 
         private Task DeleteAllRuleSets()
         {
-            CloudBlobContainer container = ((ResourceAccessRuleSetStore)this.ruleSetStore).Container;
-            return this.DeleteAllDocuments(container);
-        }
-
-        private async Task DeleteAllDocuments(CloudBlobContainer container)
-        {
-            foreach (CloudBlockBlob blob in container.ListBlobs(null, true))
-            {
-                await blob.DeleteAsync().ConfigureAwait(false);
-            }
+            BlobContainerClient container = ((ResourceAccessRuleSetStore)this.ruleSetStore).Container;
+            return DeleteAllDocuments(container);
         }
 
         private async Task CheckPermissions(string objectId, string uri, string method, string permission)

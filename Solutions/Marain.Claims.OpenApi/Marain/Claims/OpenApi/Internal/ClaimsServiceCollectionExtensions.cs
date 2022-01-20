@@ -13,7 +13,8 @@ namespace Marain.Claims.OpenApi.Internal
     public static class ClaimsServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the request claims provider.
+        /// Adds a request claims provider that uses all registered <see cref="IClaimsProviderStrategy{TRequest}"/>
+        /// to build a claims principal.
         /// </summary>
         /// <typeparam name="TRequest">The type of the request.</typeparam>
         /// <param name="services">The service collection to add to.</param>
@@ -30,7 +31,7 @@ namespace Marain.Claims.OpenApi.Internal
         }
 
         /// <summary>
-        /// Adds a strategy for the claims provider.
+        /// Adds a claims provider strategy for.
         /// </summary>
         /// <typeparam name="TRequest">The type of the request.</typeparam>
         /// <typeparam name="TStrategy">Type of the <see cref="IClaimsProviderStrategy{TRequest}"/> to add.</typeparam>

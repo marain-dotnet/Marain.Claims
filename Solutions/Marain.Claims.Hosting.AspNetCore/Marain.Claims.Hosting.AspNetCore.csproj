@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,13 +13,11 @@
 
   <ItemGroup>
     <PackageReference Include="Corvus.Monitoring.ApplicationInsights" Version="1.3.2" />
-    <PackageReference Include="Corvus.Identity.ManagedServiceIdentity.ClientAuthentication" Version="1.0.7" />
-    <PackageReference Include="Corvus.Tenancy.Storage.Azure.Blob" Version="2.0.13" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="1.1.15" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

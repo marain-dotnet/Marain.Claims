@@ -338,3 +338,6 @@ coverage.cobertura.xml
 
 local.settings.json
 appsettings.json
+launchSettings.json
+/_codeCoverage
+/_packages

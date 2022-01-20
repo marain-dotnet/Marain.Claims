@@ -9,6 +9,10 @@ namespace Microsoft.Extensions.DependencyInjection
     using Marain.Claims;
     using Marain.Claims.Internal;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
+
     /// <summary>
     /// Service collection extensions to add implementations of claims stores.
     /// </summary>
@@ -24,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>
         /// The configured <see cref="IServiceCollection"/>.
         /// </returns>
-        public static IServiceCollection AddTenantedBlobContainerClaimsStore(
+        public static IServiceCollection AddTenantedClaimsStoreOnAzureBlobStorage(
             this IServiceCollection services)
         {
             if (services.Any(s => s.ServiceType is IPermissionsStoreFactory))
@@ -37,6 +41,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 contentFactory.RegisterTransientContent<ResourceAccessRuleSet>();
                 contentFactory.RegisterTransientContent<ClaimPermissions>();
             });
+
+            services.AddBlobContainerV2ToV3Transition();
+            services.AddAzureBlobStorageClientSourceFromDynamicConfiguration();
+
+            services.AddJsonNetSerializerSettingsProvider();
+            services.AddJsonNetPropertyBag();
+            services.AddJsonNetCultureInfoConverter();
+            services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
+            services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
             services.AddSingleton<IPermissionsStoreFactory, BlobContainerPermissionsStoreFactory>();
 

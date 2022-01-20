@@ -91,7 +91,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 this.testTenants.TransientClientTenantId,
                 input);
 
-            return await GetStatusAndConvertedResourceAccessRuleSetBody<Client.Models.ResourceAccessRuleSet, ResourceAccessRuleSet>(result);
+            return await GetStatusAndConvertedResourceAccessRuleSetBody<ResourceAccessRuleSet>(result);
         }
 
         /// <inheritdoc/>
@@ -106,7 +106,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 "add",
                 input);
 
-            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+            return await GetStatusAndConvertedBody<JObject>(result);
         }
 
         /// <inheritdoc/>
@@ -121,7 +121,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 "remove",
                 input);
 
-            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+            return await GetStatusAndConvertedBody<JObject>(result);
         }
 
         /// <inheritdoc/>
@@ -135,7 +135,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 claimId,
                 input);
 
-            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+            return await GetStatusAndConvertedBody<JObject>(result);
         }
 
         /// <inheritdoc/>
@@ -150,7 +150,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 "add",
                 input);
 
-            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+            return await GetStatusAndConvertedBody<JObject>(result);
         }
 
         /// <inheritdoc/>
@@ -165,7 +165,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 "remove",
                 input);
 
-            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+            return await GetStatusAndConvertedBody<JObject>(result);
         }
 
         /// <inheritdoc/>
@@ -179,7 +179,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 claimId,
                 input);
 
-            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+            return await GetStatusAndConvertedBody<JObject>(result);
         }
 
         /// <inheritdoc/>
@@ -194,7 +194,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 "add",
                 input);
 
-            return await GetStatusAndConvertedBody<Client.Models.ProblemDetails, JObject>(result, result.Body);
+            return await GetStatusAndConvertedBody<JObject>(result);
         }
 
         /// <inheritdoc/>
@@ -205,8 +205,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 claimPermissionsId,
                 this.testTenants.TransientClientTenantId);
 
-            return await GetStatusAndConvertedBody<IList<Client.Models.ResourceAccessRule>, IList<ResourceAccessRule>>(
-                result, result.Body);
+            return await GetStatusAndConvertedBody<IList<ResourceAccessRule>>(result);
         }
 
         /// <inheritdoc/>
@@ -219,7 +218,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 resourceUri,
                 accessType);
 
-            return await GetStatusAndConvertedResourceAccessRuleSetBody<Client.Models.PermissionResult, PermissionResult>(result);
+            return await GetStatusAndConvertedResourceAccessRuleSetBody<PermissionResult>(result);
         }
 
         /// <inheritdoc/>
@@ -230,24 +229,23 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
                 this.testTenants.TransientClientTenantId,
                 input);
 
-            return await GetStatusAndConvertedResourceAccessRuleSetBody<IList<Client.Models.ClaimPermissionsBatchResponseItem>, IList<ClaimPermissionsBatchResponseItem>>(result);
+            return await GetStatusAndConvertedResourceAccessRuleSetBody<IList<ClaimPermissionsBatchResponseItem>>(result);
         }
 
         private static Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(
             HttpOperationResponse<object> result)
-            => GetStatusAndConvertedBody<Client.Models.ClaimPermissions, ClaimPermissions>(result, result.Body as Client.Models.ClaimPermissions);
+            => GetStatusAndConvertedBody<ClaimPermissions>(result);
 
         private static Task<(int HttpStatusCode, ClaimPermissions Result)> GetStatusAndConvertedBody(
             HttpOperationResponse<Client.Models.ClaimPermissions> result)
-            => GetStatusAndConvertedBody<Client.Models.ClaimPermissions, ClaimPermissions>(result, result.Body);
+            => GetStatusAndConvertedBody<ClaimPermissions>(result);
 
-        private static Task<(int HttpStatusCode, TResult Result)> GetStatusAndConvertedResourceAccessRuleSetBody<TInput, TResult>(
+        private static Task<(int HttpStatusCode, TResult Result)> GetStatusAndConvertedResourceAccessRuleSetBody<TResult>(
             HttpOperationResponse<object> result)
-            => GetStatusAndConvertedBody<TInput, TResult>(
-                    result, (TInput)result.Body);
+            => GetStatusAndConvertedBody<TResult>(result);
 
-        private static async Task<(int HttpStatusCode, TResult Result)> GetStatusAndConvertedBody<TInput, TResult>(
-            HttpOperationResponse response, TInput clientTypeResult)
+        private static async Task<(int HttpStatusCode, TResult Result)> GetStatusAndConvertedBody<TResult>(
+            HttpOperationResponse response)
         {
             // We get the result back in some  type defined in the client library, but we want
             // to convert that to the internal type for test purposes (because for in-process direct testing,

@@ -24,7 +24,9 @@ namespace Marain.Claims.SetupTool.Commands
         {
         }
 
+#pragma warning disable CA1822 // Mark members as static - invoked through reflection
         private Task<int> OnExecuteAsync(CommandLineApplication app, IConsole console)
+#pragma warning restore CA1822
         {
             app.ShowHelp();
             return Task.FromResult(1);

@@ -4,9 +4,8 @@
 
 namespace Marain.Claims.SpecFlow.Bindings
 {
-    using System.Collections.Generic;
-    using Corvus.Azure.Storage.Tenancy;
     using Corvus.Testing.SpecFlow;
+
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -38,12 +37,13 @@ namespace Marain.Claims.SpecFlow.Bindings
                         .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
 
                     IConfiguration root = configurationBuilder.Build();
-
-                    string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
-
                     serviceCollection.AddSingleton(root);
 
                     serviceCollection.AddLogging();
+
+                    string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
+                    serviceCollection.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+                    serviceCollection.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
                     serviceCollection.AddInMemoryTenantProvider();
 
@@ -53,16 +53,10 @@ namespace Marain.Claims.SpecFlow.Bindings
                     serviceCollection.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
                     serviceCollection.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    var tenantCloudBlobContainerFactoryOptions = new TenantCloudBlobContainerFactoryOptions
-                    {
-                        AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                    };
+                    serviceCollection.AddBlobContainerV2ToV3Transition();
+                    serviceCollection.AddAzureBlobStorageClientSourceFromDynamicConfiguration();
 
-                    serviceCollection.AddSingleton(tenantCloudBlobContainerFactoryOptions);
-
-                    serviceCollection.AddTenantCloudBlobContainerFactory(tenantCloudBlobContainerFactoryOptions);
-
-                    serviceCollection.AddTenantedBlobContainerClaimsStore();
+                    serviceCollection.AddTenantedClaimsStoreOnAzureBlobStorage();
 
                     serviceCollection.AddMarainServiceConfiguration();
                     serviceCollection.AddMarainServicesTenancy();

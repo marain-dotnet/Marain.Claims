@@ -16,7 +16,7 @@ resources:
       endpoint: marain-github
 
 jobs:
-- template: templates/build.and.release.yml@recommended_practices
+- template: templates/build.and.release.scripted.yml@recommended_practices
   parameters:
     vmImage: 'windows-latest'
     service_connection_nuget_org: $(Endjin_Service_Connection_NuGet_Org)
@@ -43,26 +43,42 @@ jobs:
           ENDJIN_MARAINCLAIMSSERVICEDISPLAYNAME: $(Endjin_MarainClaimsServiceDisplayName)
           ENDJIN_MARAINCLAIMSSERVICETENANTID: $(Endjin_MarainClaimsServiceTenantId)
       - task: Npm@1
-        displayName: 'Install Latest Azure Functions V3 Runtime'
+        displayName: 'Install Latest Azure Functions V4 Runtime'
         inputs:
           command: custom
           verbose: false
-          customCommand: 'install -g azure-functions-core-tools@3 --unsafe-perm true'
-    postSpecs:
-    - task: ArchiveFiles@2
-      displayName: 'Archive Function App'
-      inputs:
-        rootFolderOrFile: 'Solutions/Marain.Claims.Host.Functions/bin/Release/netcoreapp3.1/'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Host.Functions.zip'
-        replaceExistingArchive: true
-    - task: ArchiveFiles@2
-      displayName: 'Archive Deployment Artifacts'
-      inputs:
-        rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
-        replaceExistingArchive: true
-    netSdkVersion: '3.x'
+          customCommand: 'install -g azure-functions-core-tools@4 --unsafe-perm true'
+      - task: UseDotNet@2
+        displayName: 'Install Microsoft.AspNetCore.App for .NET Core 3.1 '
+        inputs:
+          # For as long as we have tests that target .NET Core 3.1, we need this.
+          # In theory we only need this:
+          # packageType: runtime
+          # However, it turns out that there's no way to ask for the runtime plus
+          # frameworks, and the official workaround is to install the entire
+          # SDK. :(
+          # https://github.com/microsoft/azure-pipelines-tasks/issues/14405#issuecomment-784221132
+          packageType: sdk
+          version: 3.1.x
+
+    # TODO: find the right way to do this:
+    #   * integrate with scripted build
+    #   * use the correct folders once we're on .NET 6.0 for most things
+    preCopyNugetPackages:
+      - task: ArchiveFiles@2
+        displayName: 'Archive Function App'
+        inputs:
+          rootFolderOrFile: 'Solutions/Marain.Claims.Host.Functions/bin/Release/net6.0/'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Host.Functions.zip'
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: 'Archive Deployment Artifacts'
+        inputs:
+          rootFolderOrFile: 'Solutions/Marain.Claims.Deployment'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/Release/Marain.Claims.Deployment.zip'
+          replaceExistingArchive: true
+    netSdkVersion: '6.x'

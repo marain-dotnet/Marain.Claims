@@ -74,11 +74,24 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                 .GetServiceProvider(featureContext)
                 .GetRequiredService<ILogger<FeatureContext>>();
 
-            BlobStorageConfiguration blobStorageConfiguration =
+            BlobStorageConfiguration claimPermissionsStoreStorageConfiguration =
                 configuration.GetSection("TestBlobStorageConfiguration").Get<BlobStorageConfiguration>()
                 ?? new BlobStorageConfiguration();
 
-            if (string.IsNullOrEmpty(blobStorageConfiguration.AccountName))
+            claimPermissionsStoreStorageConfiguration.Container = "claimpermissions";
+
+            if (string.IsNullOrEmpty(claimPermissionsStoreStorageConfiguration.AccountName))
+            {
+                logger.LogDebug("No configuration value 'TestBlobStorageConfiguration:AccountName' provided; using local storage emulator.");
+            }
+
+            BlobStorageConfiguration resourceAccessRuleSetsStoreStorageConfiguration =
+                configuration.GetSection("TestBlobStorageConfiguration").Get<BlobStorageConfiguration>()
+                ?? new BlobStorageConfiguration();
+
+            resourceAccessRuleSetsStoreStorageConfiguration.Container = "resourceaccessrulesets";
+
+            if (string.IsNullOrEmpty(resourceAccessRuleSetsStoreStorageConfiguration.AccountName))
             {
                 logger.LogDebug("No configuration value 'TestBlobStorageConfiguration:AccountName' provided; using local storage emulator.");
             }
@@ -88,12 +101,12 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                 new EnrollmentBlobStorageConfigurationItem
                 {
                     Key = "claimPermissionsStore",
-                    Configuration = blobStorageConfiguration,
+                    Configuration = claimPermissionsStoreStorageConfiguration,
                 },
                 new EnrollmentBlobStorageConfigurationItem
                 {
                     Key = "resourceAccessRuleSetsStore",
-                    Configuration = blobStorageConfiguration,
+                    Configuration = resourceAccessRuleSetsStoreStorageConfiguration,
                 },
             };
         }

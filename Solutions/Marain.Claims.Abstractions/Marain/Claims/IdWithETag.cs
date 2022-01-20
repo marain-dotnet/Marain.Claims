@@ -5,7 +5,6 @@
 namespace Marain.Claims
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// A tuple of ID and ETag.
@@ -70,12 +69,6 @@ namespace Marain.Claims
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            int hashCode = 1348440192;
-            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Id);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.ETag);
-            return hashCode;
-        }
+        public override int GetHashCode() => HashCode.Combine(this.Id, this.ETag);
     }
 }

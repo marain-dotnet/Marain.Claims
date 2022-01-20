@@ -20,6 +20,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
 
     using Menes.Testing.AspNetCoreSelfHosting;
 
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     using NUnit.Framework.Internal;
@@ -60,7 +61,9 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                 case TestHostModes.InProcessEmulateFunctionWithActionResult:
                     var hostManager = new OpenApiWebHostManager();
                     context.Set(hostManager);
-                    await hostManager.StartHostAsync<FunctionsStartupWrapper>(
+                    var startup = new FunctionsStartupWrapper(ContainerBindings.GetServiceProvider(context).GetRequiredService<IConfiguration>());
+                    await hostManager.StartInProcessFunctionsHostAsync(
+                        startup,
                         ServiceUrl,
                         services =>
                         {
@@ -83,7 +86,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     await FunctionsBindings.GetFunctionsController(context).StartFunctionsInstance(
                             "Marain.Claims.Host.Functions",
                             ClaimsHostPort,
-                            "netcoreapp3.1",
+                            "net6.0",
                             "csharp",
                             functionConfiguration);
                     break;

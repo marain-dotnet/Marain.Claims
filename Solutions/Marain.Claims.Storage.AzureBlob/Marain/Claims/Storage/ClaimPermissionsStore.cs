@@ -7,12 +7,16 @@ namespace Marain.Claims.Storage
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+
+    using Azure;
+    using Azure.Storage.Blobs;
+    using Azure.Storage.Blobs.Models;
+    using Azure.Storage.Blobs.Specialized;
+
     using Corvus.Extensions;
     using Corvus.Extensions.Json;
-    using Microsoft.Azure.Storage;
-    using Microsoft.Azure.Storage.Blob;
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -43,12 +47,12 @@ namespace Marain.Claims.Storage
         ///     backed by the given repository.
         /// </summary>
         /// <param name="container">
-        ///     The <see cref="CloudBlobContainer" /> in which permissions will be stored.
+        ///     The <see cref="BlobContainerClient" /> in which permissions will be stored.
         /// </param>
         /// <param name="resourceAccessRuleSetStore">The resource access rule set.</param>
         /// <param name="serializerSettingsProvider">The <see cref="IJsonSerializerSettingsProvider"/> for serializion.</param>
         public ClaimPermissionsStore(
-            CloudBlobContainer container,
+            BlobContainerClient container,
             IResourceAccessRuleSetStore resourceAccessRuleSetStore,
             IJsonSerializerSettingsProvider serializerSettingsProvider)
         {
@@ -63,10 +67,10 @@ namespace Marain.Claims.Storage
         }
 
         /// <summary>
-        ///     Gets the <see cref="CloudBlobContainer" /> in which claim permissions will
+        ///     Gets the <see cref="BlobContainerClient" /> in which claim permissions will
         ///     be stored.
         /// </summary>
-        public CloudBlobContainer Container { get; }
+        public BlobContainerClient Container { get; }
 
         /// <inheritdoc/>
         public async Task<ClaimPermissions> GetAsync(string id)
@@ -82,7 +86,7 @@ namespace Marain.Claims.Storage
                 permissions = await this.UpdateRuleSetsAsync(permissions).ConfigureAwait(false);
                 return permissions;
             }
-            catch (Exception ex) when (!(ex is ResourceAccessRuleSetNotFoundException))
+            catch (Exception ex) when (ex is not ResourceAccessRuleSetNotFoundException)
             {
                 throw new ClaimPermissionsNotFoundException(id, ex);
             }
@@ -106,7 +110,7 @@ namespace Marain.Claims.Storage
                     {
                         return await this.DownloadPermissionsAsync(id).ConfigureAwait(false);
                     }
-                    catch (StorageException)
+                    catch (RequestFailedException)
                     {
                         return null;
                     }
@@ -129,20 +133,23 @@ namespace Marain.Claims.Storage
                 throw new ArgumentNullException(nameof(claimPermissions));
             }
 
-            CloudBlockBlob blob = this.Container.GetBlockBlobReference(claimPermissions.Id);
+            BlockBlobClient blob = this.Container.GetBlockBlobClient(claimPermissions.Id);
             string serializedPermissions = JsonConvert.SerializeObject(claimPermissions, this.serializerSettings);
             try
             {
-                await blob.UploadTextAsync(serializedPermissions, Encoding.UTF8, new AccessCondition { IfNoneMatchETag = "*" }, null, null).ConfigureAwait(false);
+                using var content = BinaryData.FromString(serializedPermissions).ToStream();
+                Response<BlobContentInfo> response = await blob.UploadAsync(
+                    content,
+                    new BlobUploadOptions { Conditions = new BlobRequestConditions { IfNoneMatch = ETag.All } })
+                    .ConfigureAwait(false);
+                claimPermissions.ETag = response.Value.ETag.ToString("G");
+                return claimPermissions;
             }
-            catch (StorageException x)
+            catch (RequestFailedException x)
             {
                 System.Diagnostics.Debug.WriteLine(x.ToString());
                 throw new InvalidOperationException();
             }
-
-            claimPermissions.ETag = blob.Properties.ETag;
-            return claimPermissions;
         }
 
         /// <inheritdoc/>
@@ -159,18 +166,30 @@ namespace Marain.Claims.Storage
                     "There is no ETag on this ClaimPermissions. Updates are not safe without an ETag.");
             }
 
-            CloudBlockBlob blob = this.Container.GetBlockBlobReference(claimPermissions.Id);
+            BlobClient blob = this.Container.GetBlobClient(claimPermissions.Id);
             string serializedPermissions = JsonConvert.SerializeObject(claimPermissions, this.serializerSettings);
-            await blob.UploadTextAsync(serializedPermissions, Encoding.UTF8, new AccessCondition { IfMatchETag = claimPermissions.ETag }, null, null).ConfigureAwait(false);
-            claimPermissions.ETag = blob.Properties.ETag;
+            Response<BlobContentInfo> response = await blob.UploadAsync(
+                BinaryData.FromString(serializedPermissions),
+                new BlobUploadOptions { Conditions = new BlobRequestConditions { IfMatch = new ETag(claimPermissions.ETag) } })
+                .ConfigureAwait(false);
+            claimPermissions.ETag = response.Value.ETag.ToString("G");
             return claimPermissions;
         }
 
         /// <inheritdoc/>
         public async Task<bool> AnyPermissions()
         {
-            BlobResultSegment result = await this.Container.ListBlobsSegmentedAsync(null, true, BlobListingDetails.None, 1, null, null, null).ConfigureAwait(false);
-            return result.Results.Any();
+            // LINQ Any operator would be more succinct, but we don't currently have a dependency on
+            // System.Linq.Async, which is where LINQ for IAsyncEnumerable is defined, and it seems
+            // a rather simple job to lug in an extra dependency for.
+#pragma warning disable IDE0059 // Unnecessary assignment of a value - foreach loop requires an iteration variable
+            await foreach (BlobItem blob in this.Container.GetBlobsAsync())
+#pragma warning restore IDE0059
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static Dictionary<string, int> BuildDictionaryOfIdsToIndices(ClaimPermissions permissions)
@@ -182,10 +201,16 @@ namespace Marain.Claims.Storage
 
         private async Task<ClaimPermissions> DownloadPermissionsAsync(string id)
         {
-            CloudBlockBlob blob = this.Container.GetBlockBlobReference(id);
-            string permissionsJson = await blob.DownloadTextAsync().ConfigureAwait(false);
+            BlobClient blob = this.Container.GetBlobClient(id);
+            Response<BlobDownloadResult> response = await blob.DownloadContentAsync().ConfigureAwait(false);
+
+            // Note: although BlobDownloadResult supports direct deserialization from JSON, using System.Text.Json
+            // (meaning it can work directly with UTF-8 content, avoiding the conversion to UTF-16 we're doing
+            // here) we currently depend on the JSON.NET serialization settings mechanism, so we have to use
+            // this more inefficient route for now.
+            string permissionsJson = response.Value.Content.ToString();
             ClaimPermissions permissions = JsonConvert.DeserializeObject<ClaimPermissions>(permissionsJson, this.serializerSettings);
-            permissions.ETag = blob.Properties.ETag;
+            permissions.ETag = response.Value.Details.ETag.ToString("G");
             return permissions;
         }
 

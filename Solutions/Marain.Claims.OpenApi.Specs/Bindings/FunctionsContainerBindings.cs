@@ -2,18 +2,15 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Marain.Workflows.Api.Specs.Bindings
+namespace Marain.Claims.OpenApi.Specs.Bindings
 {
     using System;
 
-    using Corvus.Identity.ManagedServiceIdentity.ClientAuthentication;
     using Corvus.Testing.SpecFlow;
 
     using Marain.Claims.Client;
-    using Marain.Claims.OpenApi.Specs.Bindings;
     using Marain.Tenancy.Client;
 
-    using Microsoft.ApplicationInsights;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -54,15 +51,9 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddJsonNetDateTimeOffsetToIso8601AndUnixTimeConverter();
                     services.AddSingleton<JsonConverter>(new StringEnumConverter(new CamelCaseNamingStrategy()));
 
-                    services.AddLogging();
-
                     string azureServicesAuthConnectionString = root["AzureServicesAuthConnectionString"];
-
-                    services.AddAzureManagedIdentityBasedTokenSource(
-                        new AzureManagedIdentityTokenSourceOptions
-                        {
-                            AzureServicesAuthConnectionString = azureServicesAuthConnectionString,
-                        });
+                    services.AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(azureServicesAuthConnectionString);
+                    services.AddMicrosoftRestAdapterForServiceIdentityAccessTokenSource();
 
                     services.AddSingleton(sp => sp.GetRequiredService<IConfiguration>().GetSection("TenancyClient").Get<TenancyClientOptions>());
 
@@ -70,9 +61,8 @@ namespace Marain.Workflows.Api.Specs.Bindings
                     services.AddSingleton(tenancyClientConfiguration);
                     services.AddTenantProviderServiceClient();
 
-                    services.AddTenantedClaimsApi(root);
-                    //// TODO: remove once upgraded to Corvus.Monitoring v2, and we've taken out the telemetry code from ClaimPermissionsService
-                    services.AddSingleton(new TelemetryClient(new Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration()));
+                    services.AddTenantedClaimsStoreOnAzureBlobStorage();
+                    services.AddTenantedClaimsApiWithOpenApiActionResultHosting(root);
 
                     services.AddClaimsClient(_ =>
                     {

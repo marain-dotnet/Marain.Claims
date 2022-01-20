@@ -5,9 +5,12 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
     using System.Linq;
+
     using Marain.Claims.OpenApi;
     using Marain.Claims.OpenApi.Internal;
+
     using Menes;
+
     using Microsoft.AspNetCore.Http;
 
     /// <summary>
@@ -16,23 +19,17 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class OpenApiClaimsServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds the request claims provider.
+        /// Adds the request claims provider for HTTP requests.
         /// </summary>
         /// <param name="services">The service collection to add to.</param>
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddRequestClaimsProvider(this IServiceCollection services)
         {
-            if (services.Any(s => s.ServiceType == typeof(IRequestClaimsProvider<HttpRequest>)))
-            {
-                return services;
-            }
-
-            services.AddSingleton<IRequestClaimsProvider<HttpRequest>, RequestClaimsProvider<HttpRequest>>();
-            return services;
+            return services.AddRequestClaimsProvider<HttpRequest>();
         }
 
         /// <summary>
-        /// Adds a strategy for the claims provider.
+        /// Adds a claims provider strategy for HTTP requests.
         /// </summary>
         /// <typeparam name="TStrategy">Type of the <see cref="IClaimsProviderStrategy{TRequest}"/> to add.</typeparam>
         /// <param name="services">The service collection to add to.</param>
@@ -40,28 +37,31 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddClaimsProviderStrategy<TStrategy>(this IServiceCollection services)
             where TStrategy : class, IClaimsProviderStrategy<HttpRequest>
         {
-            if (services.Any(s => s.ImplementationType == typeof(TStrategy)))
-            {
-                return services;
-            }
-
-            services.AddSingleton<IClaimsProviderStrategy<HttpRequest>, TStrategy>();
-            return services;
+            return services.AddClaimsProviderStrategy<HttpRequest, TStrategy>();
         }
 
         /// <summary>
-        /// Adds the services for open API claims.
+        /// Adds the services that ensure the Open API context is populated with claims from all
+        /// registered <see cref="HttpRequest"/>-based claims provider strategies.
         /// </summary>
         /// <param name="services">The service collection to add to.</param>
         /// <returns>The service collection.</returns>
-        public static IServiceCollection AddOpenApiClaims(this IServiceCollection services)
+        /// <remarks>
+        /// <para>
+        /// Hosts that wish to protect an Open API service with claims call this to ensure that
+        /// the <see cref="IOpenApiContext.CurrentPrincipal"/> is populated. They will also
+        /// call <see cref="AddClaimsProviderStrategy{TStrategy}(IServiceCollection)"/> one or
+        /// more times to determine which mechanisms are used to populate it.
+        /// </para>
+        /// </remarks>
+        public static IServiceCollection AddClaimsOpenApiContextBuilder(this IServiceCollection services)
         {
             if (services.Any(s => s.ImplementationType == typeof(ClaimsOpenApiContextBuilderComponent)))
             {
                 return services;
             }
 
-            services.AddRequestClaimsProvider<HttpRequest>();
+            services.AddRequestClaimsProvider();
             services.AddSingleton<IOpenApiContextBuilderComponent<HttpRequest>, ClaimsOpenApiContextBuilderComponent>();
             return services;
         }

@@ -2,7 +2,9 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#pragma warning disable IDE0079 // If you don't have Roslynator, the next suppression is considered redundant
 #pragma warning disable RCS1194 // Roslynator's 'all the constructors' fixation
+#pragma warning restore IDE0079
 
 namespace Marain.Claims.Storage
 {
@@ -24,6 +26,16 @@ namespace Marain.Claims.Storage
         /// <param name="innerException"> The inner exception. </param>
         public ResourceAccessRuleSetNotFoundException(string id, Exception innerException)
             : base("Resource access rule set not found", innerException)
+        {
+            this.ResourceAccessRuleSetIds = new[] { id };
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceAccessRuleSetNotFoundException"/> class.
+        /// </summary>
+        /// <param name="id">The id of the rule set that couldn't be found.</param>
+        public ResourceAccessRuleSetNotFoundException(string id)
+            : base("Resource access rule set not found")
         {
             this.ResourceAccessRuleSetIds = new[] { id };
         }
