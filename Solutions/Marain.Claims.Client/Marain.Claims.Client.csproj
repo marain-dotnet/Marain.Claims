@@ -20,10 +20,6 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DebugType>Full</DebugType>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Corvus.Identity.MicrosoftRest" Version="3.0.0" />
     <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">

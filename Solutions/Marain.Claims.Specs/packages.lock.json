@@ -403,8 +403,8 @@
       },
       "Menes.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.1.0",
-        "contentHash": "kCjCibDumBF75p6Ntgca005G7+SDXBAxnyE6V16yeMJDhFdh2rofpOqXaCoBhoRFupduJA90qqJGjqXpfCtHRg==",
+        "resolved": "3.1.2",
+        "contentHash": "igOUpLSuVJRP6uTepqn88q5hf4YqKJvmmpyM1vDGg4UOL4sR3mT2brWtWNDR9X2Xxnc+RUMEhXhiVGTzsldgpg==",
         "dependencies": {
           "Corvus.ContentHandling": "2.0.11",
           "Corvus.Extensions": "1.1.4",
@@ -420,26 +420,26 @@
       },
       "Menes.Hosting": {
         "type": "Transitive",
-        "resolved": "3.1.0",
-        "contentHash": "JMXA+M6tR9RM96OMik7K3npIlXvGKCG+6pk0wnBqwqnzUS8ITymljRAQ0c03HcZCpztnpro3yjO9VLDARmsOBQ==",
+        "resolved": "3.1.2",
+        "contentHash": "+/WynRoi4DVh8El+kFmq/cIAaVJVTWXZV7XVtffkfPUKVI1y5XHB1kHZ/L6LpxFk/nbHF+9jsH2MMrYOA9LggQ==",
         "dependencies": {
-          "Menes.Abstractions": "3.1.0"
+          "Menes.Abstractions": "3.1.2"
         }
       },
       "Menes.Hosting.AspNetCore": {
         "type": "Transitive",
-        "resolved": "3.1.0",
-        "contentHash": "gQjj4UcxFtgtiSdpPzJ8l+XJ679qpblcXZQzbr6TNCUrFRiG5uyVM5C920Uxf3sEidw1FUDBtYA6wLW/NrGtuQ==",
+        "resolved": "3.1.2",
+        "contentHash": "hKpy3mt8IxehYPnJedFH3Cj5z5NIrRriWDrhmVZsVMNQ5MHsvm1ruyIiB6gGI2I2Z4ApOLeSvxiMIfhdicHK1Q==",
         "dependencies": {
-          "Menes.Hosting": "3.1.0"
+          "Menes.Hosting": "3.1.2"
         }
       },
       "Menes.Testing.AspNetCoreSelfHosting": {
         "type": "Transitive",
-        "resolved": "3.1.0",
-        "contentHash": "55RfNmNxKlJrtYwsr3oKVHtZ7pNL4UOMC/aELMENyjSqyzjqeyP/pcNOro2WGUgmXy6owOcorKQl34qN9Bc+gw==",
+        "resolved": "3.1.2",
+        "contentHash": "1hupawIT1zgY6QAn++8b3lBW5awTQCEnOCxJiZUSRuwFvpV7Rjetzr4d6Q+RQr52/eNyvSx8yxkd97mBmKzyNQ==",
         "dependencies": {
-          "Menes.Hosting.AspNetCore": "3.1.0",
+          "Menes.Hosting.AspNetCore": "3.1.2",
           "Microsoft.AspNetCore": "2.2.0",
           "Microsoft.AspNetCore.Mvc.Abstractions": "2.2.0",
           "Microsoft.Azure.WebJobs": "3.0.30"
@@ -2870,7 +2870,7 @@
         "type": "Project",
         "dependencies": {
           "Corvus.Tenancy.Abstractions": "3.0.0",
-          "Menes.Abstractions": "3.1.0",
+          "Menes.Abstractions": "3.1.2",
           "Microsoft.Extensions.FileSystemGlobbing": "6.0.0",
           "Newtonsoft.Json": "12.0.3"
         }
@@ -2915,8 +2915,8 @@
           "Corvus.Storage.Azure.BlobStorage.Tenancy": "3.0.0",
           "Marain.Claims.OpenApi": "1.0.0",
           "Marain.Claims.Storage.AzureBlob": "1.0.0",
-          "Menes.Hosting.AspNetCore": "3.1.0",
-          "Menes.Testing.AspNetCoreSelfHosting": "3.1.0",
+          "Menes.Hosting.AspNetCore": "3.1.2",
+          "Menes.Testing.AspNetCoreSelfHosting": "3.1.2",
           "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "6.0.0"
         }

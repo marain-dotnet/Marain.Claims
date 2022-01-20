@@ -230,7 +230,7 @@ namespace Marain.Claims.Benchmark
 
             foreach (ResourceAccessRuleSet ruleSet in ruleSets)
             {
-                object response = await this.ClaimsService.CreateResourceAccessRuleSetAsync(ClientTenantId, ruleSet);
+                object response = await this.ClaimsService.CreateResourceAccessRuleSetAsync(this.ClientTenantId, ruleSet);
             }
 
             var claimPermissionsList =
@@ -253,7 +253,7 @@ namespace Marain.Claims.Benchmark
 
             foreach (CreateClaimPermissionsRequest claimPermissions in claimPermissionsList)
             {
-                object response = await this.ClaimsService.CreateClaimPermissionsAsync(ClientTenantId, claimPermissions);
+                object response = await this.ClaimsService.CreateClaimPermissionsAsync(this.ClientTenantId, claimPermissions);
             }
         }
     }
