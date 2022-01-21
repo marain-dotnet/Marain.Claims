@@ -132,18 +132,7 @@ task . FullBuild
 
 
 # build extensibility tasks
-task PostVersion {
-    # Should be these, but Endjin.RecommendedPractices.Build beta008 is not adding the GITVERSION_ prefix
-    # ...ah...except that's only going wrong for Azure DevOps tasks downstream of us. Within the
-    # build.ps1 task, it does work because the environment variable names are correct.
-    Write-Host "##vso[task.setvariable variable=Endjin_IsPreRelease]$((-not ([string]::IsNullOrEmpty($Env:GITVERSION_PRERELEASETAG))))"
-    Write-Host "##vso[task.setvariable variable=Endjin_Repository_Name]$Env:BUILD_REPOSITORY_NAME"
-    # Write-Host "##vso[task.setvariable variable=Endjin_IsPreRelease]$((-not ([string]::IsNullOrEmpty($Env:PRERELEASETAG))))"
-    # Write-Host "##vso[task.setvariable variable=Endjin_Repository_Name]$Env:BUILD_REPOSITORY_NAME"
-
-    # Scripted build currently doesn't do this for us.
-    Write-Host "##vso[build.updatebuildnumber]$Env:GITVERSION_SemVer"
-}
+task PostVersion { }
 task PreBuild {}
 task PostBuild {}
 task PreTest {}
