@@ -50,7 +50,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.0" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.1" />
     <PackageReference Include="Microsoft.Azure.Management.AppService.Fluent" Version="1.38.0" />
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[6.0.*,)" />
