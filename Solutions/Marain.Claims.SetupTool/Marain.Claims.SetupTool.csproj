@@ -46,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -55,10 +55,6 @@
     <PackageReference Include="Microsoft.Azure.Management.ResourceManager.Fluent" Version="1.38.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure.Authentication" Version="2.4.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>

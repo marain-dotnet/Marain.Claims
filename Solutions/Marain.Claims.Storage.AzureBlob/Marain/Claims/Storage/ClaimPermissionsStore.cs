@@ -83,8 +83,7 @@ namespace Marain.Claims.Storage
             try
             {
                 ClaimPermissions permissions = await this.DownloadPermissionsAsync(id);
-                permissions = await this.UpdateRuleSetsAsync(permissions).ConfigureAwait(false);
-                return permissions;
+                return await this.UpdateRuleSetsAsync(permissions).ConfigureAwait(false);
             }
             catch (Exception ex) when (ex is not ResourceAccessRuleSetNotFoundException)
             {
@@ -228,7 +227,7 @@ namespace Marain.Claims.Storage
                         .SelectMany(p => p.ResourceAccessRuleSets.Select(r => new IdWithETag(r.Id, r.ETag)))
                         .Distinct()).ConfigureAwait(false);
 
-            if (updatedRuleSets.RuleSets.Any())
+            if (updatedRuleSets.RuleSets.Count > 0)
             {
                 IList<ClaimPermissions> results = new List<ClaimPermissions>();
 
@@ -271,7 +270,7 @@ namespace Marain.Claims.Storage
                 }
             }
 
-            if (tasks.Any())
+            if (tasks.Count > 0)
             {
                 results.AddRange(await Task.WhenAll(tasks).ConfigureAwait(false));
             }

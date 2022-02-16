@@ -1,4 +1,8 @@
-﻿namespace Marain.Claims.OpenApi.Specs.MultiHost
+﻿// <copyright file="DirectTestableClaimsService.cs" company="Endjin Limited">
+// Copyright (c) Endjin Limited. All rights reserved.
+// </copyright>
+
+namespace Marain.Claims.OpenApi.Specs.MultiHost
 {
     using System;
     using System.Collections.Generic;

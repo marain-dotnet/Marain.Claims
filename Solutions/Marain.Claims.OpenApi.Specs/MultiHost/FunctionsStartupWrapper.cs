@@ -1,4 +1,4 @@
-﻿// <copyright file="WorkflowFunctionsStartupWrapper.cs" company="Endjin Limited">
+﻿// <copyright file="FunctionsStartupWrapper.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -16,7 +16,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
 
     public class FunctionsStartupWrapper : IWebJobsStartup
     {
-        private readonly Startup wrappedStartup = new ();
+        private readonly Startup wrappedStartup = new();
         private readonly IConfiguration configuration;
 
         public FunctionsStartupWrapper(IConfiguration configuration)

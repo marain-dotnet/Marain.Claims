@@ -25,8 +25,9 @@ namespace Marain.Claims.SetupTool.Commands
         }
 
 #pragma warning disable CA1822 // Mark members as static - invoked through reflection
+#pragma warning disable RCS1163 // Unused parameter - required by command line library
         private Task<int> OnExecuteAsync(CommandLineApplication app, IConsole console)
-#pragma warning restore CA1822
+#pragma warning restore RCS1163,CA1822
         {
             app.ShowHelp();
             return Task.FromResult(1);

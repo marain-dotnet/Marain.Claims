@@ -1,4 +1,4 @@
-﻿// <copyright file="WorkflowTransientTenantBindings.cs" company="Endjin Limited">
+﻿// <copyright file="TransientTenantBindings.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 

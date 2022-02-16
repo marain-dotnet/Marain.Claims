@@ -32,7 +32,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -40,10 +40,6 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
     <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.2.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="[6.0.*,)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marain.Claims.Hosting.AspNetCore\Marain.Claims.Hosting.AspNetCore.csproj" />

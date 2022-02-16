@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Endjin.RecommendedPractices" Version="1.2.0">
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -31,10 +31,6 @@
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="[6.0.*,)" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

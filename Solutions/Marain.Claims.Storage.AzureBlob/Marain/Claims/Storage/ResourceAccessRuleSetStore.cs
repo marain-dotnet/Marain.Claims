@@ -2,6 +2,8 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
+#pragma warning disable RCS1021 // Convert lambda expression body to expression body. - would decrease readability in the cases Roslynator is suggesting
+
 namespace Marain.Claims.Storage
 {
     using System;
