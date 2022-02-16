@@ -1,4 +1,4 @@
-﻿// <copyright file="ClaimPermissionsModifyRules.feature.multi.cs" company="Endjin Limited">
+﻿// <copyright file="ClaimPermissionsEvaluation.feature.multi.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 

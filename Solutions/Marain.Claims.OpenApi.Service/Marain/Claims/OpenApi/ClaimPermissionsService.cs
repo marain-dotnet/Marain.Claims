@@ -632,7 +632,7 @@ namespace Marain.Claims.OpenApi
                     ResourceAccessType = x.ResourceAccessType,
                 };
 
-                ClaimPermissions claimPermission = claimPermissions.Permissions.FirstOrDefault(c => c.Id == x.ClaimPermissionsId);
+                ClaimPermissions claimPermission = claimPermissions.Permissions.Find(c => c.Id == x.ClaimPermissionsId);
                 Permission permission = Permission.Deny;
 
                 if (claimPermission == null)
@@ -699,7 +699,7 @@ namespace Marain.Claims.OpenApi
                 };
             }
 
-            (string accessType, string resourceUri, string displayName)[] ruleData =
+            (string AccessType, string ResourceUri, string DisplayName)[] ruleData =
             {
                     ("GET", "claimPermissions/**/*", "Read Claim Permissions"),
                     ("PUT", "claimPermissions/**/*", "Modify Claim Permissions"),
@@ -720,8 +720,8 @@ namespace Marain.Claims.OpenApi
                 Rules = ruleData
                     .Select(rule =>
                         new ResourceAccessRule(
-                        rule.accessType,
-                        new Resource(new Uri(prefix + rule.resourceUri, UriKind.Relative), rule.displayName),
+                        rule.AccessType,
+                        new Resource(new Uri(prefix + rule.ResourceUri, UriKind.Relative), rule.DisplayName),
                         Permission.Allow))
                     .ToList(),
             };
@@ -750,7 +750,7 @@ namespace Marain.Claims.OpenApi
             return this.OkResult();
         }
 
-        private async Task<(bool, OpenApiResult)> CheckRuleSetsExist(
+        private async Task<(bool AllRulesExist, OpenApiResult FailureResult)> CheckRuleSetsExist(
             ITenant tenant,
             IEnumerable<ResourceAccessRuleSet> ruleSets)
         {

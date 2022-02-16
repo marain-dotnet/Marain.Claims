@@ -24,7 +24,7 @@ namespace Marain.Claims.SpecFlow.Steps
         private readonly ScenarioContext scenarioContext;
         private readonly FeatureContext featureContext;
         private readonly IServiceProvider serviceProvider;
-        private readonly Dictionary<string, string> claimPermissionIds = new ();
+        private readonly Dictionary<string, string> claimPermissionIds = new();
 
         public ClaimPermissionsStoreSteps(FeatureContext featureContext, ScenarioContext scenarioContext)
         {
@@ -156,7 +156,7 @@ namespace Marain.Claims.SpecFlow.Steps
             }
         }
 
-        [Then(@"the claim permission is returned")]
+        [Then("the claim permission is returned")]
         public void ThenTheClaimPermissionIsReturned()
         {
             if (!this.scenarioContext.TryGetValue(ClaimPermissionsResult, out ClaimPermissions _))

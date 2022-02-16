@@ -1,4 +1,4 @@
-﻿// <copyright file="TestHostTypes.cs" company="Endjin Limited">
+﻿// <copyright file="TestHostModes.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -16,7 +16,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
     public enum TestHostModes
     {
         /// <summary>
-        /// Instantiate the target service type directly without going through Menes
+        /// Instantiate the target service type directly without going through Menes.
         /// </summary>
         DirectInvocation,
 

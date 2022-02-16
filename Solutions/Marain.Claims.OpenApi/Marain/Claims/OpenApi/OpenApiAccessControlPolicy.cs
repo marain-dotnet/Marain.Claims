@@ -132,7 +132,7 @@ namespace Marain.Claims.OpenApi
                 throw new OpenApiAccessControlPolicyEvaluationFailedException(
                    nameof(OpenApiAccessControlPolicy),
                    requests,
-                   $"Permission evaluation failed.",
+                   "Permission evaluation failed.",
                    ex).AddProblemDetailsExtension("ClaimPermissions", string.Join(",", claimPermissionsIds));
             }
 

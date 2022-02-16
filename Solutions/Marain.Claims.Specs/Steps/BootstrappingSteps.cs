@@ -35,10 +35,10 @@ namespace Marain.Claims.SpecFlow.Steps
         private readonly TransientTenantManager transientTenantManager;
         private readonly bool useRealDb;
 
-        private readonly Mock<IClaimPermissionsStore> permissionStoreMock = new ();
-        private readonly Mock<IResourceAccessRuleSetStore> resourceAccessRuleSetStoreMock = new ();
-        private readonly List<ClaimPermissions> claimPermissionsPersistedToStore = new ();
-        private readonly List<ResourceAccessRuleSet> resourceAccessRulesPersistedToStore = new ();
+        private readonly Mock<IClaimPermissionsStore> permissionStoreMock = new();
+        private readonly Mock<IResourceAccessRuleSetStore> resourceAccessRuleSetStoreMock = new();
+        private readonly List<ClaimPermissions> claimPermissionsPersistedToStore = new();
+        private readonly List<ResourceAccessRuleSet> resourceAccessRulesPersistedToStore = new();
         private readonly IOpenApiContext openApiContext;
 
         private ClaimPermissionsService service;

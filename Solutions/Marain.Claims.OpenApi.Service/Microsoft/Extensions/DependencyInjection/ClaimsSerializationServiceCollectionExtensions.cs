@@ -25,10 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </returns>
         public static IServiceCollection RegisterCoreClaimsContentTypes(this IServiceCollection services)
         {
-            services.AddContent(factory =>
-            {
-                factory.RegisterTransientContent<ClaimPermissionsBatchRequestItem>();
-            });
+            services.AddContent(factory => factory.RegisterTransientContent<ClaimPermissionsBatchRequestItem>());
 
             return services;
         }

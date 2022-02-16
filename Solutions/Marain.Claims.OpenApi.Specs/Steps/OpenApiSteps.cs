@@ -1,4 +1,4 @@
-﻿// <copyright file="ClaimPermissionsSteps.cs" company="Endjin Limited">
+﻿// <copyright file="OpenApiSteps.cs" company="Endjin Limited">
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
@@ -25,7 +25,7 @@ namespace Marain.Claims.OpenApi.Specs.Steps
             this.serviceProvider = ContainerBindings.GetServiceProvider(featureContext);
         }
 
-        [When(@"I make a request to get the OpenAPI definition")]
+        [When("I make a request to get the OpenAPI definition")]
         public async System.Threading.Tasks.Task WhenIMakeARequestToGetClaimPermissionsAsync()
         {
             IClaimsService claimsService = this.serviceProvider.GetRequiredService<IClaimsService>();
@@ -40,7 +40,7 @@ namespace Marain.Claims.OpenApi.Specs.Steps
             }
         }
 
-        [Then(@"the request should succeed")]
+        [Then("the request should succeed")]
         public void ThenTheRequestShouldSucceed()
         {
             bool hasException = this.scenarioContext.TryGetValue("Exception", out Exception exception);

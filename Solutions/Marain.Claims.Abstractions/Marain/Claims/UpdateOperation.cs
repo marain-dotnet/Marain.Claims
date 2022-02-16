@@ -10,12 +10,12 @@ namespace Marain.Claims
     public enum UpdateOperation
     {
         /// <summary>
-        /// Add operation
+        /// Add operation.
         /// </summary>
         Add,
 
         /// <summary>
-        /// Remove operation
+        /// Remove operation.
         /// </summary>
         Remove,
     }

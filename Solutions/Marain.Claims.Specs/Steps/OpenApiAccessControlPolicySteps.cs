@@ -30,7 +30,7 @@ namespace Marain.Claims.Specs.Steps
         private string resourcePrefix;
         private bool allowOnlyIfAll;
         private Mock<IResourceAccessEvaluator> resourceAccessEvaluator;
-        private List<(ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource)> evaluateCalls;
+        private List<(ResourceAccessEvaluatorArgs Args, TaskCompletionSource<List<ResourceAccessEvaluation>> TaskSource)> evaluateCalls;
         private List<ResourceAccessEvaluation> evaluations;
         private Task<IDictionary<AccessCheckOperationDescriptor, AccessControlPolicyResult>> policyResultTask;
 
@@ -94,7 +94,7 @@ namespace Marain.Claims.Specs.Steps
         [When("I invoke the policy with a path of '(.*)' and a method of '(.*)'")]
         public void WhenIInvokeThePolicyWithAPathOfAndAMethodOf(string path, string method)
         {
-            this.evaluateCalls = new List<(ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource)>();
+            this.evaluateCalls = new List<(ResourceAccessEvaluatorArgs Args, TaskCompletionSource<List<ResourceAccessEvaluation>> TaskSource)>();
             this.evaluations = new List<ResourceAccessEvaluation>();
             this.resourceAccessEvaluator = new Mock<IResourceAccessEvaluator>();
             this.resourceAccessEvaluator
@@ -147,7 +147,7 @@ namespace Marain.Claims.Specs.Steps
             {
                 string claimPermissionsId = GetClaimPermissionsId(Convert.ToInt32(current["ClaimPermissionsId"]));
 
-                (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
+                (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.Find(x => x.Args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
                 if (!responses.TryGetValue(taskSource, out List<ResourceAccessEvaluation> taskSourceResults))
                 {
@@ -183,7 +183,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
+            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.Find(x => x.Args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
             ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == claimPermissionsId);
 
@@ -209,7 +209,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
+            (ResourceAccessEvaluatorArgs args, TaskCompletionSource<List<ResourceAccessEvaluation>> taskSource) = this.evaluateCalls.Find(x => x.Args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
             ResourceAccessSubmission submission = args.Submissions.FirstOrDefault(x => x.ClaimPermissionsId == claimPermissionsId);
 
@@ -227,7 +227,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.Find(x => x.Args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
             Assert.IsNotNull(args);
         }
@@ -237,7 +237,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string claimPermissionId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.Find(x => x.Args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionId));
 
             Assert.AreEqual(this.tenantId, args?.TenantId);
         }
@@ -249,7 +249,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string claimPermissionId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.Find(x => x.Args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionId));
 
             Assert.IsTrue(args.Submissions.Any(x => x.ResourceUri == resourceUri));
         }
@@ -261,7 +261,7 @@ namespace Marain.Claims.Specs.Steps
         {
             string claimPermissionsId = GetClaimPermissionsId(index);
 
-            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.FirstOrDefault(x => x.args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
+            (ResourceAccessEvaluatorArgs args, _) = this.evaluateCalls.Find(x => x.Args.Submissions.Any(r => r.ClaimPermissionsId == claimPermissionsId));
 
             Assert.IsTrue(args.Submissions.Any(x => x.ResourceAccessType == accessType));
         }
