@@ -32,7 +32,7 @@
     </PackageReference>
     <PackageReference Include="Marain.Services.Tenancy" Version="2.3.3" />
     <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.3.3" />
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.3" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.4" />
     <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="[6.0.*,)" />

@@ -37,9 +37,9 @@
       },
       "Marain.Tenancy.Client": {
         "type": "Direct",
-        "requested": "[2.0.3, )",
-        "resolved": "2.0.3",
-        "contentHash": "Ee2OJqLksTd+K/wRIgrwcr0wwwHQNGff8jShzKShDokOgvKP0nu/H5uFhF5dvzgmoj27prGJEnXZHxFxKUUNsA==",
+        "requested": "[2.0.4, )",
+        "resolved": "2.0.4",
+        "contentHash": "lAbgRQOj0vdtljeQ1al0z8YpKjXpWE1RK4cmbJJ+FefYgLKyjAzINHWvTtDxLCxgXbMRtSuTaEegn1W09yQbzA==",
         "dependencies": {
           "CacheCow.Client": "2.9.0",
           "Corvus.ContentHandling.Json": "2.0.11",

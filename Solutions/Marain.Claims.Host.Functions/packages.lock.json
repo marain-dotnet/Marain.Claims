@@ -340,8 +340,8 @@
       },
       "Marain.Tenancy.Client": {
         "type": "Transitive",
-        "resolved": "2.0.3",
-        "contentHash": "Ee2OJqLksTd+K/wRIgrwcr0wwwHQNGff8jShzKShDokOgvKP0nu/H5uFhF5dvzgmoj27prGJEnXZHxFxKUUNsA==",
+        "resolved": "2.0.4",
+        "contentHash": "lAbgRQOj0vdtljeQ1al0z8YpKjXpWE1RK4cmbJJ+FefYgLKyjAzINHWvTtDxLCxgXbMRtSuTaEegn1W09yQbzA==",
         "dependencies": {
           "CacheCow.Client": "2.9.0",
           "Corvus.ContentHandling.Json": "2.0.11",
@@ -353,11 +353,11 @@
       },
       "Marain.Tenancy.ClientTenantProvider": {
         "type": "Transitive",
-        "resolved": "2.0.3",
-        "contentHash": "A5bFktAfl35+RVbzvxXvrmJ7gsO17JsXiAU+Hs5/ivB9sGq9lWDBX9reoo2Mmyx6Qwi08it/ir9Dp5lRao2qfg==",
+        "resolved": "2.0.4",
+        "contentHash": "rEqjiKm+z0e/y5KMr8F+5FC4QvfUnPzkzYYXjgNNdsRAFiqPLbezlERjnhi/HQgrNesZvSgQBzAYvFUp3SGsrQ==",
         "dependencies": {
           "Corvus.Tenancy.Abstractions": "3.0.0",
-          "Marain.Tenancy.Client": "2.0.3",
+          "Marain.Tenancy.Client": "2.0.4",
           "Microsoft.AspNetCore.WebUtilities": "2.2.0"
         }
       },
@@ -2861,7 +2861,7 @@
           "Marain.Claims.OpenApi.AspNetCore": "1.0.0",
           "Marain.Claims.OpenApi.Service": "1.0.0",
           "Marain.Claims.Tenancy.AzureBlob": "1.0.0",
-          "Marain.Tenancy.ClientTenantProvider": "2.0.3"
+          "Marain.Tenancy.ClientTenantProvider": "2.0.4"
         }
       },
       "marain.claims.openapi": {
