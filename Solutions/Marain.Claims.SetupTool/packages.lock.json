@@ -225,8 +225,8 @@
       },
       "Corvus.Tenancy.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.1.0",
-        "contentHash": "hSufeLf93Clem0WwpGsOBE4yTJTPmVZje9Epv1jYehWDjH3mQIk33w35xLNzL++Mz2iUrubi8KzfGTZKpHqEPA==",
+        "resolved": "3.2.0",
+        "contentHash": "2LWZRu7Br72l+4Cp1+VUHCZgJP2dWbLWrVPK36XUFo+Z/cghByBd8rKkx6FqXTd1+dsLYME5Yi9nORWTEvkq9g==",
         "dependencies": {
           "Corvus.ContentHandling.Json": "2.0.11",
           "Corvus.Extensions": "1.1.4",
@@ -1774,7 +1774,7 @@
       "marain.claims.abstractions": {
         "type": "Project",
         "dependencies": {
-          "Corvus.Tenancy.Abstractions": "3.1.0",
+          "Corvus.Tenancy.Abstractions": "3.2.0",
           "Menes.Abstractions": "3.1.3",
           "Microsoft.Extensions.FileSystemGlobbing": "6.0.0",
           "Newtonsoft.Json": "12.0.3"
