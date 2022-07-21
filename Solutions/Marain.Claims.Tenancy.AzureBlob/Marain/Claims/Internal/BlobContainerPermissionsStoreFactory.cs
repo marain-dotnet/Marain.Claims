@@ -51,7 +51,8 @@ namespace Marain.Claims.Internal
             BlobContainerClient container = await this.tenantBlobContainerSource.GetBlobContainerClientFromTenantAsync(
                 tenant,
                 ClaimPermissionsV2ConfigKey,
-                ClaimPermissionsV3ConfigKey);
+                ClaimPermissionsV3ConfigKey,
+                ClaimPermissionsRepositoryName);
             return new ClaimPermissionsStore(container, await this.GetResourceAccessRuleSetStoreAsync(tenant).ConfigureAwait(false), this.serializerSettingsProvider);
         }
 
@@ -61,7 +62,8 @@ namespace Marain.Claims.Internal
             BlobContainerClient container = await this.tenantBlobContainerSource.GetBlobContainerClientFromTenantAsync(
                 tenant,
                 ResourceAccessRuleSetV2ConfigKey,
-                ResourceAccessRuleSetV3ConfigKey);
+                ResourceAccessRuleSetV3ConfigKey,
+                ResourceAccessRuleSetRepositoryName);
             return new ResourceAccessRuleSetStore(container, this.serializerSettingsProvider);
         }
     }
