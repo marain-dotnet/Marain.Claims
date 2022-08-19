@@ -336,21 +336,21 @@
       },
       "Marain.Services.Tenancy": {
         "type": "Transitive",
-        "resolved": "3.0.0-297-modern.28",
-        "contentHash": "HGLnR4ZYK4I4CuL5/Q1edctL1yWNKh+4v65IkAH8s/0wbrg0DBgtwd9GbKwT3BREf0kZOG57TholUAT82rOKCA==",
+        "resolved": "3.0.0-297-modern.29",
+        "contentHash": "Am1Wf7NN8X0gkGnGLCl11eYMyWTtjOQsx2okPOH2uB+WSBtV3YLNn6ddblGZSfkDZXiINRMYDqObq3tImIRerA==",
         "dependencies": {
-          "Marain.TenantManagement.Abstractions": "3.0.0-297-modern.28",
+          "Marain.TenantManagement.Abstractions": "3.0.0-297-modern.29",
           "Menes.Abstractions": "3.1.4",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         }
       },
       "Marain.Services.Tenancy.Testing": {
         "type": "Transitive",
-        "resolved": "3.0.0-297-modern.28",
-        "contentHash": "5hWIAzbxA9e6MEE9zntZj+yPSTGvFsBAZ2eUKaC5IDQsKL+uixt9jl61FnPQWVWR07mJkvS9JGYNnIpYijsZOg==",
+        "resolved": "3.0.0-297-modern.29",
+        "contentHash": "MP7+zoXlLc9iONEZHEwCYqB9q7ytOta+1o6Br+j/rNoLnYCq0iek2I2FMQiIzETywlLMPIRtTugMtbn4fyYClw==",
         "dependencies": {
           "Corvus.Testing.SpecFlow": "1.5.1",
-          "Marain.TenantManagement.Abstractions": "3.0.0-297-modern.28",
+          "Marain.TenantManagement.Abstractions": "3.0.0-297-modern.29",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         }
       },
@@ -2390,7 +2390,7 @@
         "type": "Project",
         "dependencies": {
           "Marain.Claims.Abstractions": "[1.0.0, )",
-          "Marain.Services.Tenancy": "[3.0.0-297-modern.28, )",
+          "Marain.Services.Tenancy": "[3.0.0-297-modern.29, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[6.0.*, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.*, )"
@@ -2400,7 +2400,7 @@
         "type": "Project",
         "dependencies": {
           "Marain.Claims.Tenancy.AzureBlob": "[1.0.0, )",
-          "Marain.Services.Tenancy.Testing": "[3.0.0-297-modern.28, )",
+          "Marain.Services.Tenancy.Testing": "[3.0.0-297-modern.29, )",
           "Marain.TenantManagement.Azure.BlobStorage": "[3.0.0-297-modern.29, )"
         }
       },

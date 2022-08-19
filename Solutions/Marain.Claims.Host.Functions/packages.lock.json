@@ -287,10 +287,10 @@
       },
       "Marain.Services.Tenancy": {
         "type": "Transitive",
-        "resolved": "3.0.0-297-modern.28",
-        "contentHash": "HGLnR4ZYK4I4CuL5/Q1edctL1yWNKh+4v65IkAH8s/0wbrg0DBgtwd9GbKwT3BREf0kZOG57TholUAT82rOKCA==",
+        "resolved": "3.0.0-297-modern.29",
+        "contentHash": "Am1Wf7NN8X0gkGnGLCl11eYMyWTtjOQsx2okPOH2uB+WSBtV3YLNn6ddblGZSfkDZXiINRMYDqObq3tImIRerA==",
         "dependencies": {
-          "Marain.TenantManagement.Abstractions": "3.0.0-297-modern.28",
+          "Marain.TenantManagement.Abstractions": "3.0.0-297-modern.29",
           "Menes.Abstractions": "3.1.4",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         }
@@ -320,8 +320,8 @@
       },
       "Marain.TenantManagement.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.0.0-297-modern.28",
-        "contentHash": "26cbfRIwFTjNtDTjoq0PQ54gEDwjMNjTY2a8KQtsOwq6a6HfTBB7vjSVKS/M3VAR/ElBrXM3RuvDg6xZ/Uf5fQ==",
+        "resolved": "3.0.0-297-modern.29",
+        "contentHash": "4ryvzlkbtYyQxce0gaN8X2aw+bTSBGFIhkC1706h/RNfJwOZsgT/SUytJ1LV231YsZRZGikEEkldP39pCYXSrw==",
         "dependencies": {
           "Corvus.Tenancy.Abstractions": "3.2.0",
           "Microsoft.Extensions.Logging.Abstractions": "6.0.1"
@@ -2334,7 +2334,7 @@
         "type": "Project",
         "dependencies": {
           "Marain.Claims.Abstractions": "[1.0.0, )",
-          "Marain.Services.Tenancy": "[3.0.0-297-modern.28, )",
+          "Marain.Services.Tenancy": "[3.0.0-297-modern.29, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[6.0.*, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.*, )"
