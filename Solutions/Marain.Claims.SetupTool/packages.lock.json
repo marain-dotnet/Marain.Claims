@@ -23,28 +23,28 @@
       },
       "Microsoft.Azure.Management.AppService.Fluent": {
         "type": "Direct",
-        "requested": "[1.38.0, )",
-        "resolved": "1.38.0",
-        "contentHash": "Nb8PC9x8Pbgb8+eSn/x6vwNn2lsLMSK9HT9lBBWFfaEZPMysMa4XweDfNjgxUSVe3YnfcsDIwzY8NZi7thz2Nw==",
+        "requested": "[1.38.1, )",
+        "resolved": "1.38.1",
+        "contentHash": "KROn7N8l4qZNOBVQ8KbQr2BzZHL04Weu5StBKqjGbtRuRTuWTQmlHFij6XURzyHh716BxO89u/keh24737Wr2Q==",
         "dependencies": {
-          "Microsoft.Azure.Management.KeyVault.Fluent": "1.38.0",
-          "Microsoft.Azure.Management.Msi.Fluent": "1.38.0",
-          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.0",
-          "Microsoft.Azure.Management.Storage.Fluent": "1.38.0",
-          "Microsoft.Rest.ClientRuntime": "[2.3.20, 3.0.0)",
-          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.18, 4.0.0)",
+          "Microsoft.Azure.Management.KeyVault.Fluent": "1.38.1",
+          "Microsoft.Azure.Management.Msi.Fluent": "1.38.1",
+          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.1",
+          "Microsoft.Azure.Management.Storage.Fluent": "1.38.1",
+          "Microsoft.Rest.ClientRuntime": "[2.3.24, 3.0.0)",
+          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.19, 4.0.0)",
           "NETStandard.Library": "1.6.1",
           "System.Net.Http": "4.3.4"
         }
       },
       "Microsoft.Azure.Management.ResourceManager.Fluent": {
         "type": "Direct",
-        "requested": "[1.38.0, )",
-        "resolved": "1.38.0",
-        "contentHash": "5Rlk3nPPg+xHno1a4/FoDOy8ZiJwnLvo91MPfq77QKQtVtAvriH9UDViNwzKszl8krU+9jmzxpXDGcbjeA0Nlw==",
+        "requested": "[1.38.1, )",
+        "resolved": "1.38.1",
+        "contentHash": "fXG4VNDMma0t08Z11skeMR/Wm4t683mvNDclpqm44irYV7GlZTEwlTAGLkVdTG6VDD+nhGtWJ/Oxyy7JhNnRMg==",
         "dependencies": {
-          "Microsoft.Rest.ClientRuntime": "[2.3.20, 3.0.0)",
-          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.18, 4.0.0)",
+          "Microsoft.Rest.ClientRuntime": "[2.3.24, 3.0.0)",
+          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.19, 4.0.0)",
           "Microsoft.Rest.ClientRuntime.Azure.Authentication": "2.4.1",
           "NETStandard.Library": "1.6.1",
           "System.Net.Http": "4.3.4",
@@ -289,51 +289,51 @@
       },
       "Microsoft.Azure.Management.Graph.RBAC.Fluent": {
         "type": "Transitive",
-        "resolved": "1.38.0",
-        "contentHash": "DtB++2ZeZ+2KsNe6dQ3O9eoCGXjJTiRIx+elivCvnjAJEWSa3tzEWzHHtKIR2IHnh4Po6WxbYDmAj9oxpYEpMw==",
+        "resolved": "1.38.1",
+        "contentHash": "W1xXt9uXavd4uN3LEetAXdyzPB1QcWx8k9kf4hzFqhGz1K68cpcJaUff9Z9C8pxT3T/24F1c4vkstReqe0o/Hg==",
         "dependencies": {
-          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.0",
-          "Microsoft.Rest.ClientRuntime": "[2.3.20, 3.0.0)",
-          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.18, 4.0.0)",
+          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.1",
+          "Microsoft.Rest.ClientRuntime": "[2.3.24, 3.0.0)",
+          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.19, 4.0.0)",
           "NETStandard.Library": "1.6.1",
           "System.Net.Http": "4.3.4"
         }
       },
       "Microsoft.Azure.Management.KeyVault.Fluent": {
         "type": "Transitive",
-        "resolved": "1.38.0",
-        "contentHash": "aeSHt2LIjKKOh9pLWWA67dUsRtkdAWOk0s/X9/g6txDmebmJyLolsVB+3/Xg23M9T1q6hto9QkUHZHMfOgz6jQ==",
+        "resolved": "1.38.1",
+        "contentHash": "2Ysa4mCfCUAZtD6FD7/J6YbUcv7v3H5OTGhvKFfu2zbXvp6ffNcsjl0PA9CyzqVdkL0NJvX7tYr9khCvsL6itQ==",
         "dependencies": {
           "Microsoft.Azure.KeyVault": "3.0.5",
-          "Microsoft.Azure.Management.Graph.RBAC.Fluent": "1.38.0",
-          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.0",
-          "Microsoft.Rest.ClientRuntime": "[2.3.20, 3.0.0)",
-          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.18, 4.0.0)",
+          "Microsoft.Azure.Management.Graph.RBAC.Fluent": "1.38.1",
+          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.1",
+          "Microsoft.Rest.ClientRuntime": "[2.3.24, 3.0.0)",
+          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.19, 4.0.0)",
           "NETStandard.Library": "1.6.1",
           "System.Net.Http": "4.3.4"
         }
       },
       "Microsoft.Azure.Management.Msi.Fluent": {
         "type": "Transitive",
-        "resolved": "1.38.0",
-        "contentHash": "pqkhm3JQ+u/lvz4xuWqWrvT3cixzNZukyMo20Qv2trLr0xx6iBGNycjEVlgRKxnbAotje2V26yb9H7jd7pLytQ==",
+        "resolved": "1.38.1",
+        "contentHash": "I1ftewEZUM5mSxgQVzsoNgggDJzGgGS0H+bnjP7BreHTEYDHXdE02Ki6LPCy1MCV5oNhHMOiNx58cJ7ymJtK7g==",
         "dependencies": {
-          "Microsoft.Azure.Management.Graph.RBAC.Fluent": "1.38.0",
-          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.0",
-          "Microsoft.Rest.ClientRuntime": "[2.3.20, 3.0.0)",
-          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.18, 4.0.0)",
+          "Microsoft.Azure.Management.Graph.RBAC.Fluent": "1.38.1",
+          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.1",
+          "Microsoft.Rest.ClientRuntime": "[2.3.24, 3.0.0)",
+          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.19, 4.0.0)",
           "NETStandard.Library": "1.6.1",
           "System.Net.Http": "4.3.4"
         }
       },
       "Microsoft.Azure.Management.Storage.Fluent": {
         "type": "Transitive",
-        "resolved": "1.38.0",
-        "contentHash": "cq09FEZ8ubSv2OnEPIqab5uAbg6vu7h+CokWHK2PXgMr3r51yQbFdPGLL2DyKxbTAF1wFvYryxKL5wc+uiCcZQ==",
+        "resolved": "1.38.1",
+        "contentHash": "5T5ktlTYqJQ0aqeLOCRT8TdLNoQxTnZAQF/YExEWzFHrWY1MBemVVAFstZnQRzE7bipjxo6kAj71BhuJubKfTA==",
         "dependencies": {
-          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.0",
-          "Microsoft.Rest.ClientRuntime": "[2.3.20, 3.0.0)",
-          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.18, 4.0.0)",
+          "Microsoft.Azure.Management.ResourceManager.Fluent": "1.38.1",
+          "Microsoft.Rest.ClientRuntime": "[2.3.24, 3.0.0)",
+          "Microsoft.Rest.ClientRuntime.Azure": "[3.3.19, 4.0.0)",
           "NETStandard.Library": "1.6.1",
           "System.Net.Http": "4.3.4"
         }
@@ -561,11 +561,10 @@
       },
       "Microsoft.Rest.ClientRuntime.Azure": {
         "type": "Transitive",
-        "resolved": "3.3.18",
-        "contentHash": "pCtem10PRQYvzRiwJVInsccsqB0NrTjW83NF3zWk1LpN3IS0AneZKq89RyogDT7mRMT1Li/mLY8N8kU6RAiK0g==",
+        "resolved": "3.3.19",
+        "contentHash": "+NVBWvRXNwaAPTZUxjUlQggsrf3X0GbiRoxYfgc3kG9E55ZxZxvZPT3nIfC4DNqzGSXUEvmLbckdXgBBzGdUaA==",
         "dependencies": {
-          "Microsoft.Rest.ClientRuntime": "[2.3.17, 3.0.0)",
-          "NETStandard.Library": "1.6.1",
+          "Microsoft.Rest.ClientRuntime": "[2.3.19, 3.0.0)",
           "Newtonsoft.Json": "10.0.3"
         }
       },
