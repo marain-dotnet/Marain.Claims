@@ -52,12 +52,12 @@
       },
       "Microsoft.OpenApi.Readers": {
         "type": "Direct",
-        "requested": "[1.2.3, )",
-        "resolved": "1.2.3",
-        "contentHash": "r1KBRewLxmCYuQ3fBksYQ2u/D1FtsN3zlPvOsZoiugzVgJbtq1wFD25Rgh/UAonUXgTpmlHciM5WHMavR9bk2g==",
+        "requested": "[1.3.2, )",
+        "resolved": "1.3.2",
+        "contentHash": "/IIxzfAbATkqFDWu61aWDYyDP1nHh6QvT3kxdeloaVbJNsJqMTR9JbsWO7ETC9V/8ZtHPx8CxdoPZlibLCfOOw==",
         "dependencies": {
-          "Microsoft.OpenApi": "1.2.3",
-          "SharpYaml": "1.6.5"
+          "Microsoft.OpenApi": "1.3.2",
+          "SharpYaml": "1.9.2"
         }
       },
       "Roslynator.Analyzers": {
@@ -1198,8 +1198,8 @@
       },
       "Microsoft.OpenApi": {
         "type": "Transitive",
-        "resolved": "1.2.3",
-        "contentHash": "Nug3rO+7Kl5/SBAadzSMAVgqDlfGjJZ0GenQrLywJ84XGKO0uRqkunz5Wyl0SDwcR71bAATXvSdbdzPrYRYKGw=="
+        "resolved": "1.3.2",
+        "contentHash": "5YR1u+Mc3LgkL4yfK2RUURLv1LFLYwyDsdbfATJCH1fxFk7VAQexvsmwnavM7kk1nbwV9OmjZZGDWVREukGuJQ=="
       },
       "Microsoft.Rest.ClientRuntime": {
         "type": "Transitive",
@@ -1420,11 +1420,8 @@
       },
       "SharpYaml": {
         "type": "Transitive",
-        "resolved": "1.6.5",
-        "contentHash": "z4MKt+NxdGE5BsmNDNkcTylNx6evl9kvia/ER3jfBf+j2mLUUDz8pTbzoQLCTULR02tziDtX1Ij+eQcAey11Gw==",
-        "dependencies": {
-          "System.Reflection.TypeExtensions": "4.3.0"
-        }
+        "resolved": "1.9.2",
+        "contentHash": "T1yPXPlEBwDohiT0fUpfJX71PQ4BOIYsyErGAKlFy0idXJr3xU9qUY0oIQlS3pfwiwa2fbbG0OxM0J1e95ePvw=="
       },
       "StyleCop.Analyzers.Unstable": {
         "type": "Transitive",
