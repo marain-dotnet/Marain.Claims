@@ -418,8 +418,8 @@
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
-        "resolved": "2.20.0",
-        "contentHash": "mb+EC5j06Msn5HhKrhrsMAst6JxvYUnphQMGY2cixCabgGAO3q79Y8o/p1Zce1Azgd1IVkRKAMzAV4vDCbXOqA==",
+        "resolved": "2.21.0",
+        "contentHash": "btZEDWAFNo9CoYliMCriSMTX3ruRGZTtYw4mo2XyyfLlowFicYVM2Xszi5evDG95QRYV7MbbH3D2RqVwfZlJHw==",
         "dependencies": {
           "System.Diagnostics.DiagnosticSource": "5.0.0"
         }
@@ -1179,8 +1179,8 @@
       },
       "Newtonsoft.Json": {
         "type": "Transitive",
-        "resolved": "12.0.3",
-        "contentHash": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg=="
+        "resolved": "13.0.1",
+        "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
       },
       "NuGet.Frameworks": {
         "type": "Transitive",
@@ -2368,7 +2368,7 @@
           "Corvus.Tenancy.Abstractions": "[3.2.0, )",
           "Menes.Abstractions": "[3.1.4, )",
           "Microsoft.Extensions.FileSystemGlobbing": "[6.0.*, )",
-          "Newtonsoft.Json": "[12.0.3, )"
+          "Newtonsoft.Json": "[13.0.1, )"
         }
       },
       "marain.claims.client": {
@@ -2391,7 +2391,7 @@
         "dependencies": {
           "Marain.Claims.Abstractions": "[1.0.0, )",
           "Marain.Services.Tenancy": "[3.0.0-297-modern.28, )",
-          "Microsoft.ApplicationInsights": "[2.20.0, )",
+          "Microsoft.ApplicationInsights": "[2.21.0, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[6.0.*, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.*, )"
         }
