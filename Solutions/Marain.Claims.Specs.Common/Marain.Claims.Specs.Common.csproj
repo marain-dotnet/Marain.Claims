@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <EndjinDisableAutoPackagesLock>true</EndjinDisableAutoPackagesLock>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="3.0.0-297-modern.28" />
+    <PackageReference Include="Marain.TenantManagement.Azure.BlobStorage" Version="3.0.0-297-modern.29" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Marain.Claims.Tenancy.AzureBlob\Marain.Claims.Tenancy.AzureBlob.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ServiceManifests\" />
+    <EmbeddedResource Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
+  </ItemGroup>
+
+</Project>

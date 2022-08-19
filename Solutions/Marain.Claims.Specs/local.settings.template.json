@@ -1,9 +1,10 @@
 {
-  // If using a real blob storage account, provide the details using these settings. To use the emulator, omit the settings
-  // completely.
-  "TestBlobStorageConfiguration:AccountName": "",
-  "TestBlobStorageConfiguration:AccountKeySecretName": "",
-  "TestBlobStorageConfiguration:KeyVaultName": ""
+  // This uses the emulator:
+  "TestBlobStorageConfiguration:ConnectionStringPlainText": "UseDevelopmentStorage=true"
+  // If using a real blob storage account, provide the details using these settings.
+  //"TestBlobStorageConfiguration:AccountName": ""
+  //"TestBlobStorageConfiguration:AccessKeyInKeyVault:SecretName": "",
+  //"TestBlobStorageConfiguration:AccessKeyInKeyVault:VaultName": ""
 
   // If using a real Blob Storage configuration that requires KeyVault access, this local service will need to authenticate.
   // And for that to work, you won't be able to use the normal az cli-based AzureServicesAuthConnectionString

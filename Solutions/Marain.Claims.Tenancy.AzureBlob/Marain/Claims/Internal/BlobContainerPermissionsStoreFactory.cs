@@ -19,12 +19,10 @@ namespace Marain.Claims.Internal
     /// </summary>
     public class BlobContainerPermissionsStoreFactory : IPermissionsStoreFactory
     {
-        private const string ClaimPermissionsRepositoryName = "claimpermissions";
-        private const string ClaimPermissionsV2ConfigKey = "StorageConfiguration__" + ClaimPermissionsRepositoryName;
-        private const string ClaimPermissionsV3ConfigKey = "StorageConfigurationV3__" + ClaimPermissionsRepositoryName;
-        private const string ResourceAccessRuleSetRepositoryName = "resourceaccessrulesets";
-        private const string ResourceAccessRuleSetV2ConfigKey = "StorageConfiguration__" + ResourceAccessRuleSetRepositoryName;
-        private const string ResourceAccessRuleSetV3ConfigKey = "StorageConfigurationV3__" + ResourceAccessRuleSetRepositoryName;
+        private const string ClaimPermissionsV2ConfigKey = "StorageConfiguration__claimpermissions";
+        private const string ClaimPermissionsV3ConfigKey = ClaimsAzureBlobTenancyPropertyKeys.ClaimPermissions;
+        private const string ResourceAccessRuleSetV2ConfigKey = "StorageConfiguration__resourceaccessrulesets";
+        private const string ResourceAccessRuleSetV3ConfigKey = ClaimsAzureBlobTenancyPropertyKeys.ResourceAccessRuleSet;
         private readonly IBlobContainerSourceWithTenantLegacyTransition tenantBlobContainerSource;
         private readonly IJsonSerializerSettingsProvider serializerSettingsProvider;
 
