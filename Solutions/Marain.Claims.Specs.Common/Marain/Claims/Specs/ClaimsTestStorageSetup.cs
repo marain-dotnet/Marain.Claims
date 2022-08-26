@@ -134,20 +134,20 @@ public static class ClaimsTestStorageSetup
         return new EnrollmentConfigurationEntry(
             new Dictionary<string, ConfigurationItem>
             {
+                {
+                    ClaimsAzureBlobTenancyPropertyKeys.ClaimPermissions,
+                    new BlobStorageConfigurationItem
                     {
-                        "Marain:Claims:BlobContainerConfiguration:ClaimPermissions",
-                        new BlobStorageConfigurationItem
-                        {
-                            Configuration = claimPermissionsStoreStorageConfiguration,
-                        }
-                    },
+                        Configuration = claimPermissionsStoreStorageConfiguration,
+                    }
+                },
+                {
+                    ClaimsAzureBlobTenancyPropertyKeys.ResourceAccessRuleSet,
+                    new BlobStorageConfigurationItem
                     {
-                        "Marain:Claims:BlobContainerConfiguration:ResourceAccessRuleSets",
-                        new BlobStorageConfigurationItem
-                        {
-                            Configuration = resourceAccessRuleSetsStoreStorageConfiguration,
-                        }
-                    },
+                        Configuration = resourceAccessRuleSetsStoreStorageConfiguration,
+                    }
+                },
             },
             null);
     }

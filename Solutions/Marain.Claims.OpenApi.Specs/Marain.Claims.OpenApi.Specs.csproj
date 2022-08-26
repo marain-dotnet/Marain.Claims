@@ -53,14 +53,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ServiceManifests\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
-  </ItemGroup>
-
   <!--
   To enable execution of feature files for each hosting mode, we exploit the fact that SpecFlow's
   NUnit integration generates partial classes. We modify these by adding a constructor and a test
