@@ -62,7 +62,7 @@ jobs:
           version: 3.1.x
 
     # TODO: find the right way to do this:
-    #   * integrate with scripted build
+    #   * integrate with scripted build 
     #   * use the correct folders once we're on .NET 6.0 for most things
     preCopyNugetPackages:
       - task: ArchiveFiles@2
