@@ -58,5 +58,33 @@ Option 3 will be implemented.
 
 As part of this, we will implement a new `IResourceAccessEvaluator` which uses our new local-evaluation client. We'll provide additional extension methods in `OpenApiClaimsServiceCollectionExtensions` and `OpenApiAccessControlServiceCollectionExtensions` to allow configuring Menes and Marain Claims integration with the new features, meaning that many use cases will only need to change a single line of code to take advantage of the new functionality.
 
+## Implementation notes
+
+This section records decisions that were made during implementation.
+
+### Tokenization of URI and AccessTypes
+
+Question: Should we tokenize all of the URIs and AccessTypes in `ResourceAccessRules` at the point we retrieve a set of `ClaimPermissions` from the API, or do we allow the globbing library to tokenize on each evaluation.
+
+Tokenization is part of the glob matching process, but we have the choice of doing this up front and storing the tokenization data alongside the globs, or allowing the globbing library to tokenize globs during the evaluation.
+
+Both approaches were coded and benchmarked with the following results. Note: in the following tables, "WithTokenization" means using the code paths where URI and AccessMethod globs are tokenized up front.
+
+Firstly, the impact on processing the retrieved `ClaimPermissions` document. As expected, tokenization up front takes longer and results in more memory allocation. Note that no attempt was made at this point to optimize memory allocation.
+
+|                                     Method |      Mean |     Error |    StdDev |   Gen0 |   Gen1 | Allocated |
+|------------------------------------------- |----------:|----------:|----------:|-------:|-------:|----------:|
+|    ProcessClaimPermissionsWithTokenization | 11.841 us | 0.2002 us | 0.1872 us | 1.3580 | 0.0458 |  22.33 KB |
+| ProcessClaimPermissionsWithoutTokenization |  5.181 us | 0.0798 us | 0.0747 us | 0.5951 | 0.0076 |   9.75 KB |
+
+Secondly, the impact on claim evaluation. Again, as expected, evaluation is faster when the globs have already been tokenized.
+
+|                                           Method |     Mean |     Error |    StdDev |   Gen0 | Allocated |
+|------------------------------------------------- |---------:|----------:|----------:|-------:|----------:|
+|    EvaluateSingleClaimPermissionWithTokenization | 2.195 us | 0.0221 us | 0.0207 us | 0.0153 |     312 B |
+| EvaluateSingleClaimPermissionWithoutTokenization | 4.711 us | 0.0461 us | 0.0432 us | 0.0153 |     312 B |
+
+Based on these results, we decided to stick with up-front tokenization.
+
 ## Consequences
 
