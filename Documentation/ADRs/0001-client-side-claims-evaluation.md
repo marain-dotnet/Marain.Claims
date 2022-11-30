@@ -86,5 +86,37 @@ Secondly, the impact on claim evaluation. Again, as expected, evaluation is fast
 
 Based on these results, we decided to stick with up-front tokenization.
 
+### Caching processed `ResourceAccessRuleset`s for reuse
+
+Question: Since `ResourceAccessRuleset`s are often reused in multiple `ClaimPermissions`, should we keep a cache of the processed rulesets from each `ClaimPermissions` and reuse these for any future `ClaimPermissions` that reference the same rulesets?
+
+This essentially comes down to determining whether the cost of attempting to look up every ruleset in the cache before processing it is greater than the cost of processing/tokenizing all of the rules in the `ResourceAccessRuleset` again.
+
+The following benchmarks show the impact of this caching when processing the same `ClaimPermissions` twice - meaning that for the second `ClaimPermissions`, all of the `ResourceAccessRuleset`s will be in the cache.
+
+|                                               Method |     Mean |    Error |   StdDev | Allocated |
+|----------------------------------------------------- |---------:|---------:|---------:|----------:|
+|   ProcessSingleClaimPermissionsWithoutRulesetCaching | 29.83 us | 0.590 us | 0.808 us |  23.05 KB |
+| ProcessMultipleClaimPermissionsWithoutRulesetCaching | 49.75 us | 0.993 us | 1.104 us |  45.39 KB |
+|      ProcessSingleClaimPermissionsWithRulesetCaching | 41.74 us | 0.812 us | 1.056 us |  38.64 KB |
+|    ProcessMultipleClaimPermissionsWithRulesetCaching | 53.28 us | 1.012 us | 1.125 us |   46.5 KB |
+
+In this case we can see that loading the second `ClaimPermissions` takes around 20 us without caching, and 12 us with caching. However, we pay a penalty of around 10us to load the first `ClaimPermissions` with caching enabled, which is due to the overhead in looking up each `ResourceAccessRuleset` in the cache.
+
+This benchmark shows the same statistics but with the second `ClaimPermissions` being different from the first, with around 50% of the rules overlapping.
+
+|                                               Method |     Mean |    Error |   StdDev | Allocated |
+|----------------------------------------------------- |---------:|---------:|---------:|----------:|
+|   ProcessSingleClaimPermissionsWithoutRulesetCaching | 28.75 us | 0.571 us | 0.906 us |  23.05 KB |
+| ProcessMultipleClaimPermissionsWithoutRulesetCaching | 44.97 us | 0.871 us | 1.003 us |  41.02 KB |
+|      ProcessSingleClaimPermissionsWithRulesetCaching | 40.46 us | 0.806 us | 0.960 us |  37.66 KB |
+|    ProcessMultipleClaimPermissionsWithRulesetCaching | 50.71 us | 0.990 us | 1.252 us |  44.94 KB |
+
+In this case, we see the same ~10us penalty when loading the first `ClaimPermissions` with caching enabled. Loading the second takes around 16us without caching and about 10 us with caching.
+
+However, there is an additional complexity that caching `ResourceAccessRuleset`s will introduce. `ResourceAccessRuleset`s are entities that exist independently of the `ClaimPermissions` they are used by. The API denormalizes them into the `ClaimPermissions` document to save the need for making separate requests for the rulesets. However, this means that when multiple `ClaimPermissions` that include the same `ResourceAccessRuleset` are retrieved, it would be possible for the `ResourceAccessRuleset`s to be different versions of the same ruleset.
+
+In order to avoid dealing with this complexity (at least for the first iteration of this feature), we will accept the relatively minor impact in processing time and not cache the rulesets.
+
 ## Consequences
 
