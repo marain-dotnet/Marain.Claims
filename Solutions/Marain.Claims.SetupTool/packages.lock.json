@@ -1617,7 +1617,7 @@
         "dependencies": {
           "Corvus.Tenancy.Abstractions": "[3.4.0, )",
           "Menes.Abstractions": "[4.0.0, )",
-          "Microsoft.Extensions.FileSystemGlobbing": "[6.0.*, )",
+          "Microsoft.Extensions.FileSystemGlobbing": "[6.0.0, )",
           "Newtonsoft.Json": "[13.0.2, )"
         }
       },

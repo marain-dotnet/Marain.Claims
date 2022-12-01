@@ -2300,7 +2300,7 @@
         "dependencies": {
           "Corvus.Tenancy.Abstractions": "[3.4.0, )",
           "Menes.Abstractions": "[4.0.0, )",
-          "Microsoft.Extensions.FileSystemGlobbing": "[6.0.*, )",
+          "Microsoft.Extensions.FileSystemGlobbing": "[6.0.0, )",
           "Newtonsoft.Json": "[13.0.2, )"
         }
       },
@@ -2336,8 +2336,8 @@
           "Marain.Claims.Abstractions": "[1.0.0, )",
           "Marain.Services.Tenancy": "[3.0.0, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
-          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.*, )",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.*, )"
+          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.0, )"
         }
       },
       "marain.claims.storage.azureblob": {
@@ -2357,7 +2357,7 @@
           "Marain.Claims.Storage.AzureBlob": "[1.0.0, )",
           "Menes.Hosting.AspNetCore": "[4.0.0, )",
           "Menes.Testing.AspNetCoreSelfHosting": "[4.0.0, )",
-          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.*, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.*, )"
         }
       }

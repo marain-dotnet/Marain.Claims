@@ -2653,7 +2653,7 @@
         "dependencies": {
           "Corvus.Tenancy.Abstractions": "[3.4.0, )",
           "Menes.Abstractions": "[4.0.0, )",
-          "Microsoft.Extensions.FileSystemGlobbing": "[6.0.*, )",
+          "Microsoft.Extensions.FileSystemGlobbing": "[6.0.0, )",
           "Newtonsoft.Json": "[13.0.2, )"
         }
       },
@@ -2662,7 +2662,7 @@
         "dependencies": {
           "Cimpress.Extensions.Http.Caching.InMemory": "[2.1.111, )",
           "Corvus.Identity.MicrosoftRest": "[3.1.0, )",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "[6.0.*, )",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[6.0.0, )",
           "Microsoft.Rest.ClientRuntime": "[2.3.24, )"
         }
       },
@@ -2715,8 +2715,8 @@
           "Marain.Claims.Abstractions": "[1.0.0, )",
           "Marain.Services.Tenancy": "[3.0.0, )",
           "Microsoft.ApplicationInsights": "[2.21.0, )",
-          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.*, )",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.*, )"
+          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.0, )"
         }
       },
       "marain.claims.specs.common": {
@@ -2744,7 +2744,7 @@
           "Marain.Claims.Storage.AzureBlob": "[1.0.0, )",
           "Menes.Hosting.AspNetCore": "[4.0.0, )",
           "Menes.Testing.AspNetCoreSelfHosting": "[4.0.0, )",
-          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.*, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[6.0.*, )"
         }
       }
