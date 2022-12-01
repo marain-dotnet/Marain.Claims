@@ -44,8 +44,8 @@ public static class ClaimsTestStorageSetup
     {
         EnrollmentConfigurationEntry enrollmentConfiguration = CreateClaimsConfig(featureContext);
         IBlobContainerSourceFromDynamicConfiguration blobContainerSource = serviceProvider.GetRequiredService<IBlobContainerSourceFromDynamicConfiguration>();
-        var claimsPermissionsConfig = (BlobStorageConfigurationItem)enrollmentConfiguration.ConfigurationItems[ClaimsAzureBlobTenancyPropertyKeys.ClaimPermissions];
-        var ruleSetsConfig = (BlobStorageConfigurationItem)enrollmentConfiguration.ConfigurationItems[ClaimsAzureBlobTenancyPropertyKeys.ResourceAccessRuleSet];
+        var claimsPermissionsConfig = (BlobContainerConfigurationItem)enrollmentConfiguration.ConfigurationItems[ClaimsAzureBlobTenancyPropertyKeys.ClaimPermissions];
+        var ruleSetsConfig = (BlobContainerConfigurationItem)enrollmentConfiguration.ConfigurationItems[ClaimsAzureBlobTenancyPropertyKeys.ResourceAccessRuleSet];
         BlobContainerClient claimsPermissionsContainer = await blobContainerSource.GetStorageContextAsync(claimsPermissionsConfig.Configuration);
         BlobContainerClient ruleSetsContainer = await blobContainerSource.GetStorageContextAsync(ruleSetsConfig.Configuration);
         await claimsPermissionsContainer.CreateIfNotExistsAsync();
@@ -136,14 +136,14 @@ public static class ClaimsTestStorageSetup
             {
                 {
                     ClaimsAzureBlobTenancyPropertyKeys.ClaimPermissions,
-                    new BlobStorageConfigurationItem
+                    new BlobContainerConfigurationItem
                     {
                         Configuration = claimPermissionsStoreStorageConfiguration,
                     }
                 },
                 {
                     ClaimsAzureBlobTenancyPropertyKeys.ResourceAccessRuleSet,
-                    new BlobStorageConfigurationItem
+                    new BlobContainerConfigurationItem
                     {
                         Configuration = resourceAccessRuleSetsStoreStorageConfiguration,
                     }
