@@ -30,7 +30,7 @@ namespace Marain.Claims
     /// var rule = new ResourceAccessRule("edit", resource, Permission.Deny);
     /// </code>
     /// </example>
-    public struct ResourceAccessRule : IEquatable<ResourceAccessRule>
+    public readonly struct ResourceAccessRule : IEquatable<ResourceAccessRule>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAccessRule"/> struct.

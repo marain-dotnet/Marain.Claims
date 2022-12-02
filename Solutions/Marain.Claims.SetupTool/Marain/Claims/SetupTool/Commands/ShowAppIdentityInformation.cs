@@ -4,12 +4,15 @@
 
 namespace Marain.Claims.SetupTool.Commands
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using Azure.ResourceManager;
+    using Azure.ResourceManager.AppService;
+    using Azure.ResourceManager.AppService.Models;
+    using Azure.ResourceManager.Models;
+
     using McMaster.Extensions.CommandLineUtils;
-    using Microsoft.Azure.Management.AppService.Fluent;
-    using Microsoft.Azure.Management.AppService.Fluent.Models;
 
     /// <summary>
     /// Command to discover information about an Azure Function or Web App's identity.
@@ -60,64 +63,62 @@ namespace Marain.Claims.SetupTool.Commands
         private async Task<int> OnExecuteAsync(CommandLineApplication app, CancellationToken cancellationToken = default)
         {
             var authenticationOptions = AuthenticationOptions.BuildFrom(this.UseAzCliDevAuth, this.TenantId);
-            IAppServiceManager appServiceManager = AppServiceManagerSource.Get(
-                authenticationOptions, this.SubscriptionId);
-            IWebAppAuthentication webAppAuthConfig;
-            ManagedServiceIdentity managedIdentity;
-            IFunctionApp function = null;
+            ArmClient client = new(authenticationOptions.GetAzureCredentials());
+            WebSiteResource functionResource = null;
+            WebSiteData function = null;
             try
             {
-                function = appServiceManager.FunctionApps.GetByResourceGroup(this.ResourceGroupName, this.AppName);
+                functionResource = client.GetWebSiteResource(WebSiteResource.CreateResourceIdentifier(this.SubscriptionId, this.ResourceGroupName, this.AppName));
+                Azure.Response<WebSiteResource> result = await functionResource.GetAsync(cancellationToken);
+                function = function = result.Value.Data;
             }
-            catch (NullReferenceException)
+            catch (Azure.RequestFailedException rfx)
+            when (rfx.Status == 404)
             {
-                // Unhelpfully, we seem to get a null reference exception if the app isn't found
             }
 
-            if (function != null)
+            if (function is null)
             {
-                managedIdentity = function.Inner.Identity;
-                webAppAuthConfig = await function.GetAuthenticationConfigAsync(cancellationToken).ConfigureAwait(false);
+                app.Error.WriteLine($"Unable to find either a Function or Web App in resource group '{this.ResourceGroupName}' called '{this.AppName}'");
             }
             else
             {
-                IWebApp webApp = appServiceManager.WebApps.GetByResourceGroup(this.ResourceGroupName, this.AppName);
-                if (webApp == null)
+                ManagedServiceIdentity managedIdentity = function.Identity;
+                SiteAuthSettings webAppAuthConfig = await functionResource.GetAuthSettingsAsync(cancellationToken);
+                SiteAuthSettingsV2 webAppAuthConfigV2 = await functionResource.GetAuthSettingsV2Async(cancellationToken);
+
+                if (webAppAuthConfigV2.IdentityProviders is not null)
                 {
-                    app.Error.WriteLine($"Unable to find either a Function or Web App in resource group '{this.ResourceGroupName}' called '{this.AppName}'");
-                    return -1;
+                    app.Out.WriteLine($"Default Easy Auth (v2): {webAppAuthConfigV2.GlobalValidation?.RedirectToProvider ?? "no default provider"}");
+                    app.Out.WriteLine($" Client ID: {webAppAuthConfigV2.IdentityProviders.AzureActiveDirectory?.Registration?.ClientId ?? "client id not set"}");
+                }
+                else if (webAppAuthConfig?.IsEnabled == true)
+                {
+                    app.Out.WriteLine($"Default Easy Auth (v2): {webAppAuthConfig.DefaultProvider}");
+                    app.Out.WriteLine($" Client ID: {webAppAuthConfig.ClientId}");
+                }
+                else
+                {
+                    app.Out.WriteLine("Easy Auth not enabled");
                 }
 
-                managedIdentity = webApp.Inner.Identity;
-                webAppAuthConfig = await webApp.GetAuthenticationConfigAsync(cancellationToken).ConfigureAwait(false);
-            }
-
-            if (webAppAuthConfig.Inner.Enabled == true)
-            {
-                app.Out.WriteLine($"Default Easy Auth: {webAppAuthConfig.Inner.DefaultProvider}");
-                app.Out.WriteLine($" Client ID: {webAppAuthConfig.Inner.ClientId}");
-            }
-            else
-            {
-                app.Out.WriteLine("Easy Auth not enabled");
-            }
-
-            if (managedIdentity == null)
-            {
-                app.Out.WriteLine("No managed identity");
-            }
-            else
-            {
-                app.Out.WriteLine("Managed identity:");
-                app.Out.WriteLine($" Type:                 {managedIdentity.Type}");
-                app.Out.WriteLine($" TenantId:             {managedIdentity.TenantId}");
-                app.Out.WriteLine($" PrincipalId:          {managedIdentity.PrincipalId}");
-
-                if (managedIdentity.UserAssignedIdentities != null)
+                if (managedIdentity == null)
                 {
-                    foreach ((string id, ManagedServiceIdentityUserAssignedIdentitiesValue value) in managedIdentity.UserAssignedIdentities)
+                    app.Out.WriteLine("No managed identity");
+                }
+                else
+                {
+                    app.Out.WriteLine("Managed identity:");
+                    app.Out.WriteLine($" Type:                 {managedIdentity.ManagedServiceIdentityType}");
+                    app.Out.WriteLine($" TenantId:             {managedIdentity.TenantId}");
+                    app.Out.WriteLine($" PrincipalId:          {managedIdentity.PrincipalId}");
+
+                    if (managedIdentity.UserAssignedIdentities != null)
                     {
-                        app.Out.WriteLine($" UserAssignedIdentity: Id = {id}, ClientId = {value.ClientId}, PrincipalId = {value.PrincipalId}");
+                        foreach ((Azure.Core.ResourceIdentifier id, UserAssignedIdentity value) in managedIdentity.UserAssignedIdentities)
+                        {
+                            app.Out.WriteLine($" UserAssignedIdentity: Id = {id}, ClientId = {value.ClientId}, PrincipalId = {value.PrincipalId}");
+                        }
                     }
                 }
             }
