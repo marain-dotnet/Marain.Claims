@@ -60,6 +60,8 @@ namespace Marain.Claims.SpecFlow.Bindings
 
                     serviceCollection.AddMarainServiceConfiguration();
                     serviceCollection.AddMarainServicesTenancy();
+
+                    serviceCollection.AddMarainTenantManagementForBlobStorage();
                 });
         }
     }

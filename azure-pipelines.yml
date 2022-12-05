@@ -25,8 +25,8 @@ jobs:
     postCustomEnvironmentVariables:
       - powershell: |
           Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccountName]$Env:ENDJIN_BLOBSTORAGEACCOUNTNAME"
-          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccountKeySecretName]$Env:ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME"
-          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__KeyVaultName]$Env:ENDJIN_BLOBSTORAGEKEYVAULTNAME"
+          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccessKeyInKeyVault__SecretName]$Env:ENDJIN_BLOBSTORAGEACCOUNTKEYSECRETNAME"
+          Write-Host "##vso[task.setvariable variable=TestBlobStorageConfiguration__AccessKeyInKeyVault__VaultName]$Env:ENDJIN_BLOBSTORAGEKEYVAULTNAME"
           Write-Host "##vso[task.setvariable variable=AzureServicesAuthConnectionString]$Env:ENDJIN_AZURESERVICESAUTHCONNECTIONSTRING"
           Write-Host "##vso[task.setvariable variable=TenancyClient__TenancyServiceBaseUri]$Env:ENDJIN_MARAINTENANCYBASEURL"
           Write-Host "##vso[task.setvariable variable=TenancyClient__ResourceIdForMsiAuthentication]$Env:ENDJIN_MARAINTENANCYRESOURCEIDFORMSIAUTHENTICATION"

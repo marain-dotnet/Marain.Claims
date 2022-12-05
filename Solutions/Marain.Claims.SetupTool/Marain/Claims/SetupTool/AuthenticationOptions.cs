@@ -11,13 +11,11 @@ namespace Marain.Claims.SetupTool
 
     using Azure;
     using Azure.Core;
+    using Azure.Identity;
     using Azure.Security.KeyVault.Secrets;
 
     using Corvus.Identity.ClientAuthentication.Azure;
-    using Corvus.Identity.ClientAuthentication.MicrosoftRest;
 
-    using Microsoft.Azure.Management.ResourceManager.Fluent;
-    using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Clients.ActiveDirectory;
     using Microsoft.Rest;
@@ -34,26 +32,20 @@ namespace Marain.Claims.SetupTool
         // log users in via AAD. We use this to obtain access tokens to Azure in cases where the
         // user does not want to use the Azure CLI authentication mechanism.
         private const string MarainClaimsSetupAADClientId = "7c814853-82dc-4b38-93e3-f4e627927e00";
-        private const string AzureManagementResourceId = "https://management.core.windows.net/";
-        private const string GraphApiResourceId = "https://graph.windows.net/";
-        private readonly IServiceIdentityMicrosoftRestTokenProviderSource serviceIdTokenProviderSource;
         private readonly IServiceIdentityAzureTokenCredentialSource serviceIdAzureTokenCredentialSource;
 
         /// <summary>
         /// Creates an <see cref="AuthenticationOptions"/>.
         /// </summary>
         /// <param name="tenantId">The Azure AD tenant against which to authenticate.</param>
-        /// <param name="serviceIdTokenProviderSource">Provides token providers representing the application.</param>
         /// <param name="serviceIdAzureTokenCredentialSource">Provides Azure token credentials representing the application.</param>
         /// <param name="azureServiceTokenProviderConnectionString">The connection string for the azure service token provide if additional claims are needed.</param>
         private AuthenticationOptions(
             string tenantId,
-            IServiceIdentityMicrosoftRestTokenProviderSource serviceIdTokenProviderSource,
             IServiceIdentityAzureTokenCredentialSource serviceIdAzureTokenCredentialSource,
             string azureServiceTokenProviderConnectionString)
         {
             this.TenantId = tenantId ?? throw new ArgumentNullException(nameof(tenantId));
-            this.serviceIdTokenProviderSource = serviceIdTokenProviderSource;
             this.serviceIdAzureTokenCredentialSource = serviceIdAzureTokenCredentialSource;
             this.AzureServiceTokenProviderConnectionString = azureServiceTokenProviderConnectionString;
         }
@@ -73,29 +65,30 @@ namespace Marain.Claims.SetupTool
         public string AzureServiceTokenProviderConnectionString { get; }
 
         /// <summary>
-        /// Gets an <see cref="AzureCredentials"/> for the specified subscription.
+        /// Gets an <see cref="TokenCredential"/> for the specified subscription.
         /// </summary>
         /// <returns>
-        /// A task that produces an <see cref="AzureCredentials"/> configured based on the command
+        /// A task that produces an <see cref="TokenCredential"/> configured based on the command
         /// line options.
         /// </returns>
-        public AzureCredentials GetAzureCredentials()
+        public TokenCredential GetAzureCredentials()
         {
             if (string.IsNullOrEmpty(this.AzureServiceTokenProviderConnectionString))
             {
-                var deviceCredentialInformation = new DeviceCredentialInformation
+                var deviceCredentialInformation = new DeviceCodeCredentialOptions
                 {
+                    TenantId = this.TenantId,
                     ClientId = MarainClaimsSetupAADClientId,
-                    DeviceCodeFlowHandler = DeviceCodeFlowCallback,
                 };
 
-                return new AzureCredentials(deviceCredentialInformation, this.TenantId, AzureEnvironment.AzureGlobalCloud);
+                return new DeviceCodeCredential(deviceCredentialInformation);
             }
             else
             {
-                ServiceClientCredentials azureTokenCredentials = this.GetAzureServiceClientCredentials(AzureManagementResourceId);
-                ServiceClientCredentials graphTokenCredentials = this.GetAzureServiceClientCredentials(GraphApiResourceId);
-                return new AzureCredentials(azureTokenCredentials, graphTokenCredentials, this.TenantId, AzureEnvironment.AzureGlobalCloud);
+                return new DefaultAzureCredential(new DefaultAzureCredentialOptions
+                {
+                    TenantId = this.TenantId,
+                });
             }
         }
 
@@ -172,73 +165,8 @@ namespace Marain.Claims.SetupTool
 
             return new AuthenticationOptions(
                 tenantId,
-                sp.GetRequiredService<IServiceIdentityMicrosoftRestTokenProviderSource>(),
                 sp.GetRequiredService<IServiceIdentityAzureTokenCredentialSource>(),
                 azureServiceTokenProviderConnectionString);
-        }
-
-        /// <summary>
-        /// Callback used when the device code flow is in use and we need to prompt the user to
-        /// visit the relevant web page and type in a code.
-        /// </summary>
-        /// <param name="result">
-        /// Information about the login attempt, including the code the user will need to fill in.
-        /// </param>
-        /// <returns>True, because we never fail.</returns>
-        private static bool DeviceCodeFlowCallback(DeviceCodeResult result)
-        {
-            Console.WriteLine(result.Message);
-            return true;
-        }
-
-        /// <summary>
-        /// Determines whether a particular resource is one that we're able to obtain tokens for
-        /// through Azure CLI.
-        /// </summary>
-        /// <param name="resourceId">
-        /// The resource ID that will be passed when asking AAD for a token.
-        /// </param>
-        /// <returns>
-        /// <para>
-        /// True if this is a resource that the Azure CLI (<c>az</c>) can obtain tokens for, false
-        /// if not.
-        /// </para>
-        /// <para>
-        /// Azure CLI is what Microsoft often call a 'first party' app, meaning that it comes from
-        /// Microsoft, and as such, it can do things that we cannot do with our own apps. For
-        /// example, Microsoft can pre-approve first party applications for anyone and everyone:
-        /// often when signing in through a Microsoft AAD Application you do not see a consent
-        /// prompt in cases where you would expect to if you'd written your own application.
-        /// </para>
-        /// <para>
-        /// Azure CLI is pre-approved for use with Azure Resource Manager and the Graph API,
-        /// making it a low-friction way of obtaining tokens for those services. However, it
-        /// apparently can't obtain tokens for other applications. So when we attempt to obtain a
-        /// token that enables us to access the Claims service (by specifying its associated Azure
-        /// AD application id as the resource id) the <c>az</c> approach fails.
-        /// </para>
-        /// </returns>
-        private static bool IsAzCliAccessibleResource(string resourceId) =>
-            resourceId == AzureManagementResourceId || resourceId == GraphApiResourceId;
-
-        /// <summary>
-        /// Gets a <see cref="ServiceClientCredentials"/> for the specified resource based on the
-        /// configuration options.
-        /// </summary>
-        /// <param name="resourceId">
-        /// Identifies the resource to be accessed. This must be either the ARM or the Graph API
-        /// resource id.
-        /// </param>
-        /// <returns>A <see cref="ServiceClientCredentials"/>.</returns>
-        private ServiceClientCredentials GetAzureServiceClientCredentials(string resourceId)
-        {
-            if (!IsAzCliAccessibleResource(resourceId))
-            {
-                throw new ArgumentException($"Cannot access non-Azure resource {resourceId} this way", nameof(resourceId));
-            }
-
-            return new TokenCredentials(
-                this.serviceIdTokenProviderSource.GetTokenProvider($"{resourceId}/.default"));
         }
 
         private class CallbackTokenProvider : ITokenProvider

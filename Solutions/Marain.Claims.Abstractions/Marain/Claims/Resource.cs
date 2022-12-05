@@ -23,7 +23,7 @@ namespace Marain.Claims
     /// new Resource(new Uri("books/**", UriKind.Relative), "All books"));
     /// </code>
     /// </remarks>
-    public struct Resource : IEquatable<Resource>
+    public readonly struct Resource : IEquatable<Resource>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Resource"/> struct.

@@ -11,7 +11,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
 
     using Marain.Claims.Client;
     using Marain.Claims.OpenApi;
-    using Marain.Claims.OpenApi.Specs.Bindings;
+    using Marain.Claims.Specs;
 
     using Microsoft.Rest;
 

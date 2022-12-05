@@ -1,0 +1,24 @@
+[
+  {
+    "key": "claimPermissionsStore",
+    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
+    "configuration": {
+      "accountName": "<storage-account-name>",
+      "keyVaultName": "<key-vault-name>",
+      "accountKeySecretName": "<storage-account-key-secret-name>",
+      "container": "claimpermissions",
+      "disableTenantIdPrefix": false
+    }
+  },
+  {
+    "key": "resourceAccessRuleSetsStore",
+    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
+    "configuration": {
+      "accountName": "<storage-account-name>",
+      "keyVaultName": "<key-vault-name>",
+      "accountKeySecretName": "<storage-account-key-secret-name>",
+      "container": "resourceaccessrulesets",
+      "disableTenantIdPrefix": false
+    }
+  }
+]

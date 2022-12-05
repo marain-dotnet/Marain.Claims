@@ -341,3 +341,4 @@ appsettings.json
 launchSettings.json
 /_codeCoverage
 /_packages
+*.feature.cs

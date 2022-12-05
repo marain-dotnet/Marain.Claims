@@ -1,20 +1,18 @@
 [
   {
     "key": "claimPermissionsStore",
-    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
+    "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage.v3",
     "configuration": {
-      "accountName": null,
-      "container": "claimpermissions",
-      "disableTenantIdPrefix": false
+      "connectionStringPlainText": "UseDevelopmentStorage=true",
+      "container": "<tenant-specific-container-for-claim-permissions>"
     }
   },
   {
     "key": "resourceAccessRuleSetsStore",
     "contentType": "application/vnd.marain.tenancy.enrollment.configurationitem.azureblobstorage",
     "configuration": {
-      "accountName": null,
-      "container": "resourceaccessrulesets",
-      "disableTenantIdPrefix": false
+      "connectionStringPlainText": "UseDevelopmentStorage=true",
+      "container": "<tenant-specific-container-for-resource-access-rule-sets>"
     }
   }
 ]
