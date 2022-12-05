@@ -12,7 +12,7 @@ Since the initial implementation of the current incarnation of the Marain Claims
 
 The first implementation of the API required one call per claim evaluation. When link-stripping from a HAL document, it is often necessary to evaluate many (in some cases, up to several hundred) claims at once, and performance with the call-per-evaluation model was predictably poor.
 
-To partially remidate this, a batch evaluation endpoint was added to the API. This allowed clients to POST a batch of evaluation requests to the API and receive a single response containing the results of all evaluations. This has made the API more usable, but performance is still sub-optimal.
+To partially remediate this, a batch evaluation endpoint was added to the API. This allowed clients to POST a batch of evaluation requests to the API and receive a single response containing the results of all evaluations. This has made the API more usable, but performance is still sub-optimal.
 
 The nature of the Claims API is that the data it stores is slowly changing. As a result, a more optimal model is for the client library to retrieve `ClaimPermissions` documents in their entirety from the Claims API and to perform the claim evaluation on the client side. 
 
