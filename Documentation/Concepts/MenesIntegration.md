@@ -27,4 +27,27 @@ All of this is configured by using the extension methods in `OpenApiClaimsServic
 
 \* in both of these cases, the `ShortCircuitingAccessControlPolicyAdapter` contains an "exemption policy" and then the normal `OpenApiAccessControlPolicy`. The "exemption policy" is expected to be an implementation of `IOpenApiAccessControlPolcicy` similar to `ExemptOperationIdsAccessPolicy`, which lists URLs that are exempt from claims checking and can thus be quickly evaulated locally without needing to go to the underlying `IResourceAccessEvaluator`.
 
+The following diagram shows how the different components fit together:
 
+```mermaid
+graph TD
+    A[Menes: OpenApiOperationInvoker]
+    B[Menes: OpenApiAccessChecker]
+    C[Menes: IOpenApiAccessControlPolicy]
+    D[Claims: IResourceAccessEvaluator]
+    E[Claims: IResourceAccessSubmissionBuilder]
+    F[Claims: OpenApiAccessControlPolicy]
+    G[Claims: OpenApiClientResourceAccessEvaluator]
+    H[Claims: ClaimsService]
+    I[Claims: API]
+    A -->|calls prior to invoking the underlying operation| B
+    B -->|checks access against a list of| C
+    C -->|Claims provides an implementation| F
+    subgraph Marain.Claims
+    F -->|Builds submissions using| E
+    F -->|Submissions evaluated using| D
+    D -->|Implemented by|G
+    G -->|Evaluates submissions using|H
+    H -->|Makes HTTP calls to |I
+    end
+```

@@ -2,11 +2,11 @@
 
 ## Status
 
-Draft
+Agreed
 
 ## Background
 
-Since the initial implementation of the Marain Claims API, we have had issues with performance. A common use case we encounter when building hypermedia APIs requires evaluating two sets of claims per API request:
+Since the initial implementation of the current incarnation of the Marain Claims API, we have had issues with performance. A common use case we encounter when building hypermedia APIs requires evaluating two sets of claims per API request:
 - On receiving a request, to ensure that the current user has permission to access the endpoint they have requested
 - When returning a HAL document, to strip out any links or embedded documents that the user does not have permission to call
 
@@ -36,7 +36,7 @@ In this option we would rewrite the existing Marain.Claims.Client library, keepi
 In this option, we would provide a new implementation of `IClaimsService` which consumers could opt into using. This would likely wrap the existing auto-generated `ClaimsService`.
 
 #### Advantages
-- Clients could take advantage of the new features without needing to change their existing code.
+- Clients could take advantage of the new features with minimal changes to  existing code.
 
 #### Disadvantages
 - Would remain tied to the existing interface.
@@ -44,7 +44,7 @@ In this option, we would provide a new implementation of `IClaimsService` which 
 
 ### 3. Implement as an independent feature built on top of the existing `IClaimsService`
 
-In this option we'd define a new interface for our client side evaluation library, and implement it independently of the existing interfaces. We would still likely depend on the existing `IClaimsService` implementation to communicate with the API.
+In this option we'd define a new interface for our client side evaluation library, and implement it independently of the existing interfaces. We would still depend on the existing `IClaimsService` implementation to communicate with the API.
 
 ### Advantages
 - Not constrained by existing `IClaimsService` interface
@@ -118,5 +118,40 @@ However, there is an additional complexity that caching `ResourceAccessRuleset`s
 
 In order to avoid dealing with this complexity (at least for the first iteration of this feature), we will accept the relatively minor impact in processing time and not cache the rulesets.
 
-## Consequences
+### Choice of cache
 
+Question: Should we use the .NET standard `MemoryCache` to store `ClaimPermission` documents, or implement our own using a `ConcurrentDictionary` (or similar).
+
+|                                                    Method |     Mean |     Error |    StdDev |   Gen0 | Allocated |
+|---------------------------------------------------------- |---------:|----------:|----------:|-------:|----------:|
+|                             EvaluateSingleClaimPermission | 2.174 us | 0.0135 us | 0.0126 us | 0.0153 |     312 B |
+|              EvaluateSingleClaimPermissionWithMemoryCache | 2.178 us | 0.0150 us | 0.0141 us | 0.0153 |     312 B |
+
+Since the different in performance is negligible, the standard MemoryCache will be used.
+
+### Best approach to evaluating a batch of claims
+
+Question: Should we evaluate batches of claims in series or parallel? Given we know glob evaluation is highly performant, it may be that the overhead of parallelisation costs more than the evaluation itself.
+
+For a small (~35) batch of evaluations:
+
+|                                     Method |      Mean |     Error |    StdDev |   Gen0 | Allocated |
+|------------------------------------------- |----------:|----------:|----------:|-------:|----------:|
+|   EvaluateMultipleClaimPermissionsInSeries | 47.415 us | 0.3260 us | 0.3049 us | 0.8545 |   15120 B |
+| EvaluateMultipleClaimPermissionsInParallel | 49.658 us | 0.2860 us | 0.2675 us | 0.9766 |   16832 B |
+
+For a "realistically large" batch of 280 evaluations:
+
+|                                     Method |       Mean |     Error |    StdDev |   Gen0 | Allocated |
+|------------------------------------------- |-----------:|----------:|----------:|-------:|----------:|
+|   EvaluateMultipleClaimPermissionsInSeries | 382.955 us | 1.9772 us | 1.7527 us | 6.8359 |  120960 B |
+| EvaluateMultipleClaimPermissionsInParallel | 386.091 us | 2.4062 us | 2.1331 us | 7.8125 |  132112 B |
+
+And for an "unrealistically large" batch of  7000 evaluations:
+
+|                                     Method |         Mean |      Error |     StdDev |     Gen0 |    Gen1 | Allocated |
+|------------------------------------------- |-------------:|-----------:|-----------:|---------:|--------:|----------:|
+|   EvaluateMultipleClaimPermissionsInSeries | 9,575.074 us | 65.3881 us | 57.9649 us | 171.8750 |       - | 3024010 B |
+| EvaluateMultipleClaimPermissionsInParallel | 9,785.352 us | 86.6832 us | 81.0835 us | 187.5000 | 31.2500 | 3218618 B |
+
+We can see from this that parallel execution does not provide any benefits and actually adds to the evaluation time for the batch.
