@@ -52,7 +52,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.1" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[6.0.*,)" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure.Authentication" Version="2.4.1" />
   </ItemGroup>
