@@ -74,7 +74,7 @@ param (
     [version] $BuildModuleVersion = "1.1.1",
 
     [Parameter()]
-    [version] $InvokeBuildModuleVersion = "5.7.1"
+    [version] $InvokeBuildModuleVersion = "5.10.1"
 )
 
 $ErrorActionPreference = $ErrorActionPreference ? $ErrorActionPreference : 'Stop'
@@ -138,7 +138,8 @@ $SkipPublish = $false
 #
 $SolutionToBuild = (Resolve-Path (Join-Path $here "./Solutions/Marain.Claims.sln")).Path
 $ProjectsToPublish = @(
-    # "Solutions/MySolution/MyWebSite/MyWebSite.csproj"
+    "Solutions\Marain.Claims.Host.Functions\Marain.Claims.Host.Functions.csproj"
+    "Solutions\Marain.Claims.Hosting.AspNetCore\Marain.Claims.Hosting.AspNetCore.csproj"
 )
 $NuSpecFilesToPackage = @(
     # "Solutions/MySolution/MyProject/MyProject.nuspec"
