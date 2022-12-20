@@ -1,6 +1,6 @@
 # Menes Integration
 
-Marain Claims provides additional libraries to integration with APIs built on Menes.
+Marain Claims provides additional libraries to integrate with APIs built on Menes.
 
 Menes provides an integration point for access control libraries via the `Menes.IOpenApiAccessControlPolicy`. Third parties add functionality by providing an implementation of this in their DI container.
 
