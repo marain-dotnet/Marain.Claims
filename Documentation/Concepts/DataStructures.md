@@ -160,5 +160,3 @@ When an implementation of `IClaimPermissionStore` is used to retrieve a `ClaimPe
 ```
 
 The underlying store can choose to persist the fully expanded `ClaimPermissions` document back to the store, or re-expand it on every request. If it persists the expanded version back, it should transparently provide a mechanism for periodically ensuring the expanded `ResourceAccessRuleset` data is up to date.
-
-**WARNING**: The current implementation of `IClaimPermissionStore` does persist the expanded `ClaimPermissions` document back to the store, but does not then ensure that the expanded data remains consistent.
