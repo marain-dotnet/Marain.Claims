@@ -341,3 +341,8 @@ appsettings.json
 launchSettings.json
 /_codeCoverage
 /_packages
+*.feature.cs
+
+# Local build outputs
+_packages/
+*.sbom.*

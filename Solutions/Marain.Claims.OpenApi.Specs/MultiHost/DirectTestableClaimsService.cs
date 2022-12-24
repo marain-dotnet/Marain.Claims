@@ -10,7 +10,7 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
     using System.Threading.Tasks;
 
     using Marain.Claims;
-    using Marain.Claims.OpenApi.Specs.Bindings;
+    using Marain.Claims.Specs;
 
     using Menes;
 

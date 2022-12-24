@@ -16,6 +16,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
     using Corvus.Testing.SpecFlow;
 
     using Marain.Claims.OpenApi.Specs.MultiHost;
+    using Marain.Claims.Specs;
     using Marain.Services;
 
     using Menes.Testing.AspNetCoreSelfHosting;

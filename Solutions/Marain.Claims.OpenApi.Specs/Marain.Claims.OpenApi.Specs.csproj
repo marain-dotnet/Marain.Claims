@@ -25,15 +25,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow.NUnit" Version="1.5.1" />
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.2">
+    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow.NUnit" Version="2.0.0" />
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Marain.Services.Tenancy" Version="2.3.3" />
-    <PackageReference Include="Marain.Services.Tenancy.Testing" Version="2.3.3" />
-    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="2.0.5" />
-    <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="3.1.4" />
+    <PackageReference Include="Marain.Services.Tenancy" Version="3.0.0" />
+    <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="3.0.0" />
+    <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="[6.0.*,)" />
   </ItemGroup>
@@ -42,6 +41,7 @@
     <ProjectReference Include="..\Marain.Claims.Client.OpenApi\Marain.Claims.Client.OpenApi.csproj" />
     <ProjectReference Include="..\Marain.Claims.Client\Marain.Claims.Client.csproj" />
     <ProjectReference Include="..\Marain.Claims.Host.Functions\Marain.Claims.Host.Functions.csproj" />
+    <ProjectReference Include="..\Marain.Claims.Specs.Common\Marain.Claims.Specs.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,14 +51,6 @@
     <None Update="specflow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ServiceManifests\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\Marain.Claims.Deployment\ServiceManifests\ClaimsServiceManifest.jsonc" Link="ServiceManifests\ClaimsServiceManifest.jsonc" />
   </ItemGroup>
 
   <!--

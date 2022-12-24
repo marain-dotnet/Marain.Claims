@@ -9,7 +9,7 @@ namespace Marain.Claims
     /// <summary>
     /// A tuple of ID and ETag.
     /// </summary>
-    public struct IdWithETag : IEquatable<IdWithETag>
+    public readonly struct IdWithETag : IEquatable<IdWithETag>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IdWithETag"/> struct.

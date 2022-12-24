@@ -59,10 +59,12 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
 
                     TenancyClientOptions tenancyClientConfiguration = root.GetSection("TenancyClient").Get<TenancyClientOptions>();
                     services.AddSingleton(tenancyClientConfiguration);
-                    services.AddTenantProviderServiceClient();
+                    services.AddTenantProviderServiceClient(enableResponseCaching: false); // Caching messes us up because we meddle with tenants during testing
 
                     services.AddTenantedClaimsStoreOnAzureBlobStorage();
                     services.AddTenantedClaimsApiWithOpenApiActionResultHosting(root);
+
+                    services.AddMarainTenantManagementForBlobStorage();
 
                     services.AddClaimsClient(_ =>
                     {

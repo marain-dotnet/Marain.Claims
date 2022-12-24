@@ -1,27 +1,21 @@
 {
   "$schema": "./ServiceManifestSchema.json",
   "contentType": "application/vnd.marain.tenancy.servicemanifests.servicemanifest",
-  "wellKnownTenantGuid": "e85371ca-e1fb-4bb5-9f44-002217f1c51c",
+  "wellKnownTenantGuid": "e85371ca-e1fb-4bb5-9f44-002217f1c51c", // This will encode to 3633754ac4c9be44b55bfe791b1780f1ca7153e8fbe1b54b9f44002217f1c51c
   "serviceName": "Claims v1",
   "dependsOnServiceTenants": [
   ],
   "requiredConfigurationEntries": [
     {
-      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
-      "type": "azureBlobContainerConfiguration",
-      "key": "claimPermissionsStore",
-      "containerDefinition": {
-        "containerName": "claimpermissions"
-      },
+      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage.v3",
+      "key": "Marain:Claims:BlobContainerConfiguration:ClaimPermissions",
+      "legacyV2Key": "StorageConfiguration__claimpermissions",
       "description": "Stores the claims"
     },
     {
-      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage",
-      "type": "azureBlobContainerConfiguration",
-      "key": "resourceAccessRuleSetsStore",
-      "containerDefinition": {
-        "containerName": "resourceaccessrulesets"
-      },
+      "contentType": "application/vnd.marain.tenancy.servicemanifests.requiredconfigurationentries.azureblobstorage.v3",
+      "key": "Marain:Claims:BlobContainerConfiguration:ResourceAccessRuleSets",
+      "legacyV2Key": "StorageConfiguration__resourceaccessrulesets",
       "description": "Stores the rule sets"
     }
   ]

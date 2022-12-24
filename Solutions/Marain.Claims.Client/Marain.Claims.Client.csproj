@@ -21,13 +21,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Identity.MicrosoftRest" Version="3.0.0" />
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.2">
+    <PackageReference Include="Corvus.Identity.MicrosoftRest" Version="3.2.0" />
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[6.0.*,)" />
-    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.23" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.24" />
     <PackageReference Include="Cimpress.Extensions.Http.Caching.InMemory" Version="2.1.111" />
   </ItemGroup>
 

@@ -9,6 +9,7 @@ namespace Marain.Claims.Storage
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using Azure;
@@ -161,7 +162,7 @@ namespace Marain.Claims.Storage
             try
             {
                 Response<BlobDownloadStreamingResult> response = await blob.DownloadStreamingAsync(
-                    conditions: string.IsNullOrEmpty(eTag) ? null : new BlobRequestConditions { IfNoneMatch = new ETag(eTag!) })
+                    string.IsNullOrEmpty(eTag) ? null : new BlobDownloadOptions { Conditions = new BlobRequestConditions { IfNoneMatch = new ETag(eTag!) } })
                     .ConfigureAwait(false);
 
                 int status = response.GetRawResponse().Status;
