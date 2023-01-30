@@ -48,7 +48,7 @@
         "WEBSITE_RUN_FROM_PACKAGE": "[parameters('runFromPackage')]",
         "AzureConfigurationStorage": "[parameters('storageAccountConnectionString')]",
         "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('applicationInsightsInstrumentationKey')]",
-        "FUNCTIONS_EXTENSION_VERSION": "~3",
+        "FUNCTIONS_EXTENSION_VERSION": "~4",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
         "AzureWebJobsDashboard": "[parameters('storageAccountConnectionString')]",
         "AzureWebJobsStorage": "[parameters('storageAccountConnectionString')]",
