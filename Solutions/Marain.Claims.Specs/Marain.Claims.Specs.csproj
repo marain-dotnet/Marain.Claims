@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
     <RootNamespace>Marain.Claims.Specs</RootNamespace>
@@ -41,15 +41,15 @@
 
   <ItemGroup>
     <PackageReference Include="Corvus.Testing.SpecFlow.NUnit" Version="2.0.0" />
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.4">
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.18">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Idg.AsyncTestTools" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="[6.0.*,)" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="[6.0.*,)" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="[6.0.*,)" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[6.0.*,)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="[8.0.*,)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="[8.0.*,)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="[8.0.*,)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[8.0.*,)" />
   </ItemGroup>
 
   <ItemGroup>

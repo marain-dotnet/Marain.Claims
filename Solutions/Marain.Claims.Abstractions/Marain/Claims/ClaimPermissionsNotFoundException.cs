@@ -9,7 +9,6 @@
 namespace Marain.Claims.Storage
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Thrown when a claim permissions with the specified id cannot be found.
@@ -26,16 +25,6 @@ namespace Marain.Claims.Storage
             : base("Claim permissions not found", innerException)
         {
             this.ClaimPermissionsId = id;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClaimPermissionsNotFoundException"/> class.
-        /// </summary>
-        /// /// <param name="info"> The serialization info. </param>
-        /// <param name="context"> The context. </param>
-        protected ClaimPermissionsNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
         }
 
         /// <summary>
