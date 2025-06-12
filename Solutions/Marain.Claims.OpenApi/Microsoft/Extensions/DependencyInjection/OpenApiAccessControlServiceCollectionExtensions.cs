@@ -105,7 +105,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     allowOnlyIfAll);
                 return new ShortCircuitingAccessControlPolicyAdapter(
                     exemptionPolicy,
-                    new[] { roleBasedPolicy });
+                    [roleBasedPolicy]);
             });
 
             return services;
@@ -201,7 +201,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     allowOnlyIfAll);
                 return new ShortCircuitingAccessControlPolicyAdapter(
                     exemptionPolicy,
-                    new[] { roleBasedPolicy });
+                    [roleBasedPolicy]);
             });
 
             return services;

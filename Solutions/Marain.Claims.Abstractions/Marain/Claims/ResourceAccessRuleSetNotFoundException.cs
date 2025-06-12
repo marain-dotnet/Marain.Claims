@@ -26,7 +26,7 @@ namespace Marain.Claims.Storage
         public ResourceAccessRuleSetNotFoundException(string id, Exception innerException)
             : base("Resource access rule set not found", innerException)
         {
-            this.ResourceAccessRuleSetIds = new[] { id };
+            this.ResourceAccessRuleSetIds = [id];
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Marain.Claims.Storage
         public ResourceAccessRuleSetNotFoundException(string id)
             : base("Resource access rule set not found")
         {
-            this.ResourceAccessRuleSetIds = new[] { id };
+            this.ResourceAccessRuleSetIds = [id];
         }
 
         /// <summary>
