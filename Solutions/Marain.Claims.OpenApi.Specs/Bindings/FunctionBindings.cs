@@ -12,7 +12,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
 
     using Corvus.Extensions.Json;
     using Corvus.Testing.AzureFunctions;
-    using Corvus.Testing.AzureFunctions.SpecFlow;
+    using Corvus.Testing.AzureFunctions.ReqnRoll;
     using Corvus.Testing.SpecFlow;
 
     using Marain.Claims.OpenApi.Specs.MultiHost;
@@ -84,7 +84,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
                     // in order to isolate the test.
                     FunctionConfiguration functionConfiguration = FunctionsBindings.GetFunctionConfiguration(context);
                     functionConfiguration.EnvironmentVariables["MarainServiceConfiguration__ServiceTenantIdOverride"] = testTenants.TransientServiceTenantId;
-                    await FunctionsBindings.GetFunctionsController(context).StartFunctionsInstance(
+                    await FunctionsBindings.GetFunctionsController(context).StartFunctionsInstanceAsync(
                             "Marain.Claims.Host.Functions",
                             ClaimsHostPort,
                             "net6.0",
@@ -167,7 +167,7 @@ namespace Marain.Claims.OpenApi.Specs.Bindings
             {
                 if (context.TryGetValue(out FunctionsController controller))
                 {
-                    context.RunAndStoreExceptions(controller.TeardownFunctions);
+                    await context.RunAndStoreExceptionsAsync(async () => await controller.TeardownFunctionsAsync());
                 }
             }
             else if (TestHostMode == TestHostModes.InProcessEmulateFunctionWithActionResult)
