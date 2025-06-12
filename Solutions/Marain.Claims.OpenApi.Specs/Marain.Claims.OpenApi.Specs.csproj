@@ -2,7 +2,7 @@
   <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>Marain.Claims.OpenApi.Specs</RootNamespace>
   </PropertyGroup>
@@ -25,16 +25,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Corvus.Testing.AzureFunctions.SpecFlow.NUnit" Version="2.0.0" />
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.4">
+    <PackageReference Include="Corvus.Testing.AzureFunctions.ReqnRoll.NUnit" Version="5.0.0" />
+    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.18">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Marain.Services.Tenancy" Version="3.0.0" />
     <PackageReference Include="Marain.Tenancy.ClientTenantProvider" Version="3.0.0" />
-    <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="4.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="[6.0.*,)" />
+    <PackageReference Include="Menes.Testing.AspNetCoreSelfHosting" Version="6.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="[8.0.*,)" />
   </ItemGroup>
 
   <ItemGroup>

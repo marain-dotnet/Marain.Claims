@@ -215,7 +215,7 @@ namespace Marain.Claims.Storage
 
         private async Task<ClaimPermissions> UpdateRuleSetsAsync(ClaimPermissions permissions)
         {
-            IEnumerable<ClaimPermissions> result = await this.UpdateRuleSetsAsync(new[] { permissions }, 1).ConfigureAwait(false);
+            IEnumerable<ClaimPermissions> result = await this.UpdateRuleSetsAsync([permissions], 1).ConfigureAwait(false);
             return result.First();
         }
 

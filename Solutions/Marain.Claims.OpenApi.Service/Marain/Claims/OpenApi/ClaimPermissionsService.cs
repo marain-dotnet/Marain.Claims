@@ -700,16 +700,16 @@ namespace Marain.Claims.OpenApi
             }
 
             (string AccessType, string ResourceUri, string DisplayName)[] ruleData =
-            {
-                    ("GET", "claimPermissions/**/*", "Read Claim Permissions"),
+            [
+                ("GET", "claimPermissions/**/*", "Read Claim Permissions"),
                     ("PUT", "claimPermissions/**/*", "Modify Claim Permissions"),
                     ("POST", "claimPermissions", "Create Claim Permissions"),
                     ("POST", "claimPermissions/**/*", "Add to Claim Permissions"),
                     ("GET", "resourceAccessRuleSet/**/*", "Read Resource Access Rules"),
                     ("PUT", "resourceAccessRuleSet/**/*", "Modify Resource Access Rules"),
                     ("POST", "resourceAccessRuleSet", "Create Resource Access Rules"),
-                    ("POST", "resourceAccessRuleSet/**/*", "Add to Resource Access Rules"),
-            };
+                    ("POST", "resourceAccessRuleSet/**/*", "Add to Resource Access Rules")
+            ];
 
             string prefix = ClaimsResourceTemplate.Replace("{tenantId}", context.CurrentTenantId);
 
@@ -744,7 +744,7 @@ namespace Marain.Claims.OpenApi
             var permissions = new ClaimPermissions
             {
                 Id = administratorPrincipalObjectId,
-                ResourceAccessRuleSets = new[] { rulesetByIdOnlyForClaimPermissionsPersistence },
+                ResourceAccessRuleSets = [rulesetByIdOnlyForClaimPermissionsPersistence],
             };
             await permissionsStore.CreateAsync(permissions).ConfigureAwait(false);
             return this.OkResult();

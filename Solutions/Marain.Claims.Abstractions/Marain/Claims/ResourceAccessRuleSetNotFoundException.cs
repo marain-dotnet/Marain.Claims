@@ -11,7 +11,6 @@ namespace Marain.Claims.Storage
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Thrown when a resource access rule set with the specified id cannot be found.
@@ -27,7 +26,7 @@ namespace Marain.Claims.Storage
         public ResourceAccessRuleSetNotFoundException(string id, Exception innerException)
             : base("Resource access rule set not found", innerException)
         {
-            this.ResourceAccessRuleSetIds = new[] { id };
+            this.ResourceAccessRuleSetIds = [id];
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace Marain.Claims.Storage
         public ResourceAccessRuleSetNotFoundException(string id)
             : base("Resource access rule set not found")
         {
-            this.ResourceAccessRuleSetIds = new[] { id };
+            this.ResourceAccessRuleSetIds = [id];
         }
 
         /// <summary>
@@ -49,16 +48,6 @@ namespace Marain.Claims.Storage
             : base("Resource access rule sets not found", innerException)
         {
             this.ResourceAccessRuleSetIds = ids.ToArray();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceAccessRuleSetNotFoundException"/> class.
-        /// </summary>
-        /// /// <param name="info"> The serialization info. </param>
-        /// <param name="context"> The context. </param>
-        protected ResourceAccessRuleSetNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
         }
 
         /// <summary>

@@ -43,11 +43,11 @@ namespace Marain.Claims.OpenApi.Specs.MultiHost
     public class MultiTestHostBase : IMultiModeTest<TestHostModes>
     {
         protected static readonly object[] FixtureArgs =
-        {
+        [
             new object[] { TestHostModes.DirectInvocation },
             new object[] { TestHostModes.InProcessEmulateFunctionWithActionResult },
-            new object[] { TestHostModes.UseFunctionHost },
-        };
+            new object[] { TestHostModes.UseFunctionHost }
+        ];
 
         /// <summary>
         /// Creates a <see cref="MultiTestHostBase"/>.

@@ -16,7 +16,7 @@ namespace Marain.Claims.Specs.Steps
     using Menes;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Moq;
+    using NSubstitute;
     using NUnit.Framework;
     using TechTalk.SpecFlow;
 
@@ -29,7 +29,7 @@ namespace Marain.Claims.Specs.Steps
         private string tenantId;
         private string resourcePrefix;
         private bool allowOnlyIfAll;
-        private Mock<IResourceAccessEvaluator> resourceAccessEvaluator;
+        private IResourceAccessEvaluator resourceAccessEvaluator;
         private List<(ResourceAccessEvaluatorArgs Args, TaskCompletionSource<List<ResourceAccessEvaluation>> TaskSource)> evaluateCalls;
         private List<ResourceAccessEvaluation> evaluations;
         private Task<IDictionary<AccessCheckOperationDescriptor, AccessControlPolicyResult>> policyResultTask;
@@ -94,13 +94,15 @@ namespace Marain.Claims.Specs.Steps
         [When("I invoke the policy with a path of '(.*)' and a method of '(.*)'")]
         public void WhenIInvokeThePolicyWithAPathOfAndAMethodOf(string path, string method)
         {
-            this.evaluateCalls = new List<(ResourceAccessEvaluatorArgs Args, TaskCompletionSource<List<ResourceAccessEvaluation>> TaskSource)>();
-            this.evaluations = new List<ResourceAccessEvaluation>();
-            this.resourceAccessEvaluator = new Mock<IResourceAccessEvaluator>();
+            this.evaluateCalls = [];
+            this.evaluations = [];
+            this.resourceAccessEvaluator = Substitute.For<IResourceAccessEvaluator>();
             this.resourceAccessEvaluator
-                .Setup(m => m.EvaluateAsync(It.IsAny<string>(), It.IsAny<IEnumerable<ResourceAccessSubmission>>()))
-                .Returns((string tenantId, IList<ResourceAccessSubmission> submissions) =>
+                .EvaluateAsync(Arg.Any<string>(), Arg.Any<IEnumerable<ResourceAccessSubmission>>())
+                .Returns(call =>
                 {
+                    string tenantId = call.Arg<string>();
+                    IList<ResourceAccessSubmission> submissions = call.Arg<IEnumerable<ResourceAccessSubmission>>().ToList();
                     var args = new ResourceAccessEvaluatorArgs
                     {
                         Submissions = submissions,
@@ -114,7 +116,7 @@ namespace Marain.Claims.Specs.Steps
                 });
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton(new Mock<ILogger<OpenApiAccessControlPolicy>>().Object);
+            serviceCollection.AddSingleton(Substitute.For<ILogger<OpenApiAccessControlPolicy>>());
 
             if (this.featureContext.FeatureInfo.Tags.Contains("rolebased"))
             {
@@ -130,7 +132,7 @@ namespace Marain.Claims.Specs.Steps
                    this.allowOnlyIfAll);
             }
 
-            serviceCollection.AddSingleton(this.resourceAccessEvaluator.Object);
+            serviceCollection.AddSingleton(this.resourceAccessEvaluator);
             IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
             IOpenApiAccessControlPolicy policy = serviceProvider.GetRequiredService<IOpenApiAccessControlPolicy>();
@@ -151,7 +153,7 @@ namespace Marain.Claims.Specs.Steps
 
                 if (!responses.TryGetValue(taskSource, out List<ResourceAccessEvaluation> taskSourceResults))
                 {
-                    taskSourceResults = new List<ResourceAccessEvaluation>();
+                    taskSourceResults = [];
                     responses.Add(taskSource, taskSourceResults);
                 }
 

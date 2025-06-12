@@ -42,7 +42,7 @@ namespace Marain.Claims.Benchmark
                 .AddClaimsClient(sp => configuration.GetSection("ClaimsClient").Get<ClaimsClientOptions>())
                 .AddSingleton(sp => configuration.GetSection("TenancyClient").Get<TenancyClientOptions>())
                 .AddTenancyClient(enableResponseCaching: true)
-                .AddJsonNetPropertyBag()
+                .AddJsonPropertyBagFactory()
                 .AddBlobContainerV2ToV3Transition()
                 .AddAzureBlobStorageClientSourceFromDynamicConfiguration()
                 .AddServiceIdentityAzureTokenCredentialSourceFromLegacyConnectionString(configuration["AzureServicesAuthConnectionString"])

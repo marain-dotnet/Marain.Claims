@@ -115,12 +115,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<IResourceAccessEvaluator, LocalResourceAccessEvaluator>();
             services.AddClaimsOpenApiContextBuilder();
             string[] openOperationIds =
-            {
-                    ClaimPermissionsService.GetClaimPermissionsPermissionOperationId,
+            [
+                ClaimPermissionsService.GetClaimPermissionsPermissionOperationId,
                     ClaimPermissionsService.GetClaimPermissionsPermissionBatchOperationId,
                     ClaimPermissionsService.InitializeTenantOperationId,
-                    Menes.Internal.SwaggerService.SwaggerOperationId,
-            };
+                    Menes.Internal.SwaggerService.SwaggerOperationId
+            ];
             services.AddIdentityBasedOpenApiAccessControlWithPreemptiveExemptions(
                 new ExemptOperationIdsAccessPolicy(openOperationIds));
 
